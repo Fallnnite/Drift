@@ -16,6 +16,7 @@
     <style>
         html, body {
             height: 100%;
+            height: 100dvh; /* Fixes mobile browser URL bar clipping */
             margin: 0;
             overflow: hidden; 
         }
@@ -38,9 +39,57 @@
         .animate-wave-slow {
             animation: waveMove 25s linear infinite;
         }
+        
+        /* Pinterest-Style Minimalist Mesh Patterns */
+        .pattern-ocean {
+            background-color: #f8fafc;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(45, 212, 191, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(129, 140, 248, 0.12) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
+                linear-gradient(to right, rgba(186, 230, 253, 0.3) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(186, 230, 253, 0.3) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 24px 24px, 24px 24px;
+        }
+
+        .pattern-coral {
+            background-color: #fdf2f8;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(251, 113, 133, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(251, 146, 60, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(45, 212, 191, 0.12) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(244, 114, 182, 0.12) 0px, transparent 50%),
+                radial-gradient(rgba(253, 164, 175, 0.4) 1.5px, transparent 1.5px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 20px 20px;
+        }
+
+        /* New: Orange & Blue Mesh Pattern */
+        .pattern-koi {
+            background-color: #f0f9ff;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(249, 115, 22, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(14, 165, 233, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(249, 115, 22, 0.12) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(14, 165, 233, 0.12) 0px, transparent 50%),
+                radial-gradient(rgba(14, 165, 233, 0.3) 1.5px, transparent 1.5px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 20px 20px;
+        }
+
+        /* New: Pink & Green Mesh Pattern */
+        .pattern-lotus {
+            background-color: #fdf2f8;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(236, 72, 153, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.12) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
+                radial-gradient(rgba(236, 72, 153, 0.3) 1.5px, transparent 1.5px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 24px 24px;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased h-screen w-full overflow-hidden">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased w-full overflow-hidden">
 
 <div id="root" class="w-full h-full flex relative overflow-hidden"></div>
 
@@ -48,38 +97,17 @@
     const { useState, useEffect, useRef } = React;
 
     const THEMES = {
-        blue: {
-            id: 'blue', name: 'Ocean Blue',
-            bgMain: 'bg-blue-600', bgHover: 'hover:bg-blue-700', bgLight: 'bg-blue-50',
-            textMain: 'text-blue-600', textLight: 'text-blue-100',
-            borderMain: 'border-blue-200', borderHover: 'hover:border-blue-200', borderFocus: 'focus:border-blue-400',
-            ringActive: 'ring-blue-100', ringFocus: 'focus:ring-blue-100',
-            shadowIcon: 'shadow-blue-200', shadowBtn: 'shadow-blue-600/30',
-            gradient: 'from-blue-600 to-blue-800',
-            waveColorClass: 'text-blue-100',
-            patternClass: ''
-        },
-        mint: {
-            id: 'mint', name: 'Fresh Mint',
-            bgMain: 'bg-teal-500', bgHover: 'hover:bg-teal-600', bgLight: 'bg-teal-50',
-            textMain: 'text-teal-600', textLight: 'text-teal-100',
-            borderMain: 'border-teal-200', borderHover: 'hover:border-teal-200', borderFocus: 'focus:border-teal-400',
-            ringActive: 'ring-teal-100', ringFocus: 'focus:ring-teal-100',
-            shadowIcon: 'shadow-teal-200', shadowBtn: 'shadow-teal-500/30',
-            gradient: 'from-teal-500 to-teal-700',
-            waveColorClass: 'text-teal-100',
-            patternClass: ''
-        },
-        lavender: {
-            id: 'lavender', name: 'Lavender Night',
-            bgMain: 'bg-indigo-500', bgHover: 'hover:bg-indigo-600', bgLight: 'bg-indigo-50',
-            textMain: 'text-indigo-600', textLight: 'text-indigo-100',
-            borderMain: 'border-indigo-200', borderHover: 'hover:border-indigo-200', borderFocus: 'focus:border-indigo-400',
-            ringActive: 'ring-indigo-100', ringFocus: 'focus:ring-indigo-100',
-            shadowIcon: 'shadow-indigo-200', shadowBtn: 'shadow-indigo-500/30',
-            gradient: 'from-indigo-500 to-indigo-700',
-            waveColorClass: 'text-indigo-100',
-            patternClass: ''
+        ocean: {
+            id: 'ocean', name: 'Drift Ocean',
+            bgMain: 'bg-sky-500', bgHover: 'hover:bg-sky-600', bgLight: 'bg-sky-50',
+            textMain: 'text-sky-600', textLight: 'text-sky-100',
+            borderMain: 'border-sky-200', borderHover: 'hover:border-sky-200', borderFocus: 'focus:border-sky-400',
+            ringActive: 'ring-sky-100', ringFocus: 'focus:ring-sky-100',
+            shadowIcon: 'shadow-sky-200', shadowBtn: 'shadow-sky-500/30',
+            gradient: 'from-sky-400 via-blue-500 to-indigo-600',
+            sidebarGradient: 'from-sky-500 via-blue-600 to-blue-900',
+            waveColorClass: 'text-sky-100',
+            patternClass: 'pattern-ocean'
         },
         coral: {
             id: 'coral', name: 'Coral Reef',
@@ -88,9 +116,58 @@
             borderMain: 'border-rose-200', borderHover: 'hover:border-rose-200', borderFocus: 'focus:border-rose-400',
             ringActive: 'ring-rose-100', ringFocus: 'focus:ring-rose-100',
             shadowIcon: 'shadow-rose-200', shadowBtn: 'shadow-rose-500/30',
-            gradient: 'from-rose-500 to-orange-500',
+            gradient: 'from-rose-400 via-orange-400 to-teal-400',
+            sidebarGradient: 'from-rose-500 via-rose-600 to-orange-700',
             waveColorClass: 'text-rose-100',
-            patternClass: 'bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:20px_20px]' 
+            patternClass: 'pattern-coral'
+        },
+        koi: {
+            id: 'koi', name: 'Ocean & Goldfish',
+            bgMain: 'bg-orange-500', bgHover: 'hover:bg-orange-600', bgLight: 'bg-orange-50',
+            textMain: 'text-orange-600', textLight: 'text-orange-100',
+            borderMain: 'border-orange-200', borderHover: 'hover:border-orange-300', borderFocus: 'focus:border-orange-400',
+            ringActive: 'ring-orange-100', ringFocus: 'focus:ring-orange-100',
+            shadowIcon: 'shadow-orange-200', shadowBtn: 'shadow-orange-500/30',
+            gradient: 'from-blue-500 via-sky-400 to-orange-400',
+            sidebarGradient: 'from-sky-700 via-blue-600 to-orange-500',
+            waveColorClass: 'text-orange-100',
+            patternClass: 'pattern-koi'
+        },
+        lotus: {
+            id: 'lotus', name: 'Tropical Flora',
+            bgMain: 'bg-pink-500', bgHover: 'hover:bg-pink-600', bgLight: 'bg-pink-50',
+            textMain: 'text-pink-600', textLight: 'text-pink-100',
+            borderMain: 'border-pink-200', borderHover: 'hover:border-pink-300', borderFocus: 'focus:border-pink-400',
+            ringActive: 'ring-pink-100', ringFocus: 'focus:ring-pink-100',
+            shadowIcon: 'shadow-pink-200', shadowBtn: 'shadow-pink-500/30',
+            gradient: 'from-emerald-400 via-teal-500 to-pink-500',
+            sidebarGradient: 'from-emerald-700 via-teal-600 to-pink-600',
+            waveColorClass: 'text-pink-100',
+            patternClass: 'pattern-lotus'
+        },
+        mint: {
+            id: 'mint', name: 'Fresh Mint',
+            bgMain: 'bg-teal-500', bgHover: 'hover:bg-teal-600', bgLight: 'bg-teal-50',
+            textMain: 'text-teal-600', textLight: 'text-teal-100',
+            borderMain: 'border-teal-200', borderHover: 'hover:border-teal-200', borderFocus: 'focus:border-teal-400',
+            ringActive: 'ring-teal-100', ringFocus: 'focus:ring-teal-100',
+            shadowIcon: 'shadow-teal-200', shadowBtn: 'shadow-teal-500/30',
+            gradient: 'from-teal-400 via-teal-500 to-emerald-600',
+            sidebarGradient: 'from-teal-500 via-teal-600 to-emerald-800',
+            waveColorClass: 'text-teal-100',
+            patternClass: 'bg-slate-50/50'
+        },
+        lavender: {
+            id: 'lavender', name: 'Lavender Night',
+            bgMain: 'bg-indigo-500', bgHover: 'hover:bg-indigo-600', bgLight: 'bg-indigo-50',
+            textMain: 'text-indigo-600', textLight: 'text-indigo-100',
+            borderMain: 'border-indigo-200', borderHover: 'hover:border-indigo-200', borderFocus: 'focus:border-indigo-400',
+            ringActive: 'ring-indigo-100', ringFocus: 'focus:ring-indigo-100',
+            shadowIcon: 'shadow-indigo-200', shadowBtn: 'shadow-indigo-500/30',
+            gradient: 'from-indigo-400 via-purple-500 to-indigo-700',
+            sidebarGradient: 'from-indigo-500 via-indigo-600 to-purple-900',
+            waveColorClass: 'text-indigo-100',
+            patternClass: 'bg-slate-50/50'
         },
         navy: {
             id: 'navy', name: 'Deep Sea Grid',
@@ -99,9 +176,10 @@
             borderMain: 'border-slate-300', borderHover: 'hover:border-slate-400', borderFocus: 'focus:border-slate-500',
             ringActive: 'ring-slate-200', ringFocus: 'focus:ring-slate-200',
             shadowIcon: 'shadow-slate-300', shadowBtn: 'shadow-slate-700/30',
-            gradient: 'from-slate-700 to-slate-900',
+            gradient: 'from-slate-600 via-slate-700 to-slate-900',
+            sidebarGradient: 'from-slate-700 via-slate-800 to-slate-950',
             waveColorClass: 'text-slate-200',
-            patternClass: 'bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:24px_24px]'
+            patternClass: 'bg-slate-50/50 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:24px_24px]'
         }
     };
 
@@ -169,7 +247,7 @@
 
     function App() {
         const [activeTab, setActiveTab] = useState('courses');
-        const [voyageView, setVoyageView] = useState('active'); // 'active' or 'upcoming'
+        const [voyageView, setVoyageView] = useState('active'); 
         const [isSidebarOpen, setIsSidebarOpen] = useState(false);
         
         const [profile, setProfile] = useState(() => {
@@ -199,8 +277,11 @@
         const [editingVoyage, setEditingVoyage] = useState(null);
         const [confirmAction, setConfirmAction] = useState(null);
 
-        // Changed the default theme from 'blue' to 'navy' (Deep Sea Grid)
-        const [themeId, setThemeId] = useState(() => localStorage.getItem('drift-theme') || 'navy');
+        const [themeId, setThemeId] = useState(() => {
+            let saved = localStorage.getItem('drift-theme');
+            if (saved === 'blue') saved = 'ocean'; 
+            return saved || 'navy'; // Defaults to Deep Sea Grid
+        });
         const theme = THEMES[themeId];
         const [isEditingProfile, setIsEditingProfile] = useState(false);
         
@@ -220,12 +301,11 @@
                 setCourses(prevCourses => prevCourses.map(course => {
                     let updatedCourse = { ...course };
                     
-                    // Auto-unlock Approaching Waves when time arrives
                     if (updatedCourse.isFuture && updatedCourse.startDate) {
                         let unlockTime;
                         if (!updatedCourse.includeTime) {
                             const [y, m, d] = updatedCourse.startDate.split('-');
-                            unlockTime = new Date(y, m - 1, d, 6, 0, 0); // Default to 6:00 AM
+                            unlockTime = new Date(y, m - 1, d, 6, 0, 0); 
                         } else {
                             unlockTime = new Date(updatedCourse.startDate);
                         }
@@ -246,7 +326,7 @@
                         let unlockTime;
                         if (!updatedVoyage.includeTime) {
                             const [y, m, d] = updatedVoyage.startDate.split('-');
-                            unlockTime = new Date(y, m - 1, d, 6, 0, 0); // Default to 6:00 AM
+                            unlockTime = new Date(y, m - 1, d, 6, 0, 0); 
                         } else {
                             unlockTime = new Date(updatedVoyage.startDate);
                         }
@@ -408,11 +488,16 @@
         return (
             <div className="flex h-full w-full bg-slate-50 transition-colors duration-500 relative">
                 
+                {/* Mobile Overlay Background */}
                 {isSidebarOpen && (
-                    <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 lg:hidden animate-[fadeIn_0.3s_ease-out]" onClick={() => setIsSidebarOpen(false)}></div>
+                    <div 
+                        className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 lg:hidden animate-[fadeIn_0.3s_ease-out]"
+                        onClick={() => setIsSidebarOpen(false)}
+                    ></div>
                 )}
 
-                <aside className={`fixed inset-y-0 left-0 z-50 w-72 shrink-0 ${theme.bgMain} text-white flex flex-col shadow-2xl transition-transform duration-500 ease-in-out lg:relative lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} overflow-hidden`}>
+                {/* Sidebar Navigation */}
+                <aside className={`fixed inset-y-0 left-0 z-50 w-72 shrink-0 bg-gradient-to-b ${theme.sidebarGradient} text-white flex flex-col shadow-2xl transition-transform duration-500 ease-in-out lg:relative lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} overflow-hidden`}>
                     <WaveSVG colorClass="text-white/20" className="bottom-0 h-40 opacity-40" />
                     <WaveSVG colorClass="text-white/10" className="bottom-4 h-32 opacity-20" speed="animate-wave-slow" />
 
@@ -426,7 +511,8 @@
                         </button>
                     </div>
                     
-                    <div className="p-6 pb-2 relative z-10">
+                    {/* Fixed: Added overflow-y-auto so sidebar nav scrolls on short mobile screens */}
+                    <div className="p-6 pb-2 relative z-10 flex-1 overflow-y-auto">
                         <div className="text-xs font-bold text-white/50 uppercase tracking-widest mb-4 ml-1">Explore</div>
                         <nav className="flex flex-col gap-2">
                             <button onClick={() => handleNavClick('courses')} className={`flex items-center gap-3 w-full p-3.5 rounded-xl transition-all ${activeTab === 'courses' ? `bg-white ${theme.textMain} shadow-lg font-bold scale-105` : 'text-white/80 hover:bg-white/10 hover:text-white font-medium'}`}>
@@ -445,10 +531,15 @@
                                 <i className="fas fa-sliders text-lg w-5 text-center"></i>
                                 <span>Docking</span>
                             </button>
+                            <div className="h-px w-full bg-white/10 my-1"></div>
+                            <button onClick={() => handleNavClick('manual')} className={`flex items-center gap-3 w-full p-3.5 rounded-xl transition-all ${activeTab === 'manual' ? `bg-white ${theme.textMain} shadow-lg font-bold scale-105` : 'text-white/80 hover:bg-white/10 hover:text-white font-medium'}`}>
+                                <i className="fas fa-life-ring text-lg w-5 text-center"></i>
+                                <span>Captain's Manual</span>
+                            </button>
                         </nav>
                     </div>
 
-                    <div className="mt-auto p-6 border-t border-white/10 relative z-10">
+                    <div className="mt-auto p-6 border-t border-white/10 relative z-10 shrink-0">
                         <div className="flex items-center gap-3 p-3 bg-white/10 rounded-xl cursor-pointer hover:bg-white/20 transition-all backdrop-blur-md" onClick={() => handleNavClick('settings')}>
                             <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-lg shadow-inner shrink-0"><i className="fas fa-user-astronaut"></i></div>
                             <div className="flex flex-col overflow-hidden">
@@ -483,24 +574,26 @@
                                         {activeTab === 'crew' && 'Fleet Radar'}
                                         {activeTab === 'analytics' && 'Tide Analysis'}
                                         {activeTab === 'settings' && 'Docking Settings'}
+                                        {activeTab === 'manual' && 'Captain\'s Manual'}
                                     </h2>
                                     <div className={`absolute -bottom-1 left-0 h-1 w-12 ${theme.bgMain} rounded-full mt-1 transition-all duration-500 hidden sm:block`}></div>
                                 </div>
                             )}
                         </div>
                         {activeTab === 'courses' && voyages.length > 0 && (
-                            <button onClick={openAddCourse} className={`${theme.bgMain} text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl font-bold shadow-lg hover:shadow-2xl hover:-translate-y-1 active:scale-95 transition-all flex items-center gap-2 group text-sm sm:text-base ml-auto`}>
+                            <button onClick={() => setIsAddCourseModalOpen(true)} className={`${theme.bgMain} text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl font-bold shadow-lg hover:shadow-2xl hover:-translate-y-1 active:scale-95 transition-all flex items-center gap-2 group text-sm sm:text-base ml-auto`}>
                                 <i className="fas fa-plus group-hover:rotate-90 transition-transform"></i> <span className="hidden sm:inline">New Course</span><span className="sm:hidden">Course</span>
                             </button>
                         )}
                     </header>
 
-                    <main className={`flex-1 overflow-y-auto p-4 sm:p-6 lg:p-10 bg-slate-50/30 relative ${theme.patternClass}`}>
+                    <main className={`flex-1 overflow-y-auto p-4 sm:p-6 lg:p-10 relative ${theme.patternClass}`}>
                         <div className="max-w-7xl mx-auto h-full relative z-10">
                             {activeTab === 'courses' && <CoursesView theme={theme} voyages={voyages} courses={courses} openAddVoyage={openAddVoyage} openEditVoyage={openEditVoyage} deleteVoyage={deleteVoyage} toggleTimer={toggleTimer} completeCourse={completeCourse} toggleGoal={toggleGoal} deleteCourse={deleteCourse} openEditCourse={openEditCourse} toggleVoyagePin={toggleVoyagePin} toggleVoyageCollapse={toggleVoyageCollapse} toggleCoursePin={toggleCoursePin} moveCourse={moveCourse} currentTime={currentTime} voyageView={voyageView} unlockCourseEarly={unlockCourseEarly} unlockVoyageEarly={unlockVoyageEarly} />}
                             {activeTab === 'crew' && <CrewView theme={theme} profile={profile} crew={crew} setCrew={setCrew} />}
                             {activeTab === 'analytics' && <AnalyticsView theme={theme} courses={courses} />}
                             {activeTab === 'settings' && <SettingsView theme={theme} themeId={themeId} setThemeId={setThemeId} profile={profile} onEditProfile={() => setIsEditingProfile(true)} clearData={clearData} />}
+                            {activeTab === 'manual' && <ManualView theme={theme} />}
                         </div>
                         <div className="fixed bottom-0 right-0 w-1/3 h-1/3 opacity-[0.03] pointer-events-none">
                             <i className="fas fa-water text-[20rem] -rotate-12"></i>
@@ -513,19 +606,218 @@
                 
                 {confirmAction && (
                     <div className="absolute inset-0 z-[60] bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4">
-                        <div className="bg-white w-full max-w-sm rounded-3xl p-8 shadow-2xl animate-[slideUp_0.3s_ease-out] text-center">
-                            <div className="w-20 h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 shadow-inner">
+                        {/* Fixed: Constrained max-height for very short screens so confirm buttons don't get hidden */}
+                        <div className="bg-white w-full max-w-sm rounded-3xl p-6 sm:p-8 shadow-2xl animate-[slideUp_0.3s_ease-out] text-center flex flex-col max-h-[90vh]">
+                            <div className="w-20 h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 shadow-inner shrink-0">
                                 <i className="fas fa-exclamation-triangle"></i>
                             </div>
-                            <h2 className="text-2xl font-black text-slate-800 mb-2">{confirmAction.title}</h2>
-                            <p className="text-sm text-slate-500 mb-8 font-medium">{confirmAction.message}</p>
-                            <div className="flex gap-3">
+                            <h2 className="text-xl sm:text-2xl font-black text-slate-800 mb-2 shrink-0">{confirmAction.title}</h2>
+                            <div className="overflow-y-auto mb-8 pr-2 flex-1">
+                                <p className="text-sm text-slate-500 font-medium">{confirmAction.message}</p>
+                            </div>
+                            <div className="flex gap-3 shrink-0">
                                 <button onClick={() => setConfirmAction(null)} className="flex-1 bg-slate-100 text-slate-600 font-bold py-3.5 rounded-xl hover:bg-slate-200 transition-all">Cancel</button>
                                 <button onClick={() => { confirmAction.onConfirm(); setConfirmAction(null); }} className="flex-1 bg-red-500 text-white font-bold py-3.5 rounded-xl hover:bg-red-600 shadow-lg shadow-red-200 active:scale-95 transition-all">Confirm</button>
                             </div>
                         </div>
                     </div>
                 )}
+            </div>
+        );
+    }
+
+    function ManualView({ theme }) {
+        const slides = [
+            {
+                id: 1,
+                title: "Mapping Your Journey",
+                icon: "fas fa-map-marked-alt",
+                content: (
+                    <div className="space-y-4 text-left">
+                        <div className="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-100 shadow-sm flex items-start gap-4">
+                            <i className={`fas fa-map ${theme.textMain} mt-1 text-lg`}></i>
+                            <div>
+                                <strong className="block text-slate-800 mb-1">Voyages (Folders)</strong>
+                                <span className="text-slate-600 text-sm">Your main projects or categories. Use them to group related tasks together, like "Finals Week" or "Work Project".</span>
+                            </div>
+                        </div>
+                        <div className="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-100 shadow-sm flex items-start gap-4">
+                            <i className={`fas fa-wind ${theme.textMain} mt-1 text-lg`}></i>
+                            <div>
+                                <strong className="block text-slate-800 mb-1">Courses (Tasks)</strong>
+                                <span className="text-slate-600 text-sm">The individual tasks charted inside a specific Voyage.</span>
+                            </div>
+                        </div>
+                        <div className="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-100 shadow-sm flex items-start gap-4">
+                            <i className={`fas fa-stream ${theme.textMain} mt-1 text-lg`}></i>
+                            <div>
+                                <strong className="block text-slate-800 mb-1">Goals (Cargo)</strong>
+                                <span className="text-slate-600 text-sm">Break a heavy Course down into smaller checkpoints. If you assign duration to goals, Drift automatically calculates the total Course time for you!</span>
+                            </div>
+                        </div>
+                    </div>
+                )
+            },
+            {
+                id: 2,
+                title: "Reading the Tides",
+                icon: "fas fa-water",
+                content: (
+                    <div className="space-y-4 text-left">
+                        <p className="text-slate-500 font-bold mb-2 text-center">Courses automatically sort based on the priority you set.</p>
+                        <div className="bg-white p-4 rounded-2xl border-2 border-slate-100 shadow-sm flex items-center gap-3">
+                            <div className="bg-slate-100 text-slate-500 px-3 py-1 rounded-full text-xs font-bold shrink-0"><i className="fas fa-tint"></i> Low Tide</div>
+                            <span className="text-slate-600 text-sm">Casual tasks with no urgency.</span>
+                        </div>
+                        <div className="bg-white p-4 rounded-2xl border-2 border-orange-200 shadow-sm flex items-center gap-3">
+                            <div className="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-xs font-bold shrink-0"><i className="fas fa-water"></i> High Tide</div>
+                            <span className="text-slate-600 text-sm">Important tasks that require focus soon.</span>
+                        </div>
+                        <div className="bg-white p-4 rounded-2xl border-2 border-red-200 shadow-sm flex items-center gap-3">
+                            <div className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-xs font-bold shrink-0"><i className="fas fa-volcano"></i> Tsunami</div>
+                            <span className="text-slate-600 text-sm">Critical tasks. These always float to the absolute top of your list!</span>
+                        </div>
+                        <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3 mt-4">
+                            <i className={`fas fa-thumbtack ${theme.textMain} ml-2 text-lg`}></i>
+                            <span className="text-slate-600 text-sm ml-1"><strong>Pinning:</strong> Click the thumbtack to force any Voyage or Course to stay at the top of your view.</span>
+                        </div>
+                    </div>
+                )
+            },
+            {
+                id: 3,
+                title: "Time & Tracking",
+                icon: "fas fa-hourglass-half",
+                content: (
+                    <div className="space-y-4 text-left">
+                        <div className="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-100 shadow-sm flex items-start gap-4">
+                            <div className={`w-10 h-10 shrink-0 rounded-xl ${theme.bgMain} text-white flex items-center justify-center`}><i className="fas fa-play ml-1"></i></div>
+                            <div>
+                                <strong className="block text-slate-800 mb-1">Sailing (The Timer)</strong>
+                                <span className="text-slate-600 text-sm">Click play to launch a course. The animated circle acts as a progress ring that slowly drains as your time runs out.</span>
+                            </div>
+                        </div>
+                        <div className="bg-red-50 p-4 sm:p-5 rounded-2xl border border-red-100 shadow-sm flex items-start gap-4">
+                            <div className={`text-xl sm:text-2xl font-mono font-black text-red-500 shrink-0 pt-1`}>+00:15</div>
+                            <div>
+                                <strong className="block text-red-800 mb-1">Overtime</strong>
+                                <span className="text-red-600 text-sm">If you sail past your estimated duration, the timer turns red and starts counting <em>up</em>, tracking your extra time.</span>
+                            </div>
+                        </div>
+                        <div className="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-100 shadow-sm flex items-start gap-4">
+                            <div className={`w-10 h-10 shrink-0 rounded-xl bg-emerald-500 text-white flex items-center justify-center`}><i className="fas fa-check"></i></div>
+                            <div>
+                                <strong className="block text-slate-800 mb-1">Anchoring (Completion)</strong>
+                                <span className="text-slate-600 text-sm">Click the green check to finish a course. It will visually dim and drop to the bottom of the list to stay out of your way.</span>
+                            </div>
+                        </div>
+                    </div>
+                )
+            },
+            {
+                id: 4,
+                title: "Approaching Waves",
+                icon: "fas fa-telescope",
+                content: (
+                    <div className="space-y-4 text-left">
+                        <div className="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-100 shadow-sm flex items-start gap-4">
+                            <i className={`fas fa-calendar-alt ${theme.textMain} mt-1 text-xl`}></i>
+                            <div>
+                                <strong className="block text-slate-800 mb-1">Scheduling the Future</strong>
+                                <span className="text-slate-600 text-sm">Toggle "Approaching Wave" in the Advanced Cargo menu to schedule tasks or voyages for a future date and time.</span>
+                            </div>
+                        </div>
+                        <div className="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-100 shadow-sm flex items-start gap-4">
+                            <div className="w-8 h-8 shrink-0 bg-slate-200 text-slate-500 rounded-lg flex items-center justify-center border border-slate-300"><i className="fas fa-lock text-sm"></i></div>
+                            <div>
+                                <strong className="block text-slate-800 mb-1">Treasure Chest Locks</strong>
+                                <span className="text-slate-600 text-sm">Future courses are physically locked with a padlock. You cannot start their timers until the exact target time arrives!</span>
+                            </div>
+                        </div>
+                        <div className="bg-emerald-50 p-4 sm:p-5 rounded-2xl border border-emerald-100 shadow-sm flex items-start gap-4">
+                            <i className="fas fa-unlock text-emerald-500 mt-1 text-xl px-1"></i>
+                            <div>
+                                <strong className="block text-emerald-800 mb-1">The Automatic Tide & Early Unlocks</strong>
+                                <span className="text-emerald-700 text-sm">The moment your real-world clock hits the start time, Drift automatically unlocks the task. Need it sooner? Click the green <strong>Unlock Early</strong> button to break the lock manually.</span>
+                            </div>
+                        </div>
+                    </div>
+                )
+            },
+            {
+                id: 5,
+                title: "The Fleet",
+                icon: "fas fa-satellite-dish",
+                content: (
+                    <div className="space-y-4 text-left">
+                        <div className="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col gap-2">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                                <strong className="text-slate-800">Your Captain ID</strong>
+                                <span className="font-mono bg-slate-200 text-slate-600 px-2 py-1 rounded text-xs font-bold">CPT-XYZ123</span>
+                            </div>
+                            <span className="text-slate-600 text-sm mt-1">Found in "The Fleet" tab. Share this unique code with your friends and fellow captains.</span>
+                        </div>
+                        <div className="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col gap-2 mt-4">
+                            <strong className="text-slate-800 flex items-center gap-2"><i className={`fas fa-radar ${theme.textMain}`}></i> Global Radar</strong>
+                            <span className="text-slate-600 text-sm">Add your friends' Captain IDs to your radar. You will be able to see if they are currently <strong>Sailing</strong> (actively running a timer) or <strong>Docked</strong> (offline), along with the specific course they are tackling!</span>
+                        </div>
+                    </div>
+                )
+            }
+        ];
+
+        const [currentSlide, setCurrentSlide] = useState(0);
+
+        const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
+        const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+
+        const slide = slides[currentSlide];
+
+        return (
+            // Fixed: Gave it a minimum height. This allows it to shrink slightly, but if screen is too short, the outer window will scroll!
+            <div className="max-w-3xl mx-auto min-h-[550px] h-full flex flex-col pb-6 sm:pb-10 animate-[fadeIn_0.5s_ease-out]">
+                <div className="w-full bg-white rounded-[3rem] p-6 sm:p-10 shadow-sm border border-slate-100 relative overflow-hidden flex flex-col flex-1 min-h-0">
+                    <WaveSVG colorClass={theme.textLight} className="top-0 rotate-180 opacity-30 h-24 shrink-0" />
+                    
+                    <div className="relative z-10 flex-1 flex flex-col min-h-0">
+                        <div className="flex flex-col items-center shrink-0">
+                            <div className={`w-16 h-16 sm:w-20 sm:h-20 shrink-0 ${theme.bgLight} ${theme.textMain} rounded-[2rem] flex items-center justify-center text-3xl sm:text-4xl mb-4 sm:mb-6 shadow-inner border-4 border-white`}>
+                                <i className={slide.icon}></i>
+                            </div>
+                            <h2 className="text-xl sm:text-3xl font-black text-slate-800 mb-6 sm:mb-8 text-center tracking-tight">
+                                <span className="text-slate-300 mr-2">{slide.id}.</span> {slide.title}
+                            </h2>
+                        </div>
+                        
+                        <div className="w-full flex-1 overflow-y-auto px-2 sm:px-6 pb-4 custom-scrollbar flex flex-col justify-start">
+                            <div className="my-auto">
+                                {slide.content}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Navigation Bar */}
+                    <div className="relative z-10 shrink-0 flex items-center justify-between w-full pt-4 sm:pt-6 border-t border-slate-100 mt-2">
+                        <button onClick={prevSlide} className={`w-12 h-12 shrink-0 rounded-2xl flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-all active:scale-95 border border-slate-100`}>
+                            <i className="fas fa-chevron-left text-xl pointer-events-none"></i>
+                        </button>
+                        
+                        <div className="flex gap-2 sm:gap-3 flex-wrap justify-center">
+                            {slides.map((_, idx) => (
+                                <button 
+                                    key={idx} 
+                                    onClick={() => setCurrentSlide(idx)} 
+                                    className={`h-2.5 rounded-full transition-all duration-300 ${idx === currentSlide ? `w-8 ${theme.bgMain}` : 'w-2.5 bg-slate-200 hover:bg-slate-300'}`}
+                                    aria-label={`Go to slide ${idx + 1}`}
+                                ></button>
+                            ))}
+                        </div>
+
+                        <button onClick={nextSlide} className={`w-12 h-12 shrink-0 rounded-2xl flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-all active:scale-95 border border-slate-100`}>
+                            <i className="fas fa-chevron-right text-xl pointer-events-none"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -695,8 +987,8 @@
         const pBadge = badgeInfo[course.priority || 'low'];
         const pBorder = priorityColors[course.priority || 'low'];
 
-        // Time Locks and Migration checks are managed dynamically via the app interval
         let isPastDeadline = false;
+
         const now = currentTime || new Date();
         
         if (course.deadline) {
@@ -1165,7 +1457,6 @@
                     </form>
                     <WaveSVG colorClass={theme.textLight} className="bottom-0 opacity-40 h-16" />
                 </div>
-                <style>{"@keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } } @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }"}</style>
             </div>
         );
     }
@@ -1403,12 +1694,14 @@
 
         return (
             <div className="absolute inset-0 z-50 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4 text-left">
-                <div className="bg-white w-full max-w-sm rounded-3xl p-8 shadow-2xl animate-[slideUp_0.3s_ease-out]">
-                    <div className="flex justify-between items-center mb-6">
+                {/* Fixed: Constrained max-height for very short screens */}
+                <div className="bg-white w-full max-w-sm rounded-3xl p-6 sm:p-8 shadow-2xl animate-[slideUp_0.3s_ease-out] flex flex-col max-h-[90vh]">
+                    <div className="flex justify-between items-center mb-6 shrink-0">
                         <h2 className="text-2xl font-black text-slate-800 tracking-tight">{isEdit ? 'Edit Voyage' : 'Chart New Voyage'}</h2>
                         <button type="button" onClick={onClose} className="w-10 h-10 flex items-center justify-center rounded-2xl bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i className="fas fa-times"></i></button>
                     </div>
-                    <form onSubmit={handleSubmit} className="text-left space-y-6">
+                    {/* Fixed: Made form body scrollable */}
+                    <form onSubmit={handleSubmit} className="text-left space-y-6 overflow-y-auto flex-1 pr-2 pb-2">
                         <div>
                             <label className="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Voyage Name</label>
                             <input required autoFocus value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Finals Week" className="w-full border-b-4 border-slate-100 p-4 rounded-2xl font-bold bg-slate-50/50 outline-none focus:border-blue-500 transition-colors" />
@@ -1437,7 +1730,7 @@
                             )}
                         </div>
 
-                        <button type="submit" className={`w-full ${theme.bgMain} text-white font-black py-4 rounded-2xl shadow-lg hover:shadow-xl active:scale-95 transition-all`}>
+                        <button type="submit" className={`w-full ${theme.bgMain} text-white font-black py-4 rounded-2xl shadow-lg hover:shadow-xl active:scale-95 transition-all mt-4`}>
                             {isEdit ? 'Save Changes' : 'Create Voyage'}
                         </button>
                     </form>
