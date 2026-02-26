@@ -168,7 +168,6 @@
             setError('');
             
             try {
-                // Fetch all profiles to check names
                 const profilesRef = window.FB.collection(db, 'artifacts', globalAppId, 'public', 'data', 'profiles');
                 const snap = await window.FB.getDocs(profilesRef);
                 const allProfiles = snap.docs.map(d => ({...d.data(), uid: d.id}));
@@ -1463,6 +1462,123 @@
         );
     }
 
+    function VoyageModal({ theme, terms, initialVoyage, onClose, onSave }) {
+        const isEdit = !!initialVoyage;
+        const [name, setName] = useState(initialVoyage?.name || '');
+        const [isFuture, setIsFuture] = useState(initialVoyage?.isFuture || false);
+        const [startDate, setStartDate] = useState(initialVoyage?.startDate || '');
+        const [includeTime, setIncludeTime] = useState(initialVoyage?.includeTime || false);
+
+        const handleToggleTime = () => {
+            if (!includeTime) {
+                if (startDate) setStartDate(`${startDate}T00:00`);
+            } else {
+                if (startDate) setStartDate(startDate.split('T')[0]);
+            }
+            setIncludeTime(!includeTime);
+        };
+
+        const handleSubmit = (e) => {
+            e.preventDefault();
+            if (name.trim()) {
+                onSave({
+                    id: isEdit ? initialVoyage.id : Date.now().toString(),
+                    name: name.trim(),
+                    isPinned: isEdit ? initialVoyage.isPinned : false,
+                    isCollapsed: isEdit ? initialVoyage.isCollapsed : false,
+                    isFuture,
+                    startDate,
+                    includeTime,
+                    isEdit
+                });
+            }
+        };
+
+        return (
+            <div className="absolute inset-0 z-50 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4 text-left">
+                <div className="bg-white w-full max-w-sm rounded-3xl p-6 sm:p-8 shadow-2xl animate-[slideUp_0.3s_ease-out] flex flex-col max-h-[90vh]">
+                    <div className="flex justify-between items-center mb-6 shrink-0">
+                        <h2 className="text-2xl font-black text-slate-800 tracking-tight">{isEdit ? `Edit ${terms.voyage}` : `${terms.chartNew} ${terms.voyage}`}</h2>
+                        <button type="button" onClick={onClose} className="w-10 h-10 flex items-center justify-center rounded-2xl bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i className="fas fa-times"></i></button>
+                    </div>
+                    <form onSubmit={handleSubmit} className="text-left space-y-6 overflow-y-auto flex-1 pr-2 pb-2">
+                        <div>
+                            <label className="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">{terms.voyage} Name</label>
+                            <input required autoFocus value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Finals Week" className="w-full border-b-4 border-slate-100 p-4 rounded-2xl font-bold bg-slate-50/50 outline-none focus:border-blue-500 transition-colors" />
+                        </div>
+
+                        <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-4">
+                            <div className="flex items-center justify-between gap-3 cursor-pointer hover:bg-slate-100 transition-colors rounded-xl" onClick={() => setIsFuture(!isFuture)}>
+                                <label className="text-[10px] sm:text-[11px] font-black text-slate-600 uppercase tracking-[0.2em] cursor-pointer flex-1 flex items-center gap-2">
+                                    <i className={`fas fa-water ${isFuture ? theme.textMain : 'text-slate-400'}`}></i> {terms.wave}
+                                </label>
+                                <div className={`w-10 h-5 rounded-full relative transition-colors ${isFuture ? theme.bgMain : 'bg-slate-300'}`}>
+                                    <div className={`absolute top-1 bottom-1 w-3 rounded-full bg-white transition-all ${isFuture ? 'left-6' : 'left-1'}`}></div>
+                                </div>
+                            </div>
+
+                            {isFuture && (
+                                <div className="animate-[fadeIn_0.3s_ease-out] pt-2 border-t border-slate-200/50">
+                                    <div className="flex justify-between items-center mb-2 sm:mb-3">
+                                        <label className="block text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Target Start</label>
+                                        <button type="button" onClick={handleToggleTime} className="text-[9px] font-bold text-slate-500 bg-slate-200/60 hover:bg-slate-200 px-2 py-1 rounded-lg transition-colors flex items-center gap-1">
+                                            <i className={`fas ${includeTime ? 'fa-clock' : 'fa-calendar-day'}`}></i> {includeTime ? 'Time' : 'Date'}
+                                        </button>
+                                    </div>
+                                    <input type={includeTime ? "datetime-local" : "date"} value={startDate} onChange={e => setStartDate(e.target.value)} required={isFuture} className={`w-full border-b-4 border-slate-100 p-3 rounded-2xl outline-none ${theme.borderFocus} focus:bg-white transition-all font-bold bg-white text-slate-700 text-[10px] sm:text-sm`} />
+                                </div>
+                            )}
+                        </div>
+
+                        <button type="submit" className={`w-full ${theme.bgMain} text-white font-black py-4 rounded-2xl shadow-lg hover:shadow-xl active:scale-95 transition-all mt-4`}>
+                            {isEdit ? 'Save Changes' : `Create ${terms.voyage}`}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        );
+    }
+
+    // --- ERROR BOUNDARY TO PREVENT WHITE SCREEN ---
+    class ErrorBoundary extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = { hasError: false, error: null, info: null };
+        }
+        static getDerivedStateFromError(error) {
+            return { hasError: true, error };
+        }
+        componentDidCatch(error, info) {
+            console.error("Crash Prevented:", error, info);
+            this.setState({ info });
+        }
+        render() {
+            if (this.state.hasError) {
+                return (
+                    <div className="min-h-screen bg-red-50 text-red-900 p-6 md:p-10 flex flex-col items-start justify-center">
+                        <div className="w-16 h-16 bg-red-100 text-red-500 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow-inner">
+                            <i className="fas fa-bug"></i>
+                        </div>
+                        <h1 className="text-2xl md:text-3xl font-black mb-2 tracking-tight">System Crash Prevented</h1>
+                        <p className="mb-6 font-medium text-red-700 max-w-xl">Something caused the user interface to break. If you are beta testing, please screenshot the technical details below so we can fix it.</p>
+                        
+                        <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-red-200 w-full max-w-3xl overflow-x-auto font-mono text-[10px] md:text-xs">
+                            <strong className="text-red-600 block mb-3 text-sm">{this.state.error?.toString()}</strong>
+                            {this.state.info?.componentStack?.split('\n').map((line, i) => (
+                                <div key={i} className="mb-1.5 text-slate-600">{line}</div>
+                            ))}
+                        </div>
+                        
+                        <button onClick={() => window.location.reload()} className="mt-8 bg-red-600 hover:bg-red-700 text-white font-black py-4 px-8 rounded-2xl shadow-lg shadow-red-200 active:scale-95 transition-all uppercase tracking-widest text-xs">
+                            Reload Application
+                        </button>
+                    </div>
+                );
+            }
+            return this.props.children;
+        }
+    }
+
     function App() {
         // --- FIREBASE AUTHENTICATION ---
         const [authUser, setAuthUser] = useState(null);
@@ -1638,7 +1754,7 @@
         const toggleTimer = (course) => {
             if (!db || !authUser) return;
             const nextState = !course.isRunning;
-            window.FB.updateDoc(getCourseRef(course.id), { isRunning: nextState, timeSpent: course.timeSpent });
+            window.FB.updateDoc(getCourseRef(course.id), { isRunning: nextState, timeSpent: course.timeSpent }).catch(e => alert("Sync Error: " + e.message));
             
             // Sync status to Fleet Radar
             updatePublicStatus(nextState, nextState ? course.title : '');
@@ -1646,19 +1762,19 @@
 
         const completeCourse = (course) => {
             if (!db || !authUser) return;
-            window.FB.updateDoc(getCourseRef(course.id), { isCompleted: true, isRunning: false, timeSpent: course.timeSpent });
+            window.FB.updateDoc(getCourseRef(course.id), { isCompleted: true, isRunning: false, timeSpent: course.timeSpent }).catch(e => alert("Sync Error: " + e.message));
             updatePublicStatus(false);
         };
 
         const toggleGoal = (course, goalId) => {
             if (!db || !authUser) return;
             const newGoals = course.goals.map(g => g.id === goalId ? { ...g, isCompleted: !g.isCompleted } : g);
-            window.FB.updateDoc(getCourseRef(course.id), { goals: newGoals });
+            window.FB.updateDoc(getCourseRef(course.id), { goals: newGoals }).catch(e => alert("Sync Error: " + e.message));
         };
 
         const toggleCoursePin = (course) => {
             if (!db || !authUser) return;
-            window.FB.updateDoc(getCourseRef(course.id), { isPinned: !course.isPinned });
+            window.FB.updateDoc(getCourseRef(course.id), { isPinned: !course.isPinned }).catch(e => alert("Sync Error: " + e.message));
         };
 
         const moveCourse = (courseId, direction) => {
@@ -1681,8 +1797,8 @@
             if (direction === 'down' && idx < vCourses.length - 1) swapTarget = vCourses[idx + 1];
 
             if (swapTarget && swapTarget.isPinned === (target.isPinned || false) && swapTarget.priority === (target.priority || 'low')) {
-                window.FB.updateDoc(getCourseRef(courseId), { order: swapTarget.order || swapTarget.id });
-                window.FB.updateDoc(getCourseRef(swapTarget.id), { order: target.order || target.id });
+                window.FB.updateDoc(getCourseRef(courseId), { order: swapTarget.order || swapTarget.id }).catch(e => alert("Sync Error: " + e.message));
+                window.FB.updateDoc(getCourseRef(swapTarget.id), { order: target.order || target.id }).catch(e => alert("Sync Error: " + e.message));
             }
         };
 
@@ -1692,7 +1808,7 @@
                 message: `Are you sure you want to delete this ${terms.course.toLowerCase()}? This cannot be undone.`,
                 onConfirm: () => {
                     if (!authUser) return;
-                    window.FB.deleteDoc(getCourseRef(course.id));
+                    window.FB.deleteDoc(getCourseRef(course.id)).catch(e => alert("Sync Error: " + e.message));
                 }
             });
         };
@@ -1703,7 +1819,7 @@
                 message: `All ${terms.courses.toLowerCase()} inside this ${terms.voyage.toLowerCase()} will be lost forever!`,
                 onConfirm: () => {
                     if (!authUser) return;
-                    window.FB.deleteDoc(getVoyageRef(voyage.id));
+                    window.FB.deleteDoc(getVoyageRef(voyage.id)).catch(e => alert("Sync Error: " + e.message));
                     // Wipe related courses
                     courses.filter(c => c.voyageId === voyage.id).forEach(c => {
                         window.FB.deleteDoc(getCourseRef(c.id));
@@ -1718,7 +1834,7 @@
                 message: "Start this ahead of schedule? It will immediately become active.",
                 onConfirm: () => {
                     if (!authUser) return;
-                    window.FB.updateDoc(getCourseRef(course.id), { isFuture: false, startedEarly: true });
+                    window.FB.updateDoc(getCourseRef(course.id), { isFuture: false, startedEarly: true }).catch(e => alert("Sync Error: " + e.message));
                 }
             });
         };
@@ -1729,19 +1845,19 @@
                 message: "Start this ahead of schedule? It will immediately become active.",
                 onConfirm: () => {
                     if (!authUser) return;
-                    window.FB.updateDoc(getVoyageRef(voyage.id), { isFuture: false, startedEarly: true });
+                    window.FB.updateDoc(getVoyageRef(voyage.id), { isFuture: false, startedEarly: true }).catch(e => alert("Sync Error: " + e.message));
                 }
             });
         };
 
         const toggleVoyagePin = (voyage) => {
             if (!db || !authUser) return;
-            window.FB.updateDoc(getVoyageRef(voyage.id), { isPinned: !voyage.isPinned });
+            window.FB.updateDoc(getVoyageRef(voyage.id), { isPinned: !voyage.isPinned }).catch(e => alert("Sync Error: " + e.message));
         };
 
         const toggleVoyageCollapse = (voyage) => {
             if (!db || !authUser) return;
-            window.FB.updateDoc(getVoyageRef(voyage.id), { isCollapsed: !voyage.isCollapsed });
+            window.FB.updateDoc(getVoyageRef(voyage.id), { isCollapsed: !voyage.isCollapsed }).catch(e => alert("Sync Error: " + e.message));
         };
 
         const handleSaveVoyage = (voyageData) => {
@@ -1749,9 +1865,10 @@
             const ref = getVoyageRef(voyageData.id);
             if (voyageData.isEdit) {
                 delete voyageData.isEdit;
-                window.FB.updateDoc(ref, voyageData);
+                window.FB.updateDoc(ref, voyageData).catch(e => alert("Database Blocked: " + e.message));
             } else {
-                window.FB.setDoc(ref, { ...voyageData, startedEarly: false, ownerId: profile.id });
+                delete voyageData.isEdit; // Clean payload
+                window.FB.setDoc(ref, { ...voyageData, startedEarly: false, ownerId: profile.id }).catch(e => alert("Database Blocked: " + e.message));
             }
             setIsAddVoyageModalOpen(false);
             setEditingVoyage(null);
@@ -1762,9 +1879,10 @@
             const ref = getCourseRef(courseData.id);
             if (courseData.isEdit) {
                 delete courseData.isEdit; 
-                window.FB.updateDoc(ref, courseData);
+                window.FB.updateDoc(ref, courseData).catch(e => alert("Database Blocked: " + e.message));
             } else {
-                window.FB.setDoc(ref, { ...courseData, startedEarly: false, ownerId: profile.id });
+                delete courseData.isEdit; // Clean payload
+                window.FB.setDoc(ref, { ...courseData, startedEarly: false, ownerId: profile.id }).catch(e => alert("Database Blocked: " + e.message));
             }
             setIsAddCourseModalOpen(false);
             setEditingCourse(null);
@@ -1782,14 +1900,14 @@
             
             const newIds = [...friendIds, friend.uid];
             setFriendIds(newIds);
-            await window.FB.setDoc(getRadarRef(), { friends: newIds });
+            await window.FB.setDoc(getRadarRef(), { friends: newIds }).catch(e => alert("Sync Error: " + e.message));
         };
 
         const handleRemoveFriendFromRadar = async (removeUid) => {
             if (!authUser) return;
             const newIds = friendIds.filter(id => id !== removeUid);
             setFriendIds(newIds);
-            await window.FB.setDoc(getRadarRef(), { friends: newIds });
+            await window.FB.setDoc(getRadarRef(), { friends: newIds }).catch(e => alert("Sync Error: " + e.message));
         };
 
         const openAddCourse = () => { setEditingCourse(null); setIsAddCourseModalOpen(true); };
@@ -2003,7 +2121,11 @@
     }
 
     const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
+    root.render(
+        <ErrorBoundary>
+            <App />
+        </ErrorBoundary>
+    );
 </script>
 </body>
 </html>
