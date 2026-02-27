@@ -1006,6 +1006,7 @@
             </div>
         );
     }
+
     function CrewView({ theme, terms, profile, radarData, allProfiles, onAddFriend, onRemoveFriend, onAccept, onDecline, onCancel }) {
         const [newFriendName, setNewFriendName] = useState('');
         const [radarTab, setRadarTab] = useState('live'); // 'live', 'pending', 'sent'
@@ -1061,20 +1062,34 @@
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {activeFriends.map(mate => {
+                                        const isCompleted = mate.status === 'completed';
                                         const isFocused = mate.status === 'focused' || mate.isSailing;
                                         const isIdle = mate.status === 'idle';
                                         const isOffline = mate.status === 'offline';
+                                        const isOvertime = mate.isOvertime === true;
                                         
                                         let statusColor, statusText, statusDot, progressColor;
                                         if (isOffline) {
                                             statusColor = 'text-slate-400';
                                             statusText = terms.docked;
                                             statusDot = 'bg-slate-400';
+                                        } else if (isCompleted) {
+                                            statusColor = 'text-emerald-500';
+                                            statusText = `${terms.anchored}: ${mate.currentCourse}`;
+                                            statusDot = 'bg-emerald-500';
+                                            progressColor = 'bg-emerald-500';
                                         } else if (isFocused) {
-                                            statusColor = 'text-blue-500';
-                                            statusText = `${terms.sailing}: ${mate.currentCourse}`;
-                                            statusDot = 'bg-blue-500';
-                                            progressColor = 'bg-blue-500';
+                                            if (isOvertime) {
+                                                statusColor = 'text-red-500';
+                                                statusText = `${terms.sailing}: ${mate.currentCourse} (Overtime)`;
+                                                statusDot = 'bg-red-500 animate-pulse';
+                                                progressColor = 'bg-red-500';
+                                            } else {
+                                                statusColor = 'text-blue-500';
+                                                statusText = `${terms.sailing}: ${mate.currentCourse}`;
+                                                statusDot = 'bg-blue-500';
+                                                progressColor = 'bg-blue-500';
+                                            }
                                         } else if (isIdle) {
                                             statusColor = 'text-amber-500';
                                             statusText = terms.adrift;
@@ -1084,6 +1099,9 @@
                                             statusText = terms.atPort;
                                             statusDot = 'bg-emerald-500';
                                         }
+
+                                        const showProgress = isFocused || isCompleted;
+                                        const progressWidth = isCompleted ? 100 : (mate.progress || 0);
 
                                         return (
                                             <div key={mate.uid} className="border-2 border-slate-100 rounded-[2rem] p-6 relative overflow-hidden group">
@@ -1100,9 +1118,9 @@
                                                         {statusText}
                                                     </span>
                                                 </div>
-                                                {isFocused && (
+                                                {showProgress && (
                                                     <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden flex shadow-inner mt-2">
-                                                        <div className={`h-full ${progressColor} transition-all duration-1000 ease-linear`} style={{ width: `${mate.progress || 0}%` }}></div>
+                                                        <div className={`h-full ${progressColor} transition-all duration-1000 ease-linear`} style={{ width: `${progressWidth}%` }}></div>
                                                     </div>
                                                 )}
                                                 {isFocused && <div className={`absolute top-0 right-0 w-full h-full opacity-10 bg-gradient-to-l ${theme.gradient} animate-[shimmer_3s_infinite] pointer-events-none`}></div>}
@@ -1601,7 +1619,6 @@
                             </button>
                         </div>
                     </form>
-                    <WaveSVG colorClass={theme.textLight} className="bottom-0 opacity-40 h-16" />
                 </div>
             </div>
         );
@@ -1778,13 +1795,16 @@
         const [editingCourse, setEditingCourse] = useState(null);
         const [editingVoyage, setEditingVoyage] = useState(null);
         const [confirmAction, setConfirmAction] = useState(null);
+        
         const prevStatusRef = useRef({ status: '', currentCourse: '' });
+        const completionTimeoutRef = useRef(null);
 
         const getCourseRef = (courseId) => window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'courses', `${profile.id}_${courseId}`);
         const getVoyageRef = (voyageId) => window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'voyages', `${profile.id}_${voyageId}`);
         const getRadarRef = () => window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'radars', profile.id);
 
         const [isIdle, setIsIdle] = useState(false);
+        const isIdleRef = useRef(false);
 
         // Settings Sync Wrappers
         const handleSetThemeId = (newThemeId) => {
@@ -1821,8 +1841,12 @@
             let timeoutId;
             const handleActivity = () => {
                 setIsIdle(false);
+                isIdleRef.current = false;
                 clearTimeout(timeoutId);
-                timeoutId = setTimeout(() => setIsIdle(true), 5 * 60 * 1000); // 5 minutes
+                timeoutId = setTimeout(() => {
+                    setIsIdle(true);
+                    isIdleRef.current = true;
+                }, 5 * 60 * 1000); // 5 minutes
             };
             
             window.addEventListener('mousemove', handleActivity);
@@ -1841,20 +1865,20 @@
             };
         }, [profile.isCreated, profile.id, authUser, isDev]);
 
-        // --- LIVE CLOUD STATUS SYNC ---
+        // --- INIT RACE-CONDITION FIX (HEARTBEAT ON MOUNT) ---
         useEffect(() => {
             if (!profile.isCreated || !profile.id || !db || !authUser || isDev) return;
             
-            const runningCourse = courses.find(c => c.isRunning);
-            const currentStatus = runningCourse ? 'focused' : (isIdle ? 'idle' : 'online');
-            const courseTitle = runningCourse ? runningCourse.title : '';
-            
-            if (prevStatusRef.current.status !== currentStatus || prevStatusRef.current.currentCourse !== courseTitle) {
-                prevStatusRef.current = { status: currentStatus, currentCourse: courseTitle };
+            // Wait 2 seconds to ensure any beforeunload 'offline' signals from a rapid page refresh have fully cleared out over the network.
+            const forceOnline = setTimeout(() => {
                 const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
-                window.FB.updateDoc(profileRef, { status: currentStatus, currentCourse: courseTitle, isSailing: !!runningCourse }).catch(()=>{});
-            }
-        }, [courses, isIdle, profile.isCreated, profile.id, authUser, isDev]);
+                window.FB.updateDoc(profileRef, { status: 'online' }).catch(()=>{});
+                prevStatusRef.current.status = 'online';
+            }, 2000);
+            
+            return () => clearTimeout(forceOnline);
+        }, [profile.isCreated, profile.id, db, authUser, isDev]);
+
 
         // --- EXIT TRAP (OFFLINE) ---
         useEffect(() => {
@@ -1959,11 +1983,40 @@
                             window.FB.updateDoc(courseRef, { timeSpent: c.timeSpent }).catch(()=>{});
                         });
 
-                        // Calculate and sync percentage progress to public profile
-                        if (runningCourse) {
+                        // Calculate and sync percentage progress and overtime to public profile
+                        if (runningCourse && prevStatusRef.current.status !== 'completed') {
                             const prog = runningCourse.duration > 0 ? (runningCourse.timeSpent / runningCourse.duration) * 100 : 0;
-                            const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
-                            window.FB.updateDoc(profileRef, { progress: Math.min(100, Math.max(0, prog)) }).catch(()=>{});
+                            const isOvertime = runningCourse.timeSpent > runningCourse.duration;
+                            
+                            const currentStatus = 'focused';
+                            const courseTitle = runningCourse.title;
+
+                            // Only update if something changed
+                            if (prevStatusRef.current.status !== currentStatus || prevStatusRef.current.currentCourse !== courseTitle || prevStatusRef.current.isOvertime !== isOvertime) {
+                                prevStatusRef.current = { status: currentStatus, currentCourse: courseTitle, isOvertime: isOvertime };
+                                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+                                window.FB.updateDoc(profileRef, { 
+                                    status: currentStatus,
+                                    currentCourse: courseTitle,
+                                    isSailing: true,
+                                    progress: Math.min(100, Math.max(0, prog)),
+                                    isOvertime: isOvertime
+                                }).catch(()=>{});
+                            }
+                        } else if (prevStatusRef.current.status !== 'completed') {
+                            // HEARTBEAT: Force sync status every 10 seconds to self-heal any network drops or stuck offline states from page refreshes
+                            const correctStatus = isIdleRef.current ? 'idle' : 'online';
+                            if (prevStatusRef.current.status !== correctStatus) {
+                                prevStatusRef.current = { status: correctStatus, currentCourse: '', isOvertime: false };
+                                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+                                window.FB.updateDoc(profileRef, { 
+                                    status: correctStatus,
+                                    currentCourse: '',
+                                    isSailing: false,
+                                    progress: 0,
+                                    isOvertime: false
+                                }).catch(()=>{});
+                            }
                         }
                     }
                     return prevCourses;
@@ -1982,17 +2035,54 @@
             const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
             window.FB.updateDoc(profileRef, { isSailing, currentCourse: courseTitle, status: currentStatus }).catch(()=>{});
             
-            prevStatusRef.current = { status: currentStatus, currentCourse: courseTitle };
+            prevStatusRef.current = { status: currentStatus, currentCourse: courseTitle, isOvertime: false };
         };
 
         const toggleTimer = (course) => {
             const nextState = !course.isRunning;
+            
+            // Instantly clear the 5-second completion flash if starting a new course
+            if (completionTimeoutRef.current) {
+                clearTimeout(completionTimeoutRef.current);
+                completionTimeoutRef.current = null;
+            }
+            if (prevStatusRef.current.status === 'completed' && nextState) {
+                prevStatusRef.current.status = ''; 
+            }
+
             if (isDev) {
                 setCourses(prev => prev.map(c => c.id === course.id ? { ...c, isRunning: nextState } : c));
                 return;
             }
             if (!db || !authUser) return;
             window.FB.updateDoc(getCourseRef(course.id), { isRunning: nextState, timeSpent: course.timeSpent }).catch(e => alert("Sync Error: " + e.message));
+            
+            // Push immediate status switch on start
+            if (nextState) {
+                const isOvertime = course.timeSpent > course.duration;
+                const prog = course.duration > 0 ? (course.timeSpent / course.duration) * 100 : 0;
+                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+                window.FB.updateDoc(profileRef, { 
+                    status: 'focused', 
+                    currentCourse: course.title, 
+                    isSailing: true, 
+                    progress: Math.min(100, Math.max(0, prog)), 
+                    isOvertime: isOvertime 
+                }).catch(()=>{});
+                prevStatusRef.current = { status: 'focused', currentCourse: course.title, isOvertime: isOvertime };
+            } else {
+                // If paused, revert immediately to idle/online
+                const correctStatus = isIdleRef.current ? 'idle' : 'online';
+                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+                window.FB.updateDoc(profileRef, { 
+                    status: correctStatus, 
+                    currentCourse: '', 
+                    isSailing: false, 
+                    progress: 0, 
+                    isOvertime: false 
+                }).catch(()=>{});
+                prevStatusRef.current = { status: correctStatus, currentCourse: '', isOvertime: false };
+            }
         };
 
         const completeCourse = (course) => {
@@ -2002,6 +2092,34 @@
             }
             if (!db || !authUser) return;
             window.FB.updateDoc(getCourseRef(course.id), { isCompleted: true, isRunning: false, timeSpent: course.timeSpent }).catch(e => alert("Sync Error: " + e.message));
+            
+            // 1. Instantly lock the public profile to "Completed"
+            prevStatusRef.current = { status: 'completed', currentCourse: course.title, isOvertime: false };
+            const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+            window.FB.updateDoc(profileRef, { 
+                status: 'completed', 
+                currentCourse: course.title, 
+                isSailing: false, 
+                progress: 100, 
+                isOvertime: false 
+            }).catch(()=>{});
+
+            // 2. Set the 5-second countdown to revert back to Idle/Online
+            if (completionTimeoutRef.current) clearTimeout(completionTimeoutRef.current);
+            completionTimeoutRef.current = setTimeout(() => {
+                const newStatus = isIdleRef.current ? 'idle' : 'online';
+                prevStatusRef.current = { status: newStatus, currentCourse: '', isOvertime: false };
+                if (db && authUser) {
+                    window.FB.updateDoc(profileRef, { 
+                        status: newStatus, 
+                        currentCourse: '', 
+                        isSailing: false, 
+                        progress: 0, 
+                        isOvertime: false 
+                    }).catch(()=>{});
+                }
+                completionTimeoutRef.current = null;
+            }, 5000);
         };
 
         const toggleGoal = (course, goalId) => {
