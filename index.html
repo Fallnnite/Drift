@@ -108,6 +108,8 @@
         logs: themed ? "Tide Logs" : "Activity Logs",
         anchor: themed ? "Anchoring" : "Completing",
         anchored: themed ? "Anchored" : "Completed",
+        atPort: themed ? "At Port" : "Online",
+        adrift: themed ? "Adrift" : "Idle",
         cargo: themed ? "Cargo" : "Checkpoints",
         tide: themed ? "Tide" : "Priority", 
         lowTide: themed ? "Low Tide" : "Low Priority", 
@@ -204,10 +206,10 @@
                         if (existing.themeId) setThemeId(existing.themeId);
                         if (existing.isThemed !== undefined) setIsThemed(existing.isThemed);
                         
-                        // Force update DB so it's permanently marked complete
-                        if (!existing.hasSeenTutorial && authUser && db) {
+                        // Force update DB so it's permanently marked complete and set online
+                        if (authUser && db) {
                             const docRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', existing.uid);
-                            window.FB.updateDoc(docRef, { hasSeenTutorial: true }).catch(()=>{});
+                            window.FB.updateDoc(docRef, { hasSeenTutorial: true, status: 'online' }).catch(()=>{});
                         }
                     } else {
                         setError(`No ${terms.captain.toLowerCase()} found with that name. Try signing up!`);
@@ -222,6 +224,7 @@
                             isCreated: true,
                             hasSeenTutorial: false,
                             isSailing: false,
+                            status: 'online',
                             currentCourse: '',
                             progress: 0,
                             timestamp: Date.now(),
@@ -1057,22 +1060,54 @@
                                 <div className="text-center py-16 bg-slate-50 rounded-3xl border border-dashed border-slate-200"><p className="text-slate-500 font-bold">Your radar is empty. Add a {terms.crewmate.toLowerCase()} by their name.</p></div>
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    {activeFriends.map(mate => (
-                                        <div key={mate.uid} className="border-2 border-slate-100 rounded-[2rem] p-6 relative overflow-hidden group">
-                                            <div className="flex justify-between items-start mb-6">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="w-12 h-12 bg-slate-100 text-slate-500 rounded-2xl flex items-center justify-center text-xl shadow-inner"><i className="fas fa-user-astronaut"></i></div>
-                                                    <div><h4 className="font-bold text-slate-800 text-lg">{mate.nickname}</h4><span className="text-[10px] text-slate-400">Live Status</span></div>
+                                    {activeFriends.map(mate => {
+                                        const isFocused = mate.status === 'focused' || mate.isSailing;
+                                        const isIdle = mate.status === 'idle';
+                                        const isOffline = mate.status === 'offline';
+                                        
+                                        let statusColor, statusText, statusDot;
+                                        if (isOffline) {
+                                            statusColor = 'text-slate-400';
+                                            statusText = terms.docked;
+                                            statusDot = 'bg-slate-400';
+                                        } else if (isFocused) {
+                                            statusColor = theme.textMain;
+                                            statusText = `${terms.sailing}: ${mate.currentCourse}`;
+                                            statusDot = theme.bgMain;
+                                        } else if (isIdle) {
+                                            statusColor = 'text-amber-500';
+                                            statusText = terms.adrift;
+                                            statusDot = 'bg-amber-400 animate-pulse';
+                                        } else {
+                                            statusColor = 'text-emerald-500';
+                                            statusText = terms.atPort;
+                                            statusDot = 'bg-emerald-500';
+                                        }
+
+                                        return (
+                                            <div key={mate.uid} className="border-2 border-slate-100 rounded-[2rem] p-6 relative overflow-hidden group">
+                                                <div className="flex justify-between items-start mb-6">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-12 h-12 bg-slate-100 text-slate-500 rounded-2xl flex items-center justify-center text-xl shadow-inner"><i className="fas fa-user-astronaut"></i></div>
+                                                        <div><h4 className="font-bold text-slate-800 text-lg">{mate.nickname}</h4><span className="text-[10px] text-slate-400">Live Status</span></div>
+                                                    </div>
+                                                    <button onClick={() => onRemoveFriend(mate.uid)} className="text-slate-300 hover:text-red-500"><i className="fas fa-times"></i></button>
                                                 </div>
-                                                <button onClick={() => onRemoveFriend(mate.uid)} className="text-slate-300 hover:text-red-500"><i className="fas fa-times"></i></button>
+                                                <div className="flex justify-between text-xs font-black uppercase tracking-widest mb-2">
+                                                    <span className={`flex items-center gap-1.5 ${statusColor}`}>
+                                                        <span className={`w-2 h-2 rounded-full ${statusDot}`}></span>
+                                                        {statusText}
+                                                    </span>
+                                                </div>
+                                                {isFocused && (
+                                                    <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden flex shadow-inner mt-1">
+                                                        <div className={`h-full ${theme.bgMain}`} style={{ width: `${mate.progress || 100}%` }}></div>
+                                                    </div>
+                                                )}
+                                                {isFocused && <div className={`absolute top-0 right-0 w-full h-full opacity-10 bg-gradient-to-l ${theme.gradient} animate-[shimmer_3s_infinite] pointer-events-none`}></div>}
                                             </div>
-                                            <div className="flex justify-between text-xs font-black uppercase tracking-widest mb-2"><span className={mate.isSailing ? theme.textMain : 'text-slate-400'}>{mate.isSailing ? `${terms.sailing}: ${mate.currentCourse}` : terms.docked}</span></div>
-                                            <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden flex shadow-inner">
-                                                <div className={`h-full ${mate.isSailing ? theme.bgMain : 'bg-slate-300'}`} style={{ width: `${mate.isSailing ? mate.progress : 100}%` }}></div>
-                                            </div>
-                                            {mate.isSailing && <div className={`absolute top-0 right-0 w-full h-full opacity-10 bg-gradient-to-l ${theme.gradient} animate-[shimmer_3s_infinite] pointer-events-none`}></div>}
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
                             )}
                         </div>
@@ -1747,6 +1782,8 @@
         const getVoyageRef = (voyageId) => window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'voyages', `${profile.id}_${voyageId}`);
         const getRadarRef = () => window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'radars', profile.id);
 
+        const [isIdle, setIsIdle] = useState(false);
+
         // Settings Sync Wrappers
         const handleSetThemeId = (newThemeId) => {
             setThemeId(newThemeId);
@@ -1775,6 +1812,57 @@
                 localStorage.setItem('drift-voyages-dev', JSON.stringify(voyages));
             }
         }, [courses, voyages, isDev]);
+
+        // --- ACTIVITY TRACKER (ONLINE / IDLE) ---
+        useEffect(() => {
+            if (!profile.isCreated || !profile.id || !db || !authUser || isDev) return;
+            let timeoutId;
+            const handleActivity = () => {
+                setIsIdle(false);
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => setIsIdle(true), 5 * 60 * 1000); // 5 minutes
+            };
+            
+            window.addEventListener('mousemove', handleActivity);
+            window.addEventListener('keydown', handleActivity);
+            window.addEventListener('click', handleActivity);
+            window.addEventListener('scroll', handleActivity);
+            
+            handleActivity(); // Init
+            
+            return () => {
+                window.removeEventListener('mousemove', handleActivity);
+                window.removeEventListener('keydown', handleActivity);
+                window.removeEventListener('click', handleActivity);
+                window.removeEventListener('scroll', handleActivity);
+                clearTimeout(timeoutId);
+            };
+        }, [profile.isCreated, profile.id, authUser, isDev]);
+
+        // --- LIVE CLOUD STATUS SYNC ---
+        useEffect(() => {
+            if (!profile.isCreated || !profile.id || !db || !authUser || isDev) return;
+            
+            const runningCourse = courses.find(c => c.isRunning);
+            const currentStatus = runningCourse ? 'focused' : (isIdle ? 'idle' : 'online');
+            const courseTitle = runningCourse ? runningCourse.title : '';
+            
+            const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+            window.FB.updateDoc(profileRef, { status: currentStatus, currentCourse: courseTitle, isSailing: !!runningCourse }).catch(()=>{});
+        }, [courses, isIdle, profile.isCreated, profile.id, authUser, isDev]);
+
+        // --- EXIT TRAP (OFFLINE) ---
+        useEffect(() => {
+            if (!profile.isCreated || !profile.id || !db || !authUser || isDev) return;
+            
+            const handleUnload = () => {
+                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+                window.FB.updateDoc(profileRef, { status: 'offline', isSailing: false }).catch(()=>{});
+            };
+            
+            window.addEventListener('beforeunload', handleUnload);
+            return () => window.removeEventListener('beforeunload', handleUnload);
+        }, [profile.isCreated, profile.id, authUser, isDev]);
 
         // --- FIREBASE LIVE SYNCS ---
         useEffect(() => {
@@ -1867,13 +1955,6 @@
         }, [courses, profile.id, authUser, isDev]);
 
         // --- ACTIONS ---
-        const updatePublicStatus = (isSailing, courseTitle = '') => {
-            if (isDev) return;
-            if (!profile.id || !db || !authUser) return;
-            const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
-            window.FB.updateDoc(profileRef, { isSailing, currentCourse: courseTitle }).catch(()=>{});
-        };
-
         const toggleTimer = (course) => {
             const nextState = !course.isRunning;
             if (isDev) {
@@ -1882,7 +1963,6 @@
             }
             if (!db || !authUser) return;
             window.FB.updateDoc(getCourseRef(course.id), { isRunning: nextState, timeSpent: course.timeSpent }).catch(e => alert("Sync Error: " + e.message));
-            updatePublicStatus(nextState, nextState ? course.title : '');
         };
 
         const completeCourse = (course) => {
@@ -1892,7 +1972,6 @@
             }
             if (!db || !authUser) return;
             window.FB.updateDoc(getCourseRef(course.id), { isCompleted: true, isRunning: false, timeSpent: course.timeSpent }).catch(e => alert("Sync Error: " + e.message));
-            updatePublicStatus(false);
         };
 
         const toggleGoal = (course, goalId) => {
@@ -2331,7 +2410,7 @@
                             <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-lg shadow-inner shrink-0"><i className="fas fa-user-astronaut"></i></div>
                             <div className="flex flex-col overflow-hidden">
                                 <span className="font-bold truncate">{profile.nickname}</span>
-                                <span className={`text-[10px] uppercase tracking-tighter ${isDev ? 'text-orange-400' : 'text-emerald-400'}`}><i className="fas fa-circle text-[8px]"></i> {isDev ? 'Local Mode' : 'Online'}</span>
+                                <span className={`text-[10px] uppercase tracking-tighter ${isDev ? 'text-orange-400' : (isIdle ? 'text-amber-400' : 'text-emerald-400')}`}><i className="fas fa-circle text-[8px]"></i> {isDev ? 'Local Mode' : (isIdle ? terms.adrift : terms.atPort)}</span>
                             </div>
                         </div>
                     </div>
