@@ -54,9 +54,11 @@
 
     // --- FIREBASE INITIALIZATION ---
     let firebaseConfig;
+    let isSandboxEnvironment = false;
     
     if (typeof __firebase_config !== 'undefined' && __firebase_config) {
         firebaseConfig = JSON.parse(__firebase_config);
+        isSandboxEnvironment = true;
     } else {
         firebaseConfig = {
             apiKey: "AIzaSyCR24f17wkEK3uyrucjA_uDTEe5bpQEVAM",
@@ -143,7 +145,7 @@
 
     // --- COMPONENTS ---
 
-    function ProfileSetup({ theme, terms, setProfile, authUser, authError }) {
+    function ProfileSetup({ theme, terms, setProfile, authUser, authError, setThemeId, setIsThemed }) {
         const [mode, setMode] = useState('login'); 
         const [nickname, setNickname] = useState('');
         const [bio, setBio] = useState('');
@@ -152,14 +154,34 @@
 
         const handleSubmit = async (e) => {
             e.preventDefault();
-            if (!nickname.trim() || !db) return;
+            const val = nickname.trim();
+            if (!val) return;
+
+            // SECRET DEV TEST BYPASS
+            if (val === 'DEV_TEST') {
+                setProfile({
+                    nickname: 'Dev Tester',
+                    bio: 'Offline Sandbox Mode',
+                    id: 'DEV_TEST_ID',
+                    isCreated: true,
+                    // If they are logging in, skip tutorial. If new, show tutorial.
+                    hasSeenTutorial: mode === 'login', 
+                    isSailing: false,
+                    currentCourse: '',
+                    progress: 0,
+                    timestamp: Date.now()
+                });
+                setThemeId('navy');
+                setIsThemed(true);
+                return;
+            }
             
             if (authError) {
                 setError(authError);
                 return;
             }
 
-            if (!authUser) {
+            if (!authUser || !db) {
                 setError('Still connecting to the cloud. Please wait a second.');
                 return;
             }
@@ -172,12 +194,21 @@
                 const snap = await window.FB.getDocs(profilesRef);
                 const allProfiles = snap.docs.map(d => ({...d.data(), uid: d.id}));
                 
-                const nameLower = nickname.trim().toLowerCase();
+                const nameLower = val.toLowerCase();
                 const existing = allProfiles.find(p => p.nickname.toLowerCase() === nameLower);
 
                 if (mode === 'login') {
                     if (existing) {
-                        setProfile({ ...existing, id: existing.uid }); 
+                        // FIX: Returning users automatically skip the tutorial
+                        setProfile({ ...existing, id: existing.uid, hasSeenTutorial: true }); 
+                        if (existing.themeId) setThemeId(existing.themeId);
+                        if (existing.isThemed !== undefined) setIsThemed(existing.isThemed);
+                        
+                        // Force update DB so it's permanently marked complete
+                        if (!existing.hasSeenTutorial && authUser && db) {
+                            const docRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', existing.uid);
+                            window.FB.updateDoc(docRef, { hasSeenTutorial: true }).catch(()=>{});
+                        }
                     } else {
                         setError(`No ${terms.captain.toLowerCase()} found with that name. Try signing up!`);
                     }
@@ -186,14 +217,16 @@
                         setError('That name is already taken. Try another!');
                     } else {
                         const newProfile = {
-                            nickname: nickname.trim(),
+                            nickname: val,
                             bio: bio.trim() || "Ready to sail.",
                             isCreated: true,
                             hasSeenTutorial: false,
                             isSailing: false,
                             currentCourse: '',
                             progress: 0,
-                            timestamp: Date.now()
+                            timestamp: Date.now(),
+                            themeId: theme.id,
+                            isThemed: true
                         };
                         const docRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', authUser.uid);
                         await window.FB.setDoc(docRef, newProfile);
@@ -971,7 +1004,7 @@
         );
     }
 
-    function CrewView({ theme, terms, profile, friendIds, allProfiles, onAddFriend, onRemoveFriend }) {
+    function CrewView({ theme, terms, profile, radarData, allProfiles, onAddFriend, onRemoveFriend, onAccept, onDecline }) {
         const [newFriendName, setNewFriendName] = useState('');
         
         const handleAdd = (e) => {
@@ -980,7 +1013,8 @@
             setNewFriendName('');
         };
 
-        const activeFriends = allProfiles.filter(p => friendIds.includes(p.uid));
+        const activeFriends = allProfiles.filter(p => radarData.friends.includes(p.uid));
+        const incomingProfiles = allProfiles.filter(p => radarData.incomingRequests.includes(p.uid));
 
         return (
             <div className="space-y-10 max-w-5xl mx-auto pb-20 animate-[fadeIn_0.5s_ease-out] text-left">
@@ -1001,6 +1035,30 @@
                         </form>
                     </div>
                 </div>
+
+                {incomingProfiles.length > 0 && (
+                    <div className="bg-amber-50 rounded-[3rem] p-6 sm:p-10 shadow-sm border border-amber-200 relative overflow-hidden">
+                        <h3 className="text-xl font-black text-amber-800 tracking-tight flex items-center gap-3 mb-6"><i className="fas fa-bell"></i> Pending Requests</h3>
+                        <div className="flex flex-col gap-4">
+                            {incomingProfiles.map(req => (
+                                <div key={req.uid} className="bg-white p-4 sm:p-5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between shadow-sm border border-amber-100 gap-4">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-xl shadow-inner"><i className="fas fa-user-astronaut"></i></div>
+                                        <div>
+                                            <h4 className="font-bold text-slate-800 text-lg">{req.nickname}</h4>
+                                            <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block">Wants to join {terms.fleet}</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-2 w-full sm:w-auto">
+                                        <button onClick={() => onDecline(req.uid)} className="flex-1 sm:flex-none px-4 py-3 rounded-xl bg-slate-100 text-slate-500 font-black hover:bg-red-100 hover:text-red-600 transition-all text-xs uppercase tracking-widest">Decline</button>
+                                        <button onClick={() => onAccept(req.uid)} className="flex-1 sm:flex-none px-6 py-3 rounded-xl bg-emerald-500 text-white font-black hover:bg-emerald-600 hover:shadow-lg hover:shadow-emerald-200 transition-all text-xs uppercase tracking-widest">Accept</button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 <div className="bg-white rounded-[3rem] p-10 shadow-sm border border-slate-100 relative overflow-hidden">
                     <h3 className="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-3 mb-10"><i className={`fas fa-radar ${theme.textMain}`}></i> Live {terms.radar}</h3>
                     {activeFriends.length === 0 ? (
@@ -1452,7 +1510,7 @@
 
                         <div className="pt-8 border-t border-slate-100 flex justify-end">
                             <button type="submit" className={`w-full lg:w-auto lg:px-16 ${theme.bgMain} text-white font-black text-xl py-5 rounded-[2rem] shadow-2xl ${theme.shadowBtn} ${theme.bgHover} hover:-translate-y-2 active:scale-95 transition-all tracking-tight`}>
-                                {isEdit ? 'Save Changes' : `${terms.launch} ${terms.course}`}
+                                {isEdit ? 'Save Changes' : `Create ${terms.voyage}`}
                             </button>
                         </div>
                     </form>
@@ -1539,39 +1597,23 @@
         );
     }
 
-    // --- ERROR BOUNDARY TO PREVENT WHITE SCREEN ---
+    // --- ERROR BOUNDARY ---
     class ErrorBoundary extends React.Component {
-        constructor(props) {
-            super(props);
-            this.state = { hasError: false, error: null, info: null };
-        }
-        static getDerivedStateFromError(error) {
-            return { hasError: true, error };
-        }
-        componentDidCatch(error, info) {
-            console.error("Crash Prevented:", error, info);
-            this.setState({ info });
-        }
+        constructor(props) { super(props); this.state = { hasError: false, error: null, info: null }; }
+        static getDerivedStateFromError(error) { return { hasError: true, error }; }
+        componentDidCatch(error, info) { console.error("Crash Prevented:", error, info); this.setState({ info }); }
         render() {
             if (this.state.hasError) {
                 return (
                     <div className="min-h-screen bg-red-50 text-red-900 p-6 md:p-10 flex flex-col items-start justify-center">
-                        <div className="w-16 h-16 bg-red-100 text-red-500 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow-inner">
-                            <i className="fas fa-bug"></i>
-                        </div>
+                        <div className="w-16 h-16 bg-red-100 text-red-500 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow-inner"><i className="fas fa-bug"></i></div>
                         <h1 className="text-2xl md:text-3xl font-black mb-2 tracking-tight">System Crash Prevented</h1>
-                        <p className="mb-6 font-medium text-red-700 max-w-xl">Something caused the user interface to break. If you are beta testing, please screenshot the technical details below so we can fix it.</p>
-                        
+                        <p className="mb-6 font-medium text-red-700 max-w-xl">Something caused the user interface to break.</p>
                         <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-red-200 w-full max-w-3xl overflow-x-auto font-mono text-[10px] md:text-xs">
                             <strong className="text-red-600 block mb-3 text-sm">{this.state.error?.toString()}</strong>
-                            {this.state.info?.componentStack?.split('\n').map((line, i) => (
-                                <div key={i} className="mb-1.5 text-slate-600">{line}</div>
-                            ))}
+                            {this.state.info?.componentStack?.split('\n').map((line, i) => <div key={i} className="mb-1.5 text-slate-600">{line}</div>)}
                         </div>
-                        
-                        <button onClick={() => window.location.reload()} className="mt-8 bg-red-600 hover:bg-red-700 text-white font-black py-4 px-8 rounded-2xl shadow-lg shadow-red-200 active:scale-95 transition-all uppercase tracking-widest text-xs">
-                            Reload Application
-                        </button>
+                        <button onClick={() => window.location.reload()} className="mt-8 bg-red-600 hover:bg-red-700 text-white font-black py-4 px-8 rounded-2xl shadow-lg shadow-red-200 active:scale-95 transition-all uppercase tracking-widest text-xs">Reload Application</button>
                     </div>
                 );
             }
@@ -1588,14 +1630,15 @@
             if (!auth) return;
             const initAuth = async () => {
                 try {
-                    // Since you are using your own Firebase Project (drift-49dc1), 
-                    // the Canvas environment's custom token will not work. 
-                    // We must use Anonymous Auth directly.
-                    await window.FB.signInAnonymously(auth);
+                    if (isSandboxEnvironment && typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await window.FB.signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await window.FB.signInAnonymously(auth);
+                    }
                 } catch (e) { 
                     console.error("Firebase Auth Init Failed", e);
                     if (e.code === 'auth/configuration-not-found' || e.code === 'auth/admin-restricted-operation') {
-                        setAuthError("Action Required: Please enable 'Anonymous' Sign-in provider in your Firebase Console (Authentication -> Sign-in method).");
+                        setAuthError("Please enable 'Anonymous' Sign-in provider in your Firebase Console (Authentication -> Sign-in method).");
                     } else {
                         setAuthError(`Cloud Connection Error: ${e.message}`);
                     }
@@ -1603,7 +1646,7 @@
             };
             initAuth();
             const unsub = window.FB.onAuthStateChanged(auth, (user) => {
-                setAuthUser(user); // Will be null or User object
+                setAuthUser(user); 
                 if (user) setAuthError(null); 
             });
             return () => unsub();
@@ -1624,18 +1667,24 @@
         const theme = THEMES[themeId] || THEMES['navy'];
         const terms = getTerms(isThemed);
 
-        // Keep local profile minimal so we don't have to login every refresh
         const [profile, setProfile] = useState(() => {
             const saved = localStorage.getItem('drift-profile');
             return saved ? JSON.parse(saved) : { nickname: '', bio: '', id: '', isCreated: false, hasSeenTutorial: false };
         });
         
-        const [voyages, setVoyages] = useState([]);
-        const [courses, setCourses] = useState([]);
+        const isDev = profile.id === 'DEV_TEST_ID';
+
+        const [voyages, setVoyages] = useState(() => {
+            if (isDev) return JSON.parse(localStorage.getItem('drift-voyages-dev') || '[]');
+            return [];
+        });
+        const [courses, setCourses] = useState(() => {
+            if (isDev) return JSON.parse(localStorage.getItem('drift-courses-dev') || '[]');
+            return [];
+        });
         
-        // Multi-player Live States
         const [allProfiles, setAllProfiles] = useState([]);
-        const [friendIds, setFriendIds] = useState([]);
+        const [radarData, setRadarData] = useState({ friends: [], incomingRequests: [], outgoingRequests: [] });
 
         const [isAddCourseModalOpen, setIsAddCourseModalOpen] = useState(false);
         const [isAddVoyageModalOpen, setIsAddVoyageModalOpen] = useState(false);
@@ -1643,28 +1692,49 @@
         const [editingVoyage, setEditingVoyage] = useState(null);
         const [confirmAction, setConfirmAction] = useState(null);
 
-        // Helpers to target public paths
         const getCourseRef = (courseId) => window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'courses', `${profile.id}_${courseId}`);
         const getVoyageRef = (voyageId) => window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'voyages', `${profile.id}_${voyageId}`);
         const getRadarRef = () => window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'radars', profile.id);
+
+        // Settings Sync Wrappers
+        const handleSetThemeId = (newThemeId) => {
+            setThemeId(newThemeId);
+            if (!isDev && db && profile.id) {
+                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+                window.FB.updateDoc(profileRef, { themeId: newThemeId }).catch(()=>{});
+            }
+        };
+
+        const handleSetIsThemed = (newVal) => {
+            setIsThemed(newVal);
+            if (!isDev && db && profile.id) {
+                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+                window.FB.updateDoc(profileRef, { isThemed: newVal }).catch(()=>{});
+            }
+        };
 
         // Effect synchronizers
         useEffect(() => { localStorage.setItem('drift-terminology', JSON.stringify(isThemed)); }, [isThemed]);
         useEffect(() => { localStorage.setItem('drift-theme', themeId); }, [themeId]);
         useEffect(() => { localStorage.setItem('drift-profile', JSON.stringify(profile)); }, [profile]);
+        
+        useEffect(() => {
+            if (isDev) {
+                localStorage.setItem('drift-courses-dev', JSON.stringify(courses));
+                localStorage.setItem('drift-voyages-dev', JSON.stringify(voyages));
+            }
+        }, [courses, voyages, isDev]);
 
         // --- FIREBASE LIVE SYNCS ---
         useEffect(() => {
-            if (!profile.isCreated || !profile.id || !db || !authUser) return;
+            if (!profile.isCreated || !profile.id || !db || !authUser || isDev) return;
             
-            // Sync Voyages (Public space, filtered locally)
             const voyagesRef = window.FB.collection(db, 'artifacts', globalAppId, 'public', 'data', 'voyages');
             const unsubVoyages = window.FB.onSnapshot(voyagesRef, (snap) => {
                 const all = snap.docs.map(d => ({ ...d.data(), id: d.data().id || d.id.split('_')[1] }));
                 setVoyages(all.filter(v => v.ownerId === profile.id));
-            }, (error) => console.error("Voyage Sync Error:", error));
+            });
 
-            // Sync Courses (Public space, filtered locally)
             const coursesRef = window.FB.collection(db, 'artifacts', globalAppId, 'public', 'data', 'courses');
             const unsubCourses = window.FB.onSnapshot(coursesRef, (snap) => {
                 const all = snap.docs.map(d => ({ ...d.data(), id: d.data().id || d.id.split('_')[1] }));
@@ -1672,27 +1742,30 @@
                 setCourses(prev => {
                     return mine.map(newC => {
                         const oldC = prev.find(p => p.id === newC.id);
-                        if (oldC && oldC.isRunning) {
-                            return { ...newC, timeSpent: oldC.timeSpent }; 
-                        }
+                        if (oldC && oldC.isRunning) return { ...newC, timeSpent: oldC.timeSpent }; 
                         return newC;
                     });
                 });
-            }, (error) => console.error("Course Sync Error:", error));
+            });
 
-            // Sync Friends List (Radar)
             const unsubRadar = window.FB.onSnapshot(getRadarRef(), (snap) => {
-                if (snap.exists()) setFriendIds(snap.data().friends || []);
-            }, (error) => console.error("Radar Sync Error:", error));
+                if (snap.exists()) {
+                    const data = snap.data();
+                    setRadarData({
+                        friends: data.friends || [],
+                        incomingRequests: data.incomingRequests || [],
+                        outgoingRequests: data.outgoingRequests || []
+                    });
+                }
+            });
 
-            // Sync All Public Profiles (For the Radar Display)
             const profilesRef = window.FB.collection(db, 'artifacts', globalAppId, 'public', 'data', 'profiles');
             const unsubProfiles = window.FB.onSnapshot(profilesRef, (snap) => {
                 setAllProfiles(snap.docs.map(d => ({ ...d.data(), uid: d.id })));
-            }, (error) => console.error("Public Profiles Sync Error:", error));
+            });
 
             return () => { unsubVoyages(); unsubCourses(); unsubRadar(); unsubProfiles(); };
-        }, [profile.isCreated, profile.id, authUser]);
+        }, [profile.isCreated, profile.id, authUser, isDev]);
 
 
         // --- TIMER INTERVAL & AUTOMATIC UNLOCKS ---
@@ -1701,7 +1774,6 @@
                 const now = new Date();
                 setCurrentTime(now);
                 
-                // Locally increment running timers
                 setCourses(prevCourses => prevCourses.map(course => {
                     let updatedCourse = { ...course };
                     if (updatedCourse.isFuture && updatedCourse.startDate) {
@@ -1733,54 +1805,70 @@
                 }));
             }, 1000);
 
-            // Sync running timers to cloud every 10 seconds so data isn't lost if browser is closed
             const dbSyncInterval = setInterval(() => {
-                if (!profile.id || !db || !authUser) return;
+                if (!profile.id || !db || !authUser || isDev) return;
                 courses.filter(c => c.isRunning).forEach(c => {
                     window.FB.updateDoc(getCourseRef(c.id), { timeSpent: c.timeSpent }).catch(()=>{});
                 });
             }, 10000);
 
             return () => { clearInterval(interval); clearInterval(dbSyncInterval); };
-        }, [courses, profile.id, authUser]);
+        }, [courses, profile.id, authUser, isDev]);
 
-        // --- HELPER FUNCTIONS FOR CLOUD UPDATES ---
+        // --- ACTIONS ---
         const updatePublicStatus = (isSailing, courseTitle = '') => {
+            if (isDev) return;
             if (!profile.id || !db || !authUser) return;
             const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
-            window.FB.updateDoc(profileRef, { isSailing, currentCourse: courseTitle }).catch(console.error);
+            window.FB.updateDoc(profileRef, { isSailing, currentCourse: courseTitle }).catch(()=>{});
         };
 
         const toggleTimer = (course) => {
-            if (!db || !authUser) return;
             const nextState = !course.isRunning;
+            if (isDev) {
+                setCourses(prev => prev.map(c => c.id === course.id ? { ...c, isRunning: nextState } : c));
+                return;
+            }
+            if (!db || !authUser) return;
             window.FB.updateDoc(getCourseRef(course.id), { isRunning: nextState, timeSpent: course.timeSpent }).catch(e => alert("Sync Error: " + e.message));
-            
-            // Sync status to Fleet Radar
             updatePublicStatus(nextState, nextState ? course.title : '');
         };
 
         const completeCourse = (course) => {
+            if (isDev) {
+                setCourses(prev => prev.map(c => c.id === course.id ? { ...c, isCompleted: true, isRunning: false } : c));
+                return;
+            }
             if (!db || !authUser) return;
             window.FB.updateDoc(getCourseRef(course.id), { isCompleted: true, isRunning: false, timeSpent: course.timeSpent }).catch(e => alert("Sync Error: " + e.message));
             updatePublicStatus(false);
         };
 
         const toggleGoal = (course, goalId) => {
+            if (isDev) {
+                setCourses(prev => prev.map(c => {
+                    if (c.id === course.id) return { ...c, goals: c.goals.map(g => g.id === goalId ? { ...g, isCompleted: !g.isCompleted } : g) };
+                    return c;
+                }));
+                return;
+            }
             if (!db || !authUser) return;
             const newGoals = course.goals.map(g => g.id === goalId ? { ...g, isCompleted: !g.isCompleted } : g);
             window.FB.updateDoc(getCourseRef(course.id), { goals: newGoals }).catch(e => alert("Sync Error: " + e.message));
         };
 
         const toggleCoursePin = (course) => {
+            if (isDev) {
+                setCourses(prev => prev.map(c => c.id === course.id ? { ...c, isPinned: !c.isPinned } : c));
+                return;
+            }
             if (!db || !authUser) return;
             window.FB.updateDoc(getCourseRef(course.id), { isPinned: !course.isPinned }).catch(e => alert("Sync Error: " + e.message));
         };
 
         const moveCourse = (courseId, direction) => {
-            // Memory sort then db update
             const target = courses.find(c => c.id === courseId);
-            if (!target || !db || !authUser) return;
+            if (!target) return;
             
             const vCourses = courses.filter(c => c.voyageId === target.voyageId)
                 .map(c => ({...c, priority: c.priority || 'low', order: c.order || c.id}))
@@ -1797,6 +1885,15 @@
             if (direction === 'down' && idx < vCourses.length - 1) swapTarget = vCourses[idx + 1];
 
             if (swapTarget && swapTarget.isPinned === (target.isPinned || false) && swapTarget.priority === (target.priority || 'low')) {
+                if (isDev) {
+                    setCourses(prev => prev.map(c => {
+                        if (c.id === courseId) return { ...c, order: swapTarget.order || swapTarget.id };
+                        if (c.id === swapTarget.id) return { ...c, order: target.order || target.id };
+                        return c;
+                    }));
+                    return;
+                }
+                if (!db || !authUser) return;
                 window.FB.updateDoc(getCourseRef(courseId), { order: swapTarget.order || swapTarget.id }).catch(e => alert("Sync Error: " + e.message));
                 window.FB.updateDoc(getCourseRef(swapTarget.id), { order: target.order || target.id }).catch(e => alert("Sync Error: " + e.message));
             }
@@ -1807,6 +1904,7 @@
                 title: `Delete ${terms.course}?`,
                 message: `Are you sure you want to delete this ${terms.course.toLowerCase()}? This cannot be undone.`,
                 onConfirm: () => {
+                    if (isDev) { setCourses(prev => prev.filter(c => c.id !== course.id)); return; }
                     if (!authUser) return;
                     window.FB.deleteDoc(getCourseRef(course.id)).catch(e => alert("Sync Error: " + e.message));
                 }
@@ -1818,12 +1916,15 @@
                 title: `Delete ${terms.voyage}?`,
                 message: `All ${terms.courses.toLowerCase()} inside this ${terms.voyage.toLowerCase()} will be lost forever!`,
                 onConfirm: () => {
+                    if (isDev) {
+                        setVoyages(prev => prev.filter(v => v.id !== voyage.id));
+                        setCourses(prev => prev.filter(c => c.voyageId !== voyage.id));
+                        return;
+                    }
                     if (!authUser) return;
                     window.FB.deleteDoc(getVoyageRef(voyage.id)).catch(e => alert("Sync Error: " + e.message));
                     // Wipe related courses
-                    courses.filter(c => c.voyageId === voyage.id).forEach(c => {
-                        window.FB.deleteDoc(getCourseRef(c.id));
-                    });
+                    courses.filter(c => c.voyageId === voyage.id).forEach(c => window.FB.deleteDoc(getCourseRef(c.id)));
                 }
             });
         };
@@ -1833,8 +1934,9 @@
                 title: "Unlock Early?",
                 message: "Start this ahead of schedule? It will immediately become active.",
                 onConfirm: () => {
+                    if (isDev) { setCourses(prev => prev.map(c => c.id === course.id ? { ...c, isFuture: false, startedEarly: true } : c)); return; }
                     if (!authUser) return;
-                    window.FB.updateDoc(getCourseRef(course.id), { isFuture: false, startedEarly: true }).catch(e => alert("Sync Error: " + e.message));
+                    window.FB.updateDoc(getCourseRef(course.id), { isFuture: false, startedEarly: true });
                 }
             });
         };
@@ -1844,30 +1946,43 @@
                 title: "Unlock Early?",
                 message: "Start this ahead of schedule? It will immediately become active.",
                 onConfirm: () => {
+                    if (isDev) { setVoyages(prev => prev.map(v => v.id === voyage.id ? { ...v, isFuture: false, startedEarly: true } : v)); return; }
                     if (!authUser) return;
-                    window.FB.updateDoc(getVoyageRef(voyage.id), { isFuture: false, startedEarly: true }).catch(e => alert("Sync Error: " + e.message));
+                    window.FB.updateDoc(getVoyageRef(voyage.id), { isFuture: false, startedEarly: true });
                 }
             });
         };
 
         const toggleVoyagePin = (voyage) => {
+            if (isDev) { setVoyages(prev => prev.map(v => v.id === voyage.id ? { ...v, isPinned: !v.isPinned } : v)); return; }
             if (!db || !authUser) return;
-            window.FB.updateDoc(getVoyageRef(voyage.id), { isPinned: !voyage.isPinned }).catch(e => alert("Sync Error: " + e.message));
+            window.FB.updateDoc(getVoyageRef(voyage.id), { isPinned: !voyage.isPinned });
         };
 
         const toggleVoyageCollapse = (voyage) => {
+            if (isDev) { setVoyages(prev => prev.map(v => v.id === voyage.id ? { ...v, isCollapsed: !v.isCollapsed } : v)); return; }
             if (!db || !authUser) return;
-            window.FB.updateDoc(getVoyageRef(voyage.id), { isCollapsed: !voyage.isCollapsed }).catch(e => alert("Sync Error: " + e.message));
+            window.FB.updateDoc(getVoyageRef(voyage.id), { isCollapsed: !voyage.isCollapsed });
         };
 
         const handleSaveVoyage = (voyageData) => {
+            if (isDev) {
+                if (voyageData.isEdit) {
+                    setVoyages(voyages.map(v => v.id === voyageData.id ? voyageData : v));
+                } else {
+                    setVoyages([...voyages, { ...voyageData, startedEarly: false, ownerId: profile.id }]);
+                }
+                setIsAddVoyageModalOpen(false);
+                setEditingVoyage(null);
+                return;
+            }
             if (!db || !authUser) return;
             const ref = getVoyageRef(voyageData.id);
             if (voyageData.isEdit) {
                 delete voyageData.isEdit;
                 window.FB.updateDoc(ref, voyageData).catch(e => alert("Database Blocked: " + e.message));
             } else {
-                delete voyageData.isEdit; // Clean payload
+                delete voyageData.isEdit; 
                 window.FB.setDoc(ref, { ...voyageData, startedEarly: false, ownerId: profile.id }).catch(e => alert("Database Blocked: " + e.message));
             }
             setIsAddVoyageModalOpen(false);
@@ -1875,39 +1990,127 @@
         };
 
         const handleSaveCourse = (courseData) => {
+            if (isDev) {
+                if (courseData.isEdit) {
+                    setCourses(courses.map(c => c.id === courseData.id ? courseData : c));
+                } else {
+                    setCourses([...courses, { ...courseData, startedEarly: false, ownerId: profile.id }]);
+                }
+                setIsAddCourseModalOpen(false);
+                setEditingCourse(null);
+                return;
+            }
             if (!db || !authUser) return;
             const ref = getCourseRef(courseData.id);
             if (courseData.isEdit) {
                 delete courseData.isEdit; 
                 window.FB.updateDoc(ref, courseData).catch(e => alert("Database Blocked: " + e.message));
             } else {
-                delete courseData.isEdit; // Clean payload
+                delete courseData.isEdit; 
                 window.FB.setDoc(ref, { ...courseData, startedEarly: false, ownerId: profile.id }).catch(e => alert("Database Blocked: " + e.message));
             }
             setIsAddCourseModalOpen(false);
             setEditingCourse(null);
         };
 
+        // --- NETWORK / RADAR FUNCTIONS ---
+
         const handleAddFriendToRadar = async (friendName) => {
+            if (isDev) { alert("Offline Mode: Network features are disabled."); return; }
             if (!authUser) return;
+            
             const friendNameLower = friendName.trim().toLowerCase();
             const friend = allProfiles.find(p => p.nickname.toLowerCase() === friendNameLower);
-            if (!friend) {
-                alert(`Could not locate ${terms.captain.toLowerCase()} "${friendName}" on the global network.`);
+            if (!friend) { alert(`Could not locate ${terms.captain.toLowerCase()} "${friendName}" on the global network.`); return; }
+            if (friend.uid === profile.id) return;
+            
+            const { friends, incomingRequests, outgoingRequests } = radarData;
+            
+            if (friends.includes(friend.uid) || outgoingRequests.includes(friend.uid) || incomingRequests.includes(friend.uid)) {
+                alert(`You are already connected or have a pending request with ${friend.nickname}.`);
                 return;
             }
-            if (friend.uid === profile.id || friendIds.includes(friend.uid)) return;
-            
-            const newIds = [...friendIds, friend.uid];
-            setFriendIds(newIds);
-            await window.FB.setDoc(getRadarRef(), { friends: newIds }).catch(e => alert("Sync Error: " + e.message));
+
+            try {
+                // Update my outgoing queue
+                const myNewOutgoing = [...outgoingRequests, friend.uid];
+                await window.FB.setDoc(getRadarRef(), { outgoingRequests: myNewOutgoing }, { merge: true });
+
+                // Update their incoming queue
+                const friendRadarRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'radars', friend.uid);
+                const friendSnap = await window.FB.getDoc(friendRadarRef);
+                let theirIncoming = [];
+                if (friendSnap.exists()) {
+                    theirIncoming = friendSnap.data().incomingRequests || [];
+                }
+                if (!theirIncoming.includes(profile.id)) {
+                    await window.FB.setDoc(friendRadarRef, { incomingRequests: [...theirIncoming, profile.id] }, { merge: true });
+                }
+                alert(`Request sent to ${friend.nickname}!`);
+            } catch (e) {
+                alert("Failed to send request: " + e.message);
+            }
+        };
+
+        const handleAcceptRequest = async (requesterUid) => {
+            if (isDev || !authUser) return;
+            try {
+                // Remove from my incoming, add to my friends
+                const newIncoming = radarData.incomingRequests.filter(id => id !== requesterUid);
+                const newFriends = [...radarData.friends, requesterUid];
+                await window.FB.setDoc(getRadarRef(), { incomingRequests: newIncoming, friends: newFriends }, { merge: true });
+
+                // Remove from their outgoing, add to their friends
+                const requesterRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'radars', requesterUid);
+                const reqSnap = await window.FB.getDoc(requesterRef);
+                if (reqSnap.exists()) {
+                    const reqData = reqSnap.data();
+                    const theirOut = (reqData.outgoingRequests || []).filter(id => id !== profile.id);
+                    const theirFriends = [...(reqData.friends || []).filter(id => id !== profile.id), profile.id];
+                    await window.FB.setDoc(requesterRef, { outgoingRequests: theirOut, friends: theirFriends }, { merge: true });
+                }
+            } catch (e) {
+                alert("Failed to accept request: " + e.message);
+            }
+        };
+
+        const handleDeclineRequest = async (requesterUid) => {
+            if (isDev || !authUser) return;
+            try {
+                // Remove from my incoming
+                const newIncoming = radarData.incomingRequests.filter(id => id !== requesterUid);
+                await window.FB.setDoc(getRadarRef(), { incomingRequests: newIncoming }, { merge: true });
+
+                // Remove from their outgoing
+                const requesterRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'radars', requesterUid);
+                const reqSnap = await window.FB.getDoc(requesterRef);
+                if (reqSnap.exists()) {
+                    const reqData = reqSnap.data();
+                    const theirOut = (reqData.outgoingRequests || []).filter(id => id !== profile.id);
+                    await window.FB.setDoc(requesterRef, { outgoingRequests: theirOut }, { merge: true });
+                }
+            } catch (e) {
+                alert("Failed to decline request: " + e.message);
+            }
         };
 
         const handleRemoveFriendFromRadar = async (removeUid) => {
-            if (!authUser) return;
-            const newIds = friendIds.filter(id => id !== removeUid);
-            setFriendIds(newIds);
-            await window.FB.setDoc(getRadarRef(), { friends: newIds }).catch(e => alert("Sync Error: " + e.message));
+            if (isDev || !authUser) return;
+            try {
+                // Remove from my friends
+                const newFriends = radarData.friends.filter(id => id !== removeUid);
+                await window.FB.setDoc(getRadarRef(), { friends: newFriends }, { merge: true });
+
+                // Remove from their friends
+                const friendRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'radars', removeUid);
+                const friendSnap = await window.FB.getDoc(friendRef);
+                if (friendSnap.exists()) {
+                    const theirFriends = (friendSnap.data().friends || []).filter(id => id !== profile.id);
+                    await window.FB.setDoc(friendRef, { friends: theirFriends }, { merge: true });
+                }
+            } catch (e) {
+                alert("Failed to remove: " + e.message);
+            }
         };
 
         const openAddCourse = () => { setEditingCourse(null); setIsAddCourseModalOpen(true); };
@@ -1921,9 +2124,8 @@
                 message: "Are you sure you want to log out? You can return anytime by typing your exact name.",
                 onConfirm: () => {
                     setProfile({ nickname: '', bio: '', id: '', isCreated: false, hasSeenTutorial: false });
-                    setCourses([]); setVoyages([]); setFriendIds([]);
+                    setCourses([]); setVoyages([]); setRadarData({ friends: [], incomingRequests: [], outgoingRequests: [] });
                     localStorage.removeItem('drift-profile');
-                    // Reload to clear auth state
                     window.location.reload();
                 }
             });
@@ -1935,7 +2137,7 @@
                 message: "Are you sure? This logs you out and clears all local settings. (Cloud data remains tied to your name).",
                 onConfirm: () => {
                     setProfile({ nickname: '', bio: '', id: '', isCreated: false, hasSeenTutorial: false });
-                    setCourses([]); setVoyages([]); setFriendIds([]);
+                    setCourses([]); setVoyages([]); setRadarData({ friends: [], incomingRequests: [], outgoingRequests: [] });
                     localStorage.clear();
                     window.location.reload();
                 }
@@ -1949,8 +2151,7 @@
 
         // UI RENDER SAFEGUARDS
 
-        // 1. If auth completely fails but they have a profile, let them wipe it to recover.
-        if (authError && profile.isCreated) {
+        if (authError && profile.isCreated && !isDev) {
             return (
                 <div className="flex flex-col h-full w-full items-center justify-center bg-slate-50 p-6 text-center">
                     <div className="w-16 h-16 bg-red-100 text-red-500 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow-inner"><i className="fas fa-exclamation-triangle"></i></div>
@@ -1961,8 +2162,7 @@
             );
         }
 
-        // 2. If they have a profile saved locally, but Firebase hasn't authenticated them yet, block UI to prevent permission errors.
-        if (profile.isCreated && !authUser) {
+        if (profile.isCreated && !authUser && !isDev) {
              return (
                 <div className="flex flex-col h-full w-full items-center justify-center bg-slate-50 p-6">
                     <div className="w-16 h-16 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin mb-4"></div>
@@ -1971,25 +2171,25 @@
             );
         }
 
-        // 3. User is completely new or logged out
         if (!profile.isCreated) {
-            return <ProfileSetup theme={theme} terms={terms} setProfile={setProfile} authUser={authUser} authError={authError} />;
+            return <ProfileSetup theme={theme} terms={terms} setProfile={setProfile} authUser={authUser} authError={authError} setThemeId={setThemeId} setIsThemed={setIsThemed} />;
         }
 
-        // 4. User is logged in but hasn't seen tutorial
         if (!profile.hasSeenTutorial) {
-            return <Onboarding theme={theme} terms={terms} isThemed={isThemed} setIsThemed={setIsThemed} onComplete={() => setProfile({...profile, hasSeenTutorial: true})} />;
+            return <Onboarding theme={theme} terms={terms} isThemed={isThemed} setIsThemed={handleSetIsThemed} onComplete={() => {
+                setProfile({...profile, hasSeenTutorial: true});
+                if (!isDev && db && authUser) {
+                    const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+                    window.FB.updateDoc(profileRef, { hasSeenTutorial: true }).catch(()=>{});
+                }
+            }} />;
         }
 
-        // 5. Main Application render
         return (
             <div className="flex h-full w-full bg-slate-50 transition-colors duration-500 relative">
                 
                 {isSidebarOpen && (
-                    <div 
-                        className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 lg:hidden animate-[fadeIn_0.3s_ease-out]"
-                        onClick={() => setIsSidebarOpen(false)}
-                    ></div>
+                    <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 lg:hidden animate-[fadeIn_0.3s_ease-out]" onClick={() => setIsSidebarOpen(false)}></div>
                 )}
 
                 <aside className={`fixed inset-y-0 left-0 z-50 w-72 shrink-0 bg-gradient-to-b ${theme.sidebarGradient} text-white flex flex-col shadow-2xl transition-transform duration-500 ease-in-out lg:relative lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} overflow-hidden`}>
@@ -2001,7 +2201,7 @@
                             <i className="fas fa-water"></i>
                         </div>
                         <h1 className="text-2xl font-bold tracking-tight">Drift</h1>
-                        <span className="bg-white/20 text-[9px] px-2 py-0.5 rounded uppercase tracking-widest ml-1 font-bold">BETA</span>
+                        <span className={`text-[9px] px-2 py-0.5 rounded uppercase tracking-widest ml-1 font-bold ${isDev ? 'bg-orange-500 text-white' : 'bg-white/20'}`}>{isDev ? 'OFFLINE' : 'BETA'}</span>
                         <button onClick={() => setIsSidebarOpen(false)} className="lg:hidden ml-auto w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 transition-all text-white/80 hover:text-white">
                             <i className="fas fa-times text-xl"></i>
                         </button>
@@ -2039,7 +2239,7 @@
                             <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-lg shadow-inner shrink-0"><i className="fas fa-user-astronaut"></i></div>
                             <div className="flex flex-col overflow-hidden">
                                 <span className="font-bold truncate">{profile.nickname}</span>
-                                <span className="text-[10px] text-emerald-400 uppercase tracking-tighter"><i className="fas fa-circle text-[8px]"></i> Online</span>
+                                <span className={`text-[10px] uppercase tracking-tighter ${isDev ? 'text-orange-400' : 'text-emerald-400'}`}><i className="fas fa-circle text-[8px]"></i> {isDev ? 'Local Mode' : 'Online'}</span>
                             </div>
                         </div>
                     </div>
@@ -2075,7 +2275,7 @@
                                 </div>
                             )}
                         </div>
-                        {activeTab === 'courses' && voyages.length > 0 && (
+                        {activeTab === 'courses' && (isDev || voyages.length > 0) && (
                             <button onClick={() => setIsAddCourseModalOpen(true)} className={`${theme.bgMain} text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl font-bold shadow-lg hover:shadow-2xl hover:-translate-y-1 active:scale-95 transition-all flex items-center gap-2 group text-sm sm:text-base ml-auto`}>
                                 <i className="fas fa-plus group-hover:rotate-90 transition-transform"></i> <span className="hidden sm:inline">New {terms.course}</span><span className="sm:hidden">{terms.course}</span>
                             </button>
@@ -2085,9 +2285,9 @@
                     <main className={`flex-1 overflow-y-auto p-4 sm:p-6 lg:p-10 relative ${theme.patternClass}`}>
                         <div className="max-w-7xl mx-auto h-full relative z-10">
                             {activeTab === 'courses' && <CoursesView theme={theme} terms={terms} voyages={voyages} courses={courses} openAddVoyage={openAddVoyage} openEditVoyage={openEditVoyage} deleteVoyage={deleteVoyage} toggleTimer={toggleTimer} completeCourse={completeCourse} toggleGoal={toggleGoal} deleteCourse={deleteCourse} openEditCourse={openEditCourse} toggleVoyagePin={toggleVoyagePin} toggleVoyageCollapse={toggleVoyageCollapse} toggleCoursePin={toggleCoursePin} moveCourse={moveCourse} currentTime={currentTime} voyageView={voyageView} unlockCourseEarly={unlockCourseEarly} unlockVoyageEarly={unlockVoyageEarly} />}
-                            {activeTab === 'crew' && <CrewView theme={theme} terms={terms} profile={profile} friendIds={friendIds} allProfiles={allProfiles} onAddFriend={handleAddFriendToRadar} onRemoveFriend={handleRemoveFriendFromRadar} />}
+                            {activeTab === 'crew' && <CrewView theme={theme} terms={terms} profile={profile} radarData={radarData} allProfiles={allProfiles} onAddFriend={handleAddFriendToRadar} onRemoveFriend={handleRemoveFriendFromRadar} onAccept={handleAcceptRequest} onDecline={handleDeclineRequest} />}
                             {activeTab === 'analytics' && <AnalyticsView theme={theme} terms={terms} courses={courses} />}
-                            {activeTab === 'settings' && <SettingsView theme={theme} terms={terms} themeId={themeId} setThemeId={setThemeId} profile={profile} clearData={clearData} logOut={logOut} isThemed={isThemed} setIsThemed={setIsThemed} />}
+                            {activeTab === 'settings' && <SettingsView theme={theme} terms={terms} themeId={themeId} setThemeId={handleSetThemeId} profile={profile} clearData={clearData} logOut={logOut} isThemed={isThemed} setIsThemed={handleSetIsThemed} />}
                             {activeTab === 'manual' && <ManualView theme={theme} terms={terms} />}
                         </div>
                         <div className="fixed bottom-0 right-0 w-1/3 h-1/3 opacity-[0.03] pointer-events-none">
