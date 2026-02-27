@@ -1065,15 +1065,16 @@
                                         const isIdle = mate.status === 'idle';
                                         const isOffline = mate.status === 'offline';
                                         
-                                        let statusColor, statusText, statusDot;
+                                        let statusColor, statusText, statusDot, progressColor;
                                         if (isOffline) {
                                             statusColor = 'text-slate-400';
                                             statusText = terms.docked;
                                             statusDot = 'bg-slate-400';
                                         } else if (isFocused) {
-                                            statusColor = theme.textMain;
+                                            statusColor = 'text-blue-500';
                                             statusText = `${terms.sailing}: ${mate.currentCourse}`;
-                                            statusDot = theme.bgMain;
+                                            statusDot = 'bg-blue-500';
+                                            progressColor = 'bg-blue-500';
                                         } else if (isIdle) {
                                             statusColor = 'text-amber-500';
                                             statusText = terms.adrift;
@@ -1100,8 +1101,8 @@
                                                     </span>
                                                 </div>
                                                 {isFocused && (
-                                                    <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden flex shadow-inner mt-1">
-                                                        <div className={`h-full ${theme.bgMain}`} style={{ width: `${mate.progress || 100}%` }}></div>
+                                                    <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden flex shadow-inner mt-2">
+                                                        <div className={`h-full ${progressColor} transition-all duration-1000 ease-linear`} style={{ width: `${mate.progress || 0}%` }}></div>
                                                     </div>
                                                 )}
                                                 {isFocused && <div className={`absolute top-0 right-0 w-full h-full opacity-10 bg-gradient-to-l ${theme.gradient} animate-[shimmer_3s_infinite] pointer-events-none`}></div>}
@@ -1777,6 +1778,7 @@
         const [editingCourse, setEditingCourse] = useState(null);
         const [editingVoyage, setEditingVoyage] = useState(null);
         const [confirmAction, setConfirmAction] = useState(null);
+        const prevStatusRef = useRef({ status: '', currentCourse: '' });
 
         const getCourseRef = (courseId) => window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'courses', `${profile.id}_${courseId}`);
         const getVoyageRef = (voyageId) => window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'voyages', `${profile.id}_${voyageId}`);
@@ -1847,8 +1849,11 @@
             const currentStatus = runningCourse ? 'focused' : (isIdle ? 'idle' : 'online');
             const courseTitle = runningCourse ? runningCourse.title : '';
             
-            const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
-            window.FB.updateDoc(profileRef, { status: currentStatus, currentCourse: courseTitle, isSailing: !!runningCourse }).catch(()=>{});
+            if (prevStatusRef.current.status !== currentStatus || prevStatusRef.current.currentCourse !== courseTitle) {
+                prevStatusRef.current = { status: currentStatus, currentCourse: courseTitle };
+                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+                window.FB.updateDoc(profileRef, { status: currentStatus, currentCourse: courseTitle, isSailing: !!runningCourse }).catch(()=>{});
+            }
         }, [courses, isIdle, profile.isCreated, profile.id, authUser, isDev]);
 
         // --- EXIT TRAP (OFFLINE) ---
@@ -1945,16 +1950,41 @@
             }, 1000);
 
             const dbSyncInterval = setInterval(() => {
-                if (!profile.id || !db || !authUser || isDev) return;
-                courses.filter(c => c.isRunning).forEach(c => {
-                    window.FB.updateDoc(getCourseRef(c.id), { timeSpent: c.timeSpent }).catch(()=>{});
+                setCourses(prevCourses => {
+                    if (profile.id && db && authUser && !isDev) {
+                        const runningCourse = prevCourses.find(c => c.isRunning);
+                        
+                        prevCourses.filter(c => c.isRunning).forEach(c => {
+                            const courseRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'courses', `${profile.id}_${c.id}`);
+                            window.FB.updateDoc(courseRef, { timeSpent: c.timeSpent }).catch(()=>{});
+                        });
+
+                        // Calculate and sync percentage progress to public profile
+                        if (runningCourse) {
+                            const prog = runningCourse.duration > 0 ? (runningCourse.timeSpent / runningCourse.duration) * 100 : 0;
+                            const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+                            window.FB.updateDoc(profileRef, { progress: Math.min(100, Math.max(0, prog)) }).catch(()=>{});
+                        }
+                    }
+                    return prevCourses;
                 });
             }, 10000);
 
             return () => { clearInterval(interval); clearInterval(dbSyncInterval); };
-        }, [courses, profile.id, authUser, isDev]);
+        }, [profile.id, authUser, isDev, db]);
 
         // --- ACTIONS ---
+        const updatePublicStatus = (isSailing, courseTitle = '') => {
+            if (isDev) return;
+            if (!profile.id || !db || !authUser) return;
+            
+            const currentStatus = isSailing ? 'focused' : (isIdle ? 'idle' : 'online');
+            const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+            window.FB.updateDoc(profileRef, { isSailing, currentCourse: courseTitle, status: currentStatus }).catch(()=>{});
+            
+            prevStatusRef.current = { status: currentStatus, currentCourse: courseTitle };
+        };
+
         const toggleTimer = (course) => {
             const nextState = !course.isRunning;
             if (isDev) {
