@@ -123,9 +123,9 @@
         chartNew: themed ? "Chart New" : "Create New", 
         chartFirst: themed ? "Chart First" : "Create First", 
         jettison: themed ? "Jettison" : "Delete", 
-        settings: themed ? "Docking Settings" : "Settings", 
+        settings: themed ? "Docking" : "Settings", 
         manual: themed ? "Captain's Manual" : "User Manual", 
-        launch: themed ? "Launch" : "Start", 
+        launch: themed ? "Launch" : "Create", 
         explore: themed ? "Explore" : "Menu"
     });
 
@@ -1597,7 +1597,7 @@
 
                         <div className="pt-8 border-t border-slate-100 flex justify-end">
                             <button type="submit" className={`w-full lg:w-auto lg:px-16 ${theme.bgMain} text-white font-black text-xl py-5 rounded-[2rem] shadow-2xl ${theme.shadowBtn} ${theme.bgHover} hover:-translate-y-2 active:scale-95 transition-all tracking-tight`}>
-                                {isEdit ? 'Save Changes' : `Create ${terms.voyage}`}
+                                {isEdit ? 'Save Changes' : `${terms.launch} ${terms.course}`}
                             </button>
                         </div>
                     </form>
