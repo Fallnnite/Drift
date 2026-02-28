@@ -43,6 +43,9 @@
         .pattern-coral { background-color: #fdf2f8; background-image: radial-gradient(at 0% 0%, rgba(251, 113, 133, 0.15) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(251, 146, 60, 0.12) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(45, 212, 191, 0.12) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(244, 114, 182, 0.12) 0px, transparent 50%), radial-gradient(rgba(253, 164, 175, 0.4) 1.5px, transparent 1.5px); background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 20px 20px; }
         .pattern-koi { background-color: #f0f9ff; background-image: radial-gradient(at 0% 0%, rgba(249, 115, 22, 0.15) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(14, 165, 233, 0.12) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(249, 115, 22, 0.12) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(14, 165, 233, 0.12) 0px, transparent 50%), radial-gradient(rgba(14, 165, 233, 0.3) 1.5px, transparent 1.5px); background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 20px 20px; }
         .pattern-lotus { background-color: #fdf2f8; background-image: radial-gradient(at 0% 0%, rgba(236, 72, 153, 0.12) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.12) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.12) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(16, 185, 129, 0.12) 0px, transparent 50%), radial-gradient(rgba(236, 72, 153, 0.3) 1.5px, transparent 1.5px); background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 24px 24px; }
+        .pattern-mint { background-color: #f0fdf4; background-image: radial-gradient(at 0% 0%, rgba(45, 212, 191, 0.12) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.12) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(45, 212, 191, 0.12) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(16, 185, 129, 0.12) 0px, transparent 50%), radial-gradient(rgba(45, 212, 191, 0.3) 1.5px, transparent 1.5px); background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 24px 24px; }
+        .pattern-lavender { background-color: #eef2ff; background-image: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.12) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.12) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(168, 85, 247, 0.12) 0px, transparent 50%), radial-gradient(rgba(99, 102, 241, 0.3) 1.5px, transparent 1.5px); background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 24px 24px; }
+        .pattern-navy { background-color: #f8fafc; background-image: radial-gradient(at 0% 0%, rgba(71, 85, 105, 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(51, 65, 85, 0.05) 0px, transparent 50%), linear-gradient(to right, rgba(203, 213, 225, 0.3) 1px, transparent 1px), linear-gradient(to bottom, rgba(203, 213, 225, 0.3) 1px, transparent 1px); background-size: 100% 100%, 100% 100%, 24px 24px, 24px 24px; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased w-full overflow-hidden">
@@ -87,9 +90,9 @@
         coral: { id: 'coral', name: 'Coral Reef', bgMain: 'bg-rose-500', bgHover: 'hover:bg-rose-600', bgLight: 'bg-rose-50', textMain: 'text-rose-600', textLight: 'text-rose-100', borderMain: 'border-rose-200', borderHover: 'hover:border-rose-200', borderFocus: 'focus:border-rose-400', ringActive: 'ring-rose-100', ringFocus: 'focus:ring-rose-100', shadowIcon: 'shadow-rose-200', shadowBtn: 'shadow-rose-500/30', gradient: 'from-rose-400 via-orange-400 to-teal-400', sidebarGradient: 'from-rose-500 via-rose-600 to-orange-700', waveColorClass: 'text-rose-100', patternClass: 'pattern-coral' },
         koi: { id: 'koi', name: 'Ocean & Goldfish', bgMain: 'bg-orange-500', bgHover: 'hover:bg-orange-600', bgLight: 'bg-orange-50', textMain: 'text-orange-600', textLight: 'text-orange-100', borderMain: 'border-orange-200', borderHover: 'hover:border-orange-300', borderFocus: 'focus:border-orange-400', ringActive: 'ring-orange-100', ringFocus: 'focus:ring-orange-100', shadowIcon: 'shadow-orange-200', shadowBtn: 'shadow-orange-500/30', gradient: 'from-blue-500 via-sky-400 to-orange-400', sidebarGradient: 'from-sky-700 via-blue-600 to-orange-500', waveColorClass: 'text-orange-100', patternClass: 'pattern-koi' },
         lotus: { id: 'lotus', name: 'Tropical Flora', bgMain: 'bg-pink-500', bgHover: 'hover:bg-pink-600', bgLight: 'bg-pink-50', textMain: 'text-pink-600', textLight: 'text-pink-100', borderMain: 'border-pink-200', borderHover: 'hover:border-pink-300', borderFocus: 'focus:border-pink-400', ringActive: 'ring-pink-100', ringFocus: 'focus:ring-pink-100', shadowIcon: 'shadow-pink-200', shadowBtn: 'shadow-pink-500/30', gradient: 'from-emerald-400 via-teal-500 to-pink-500', sidebarGradient: 'from-emerald-700 via-teal-600 to-pink-600', waveColorClass: 'text-pink-100', patternClass: 'pattern-lotus' },
-        mint: { id: 'mint', name: 'Fresh Mint', bgMain: 'bg-teal-500', bgHover: 'hover:bg-teal-600', bgLight: 'bg-teal-50', textMain: 'text-teal-600', textLight: 'text-teal-100', borderMain: 'border-teal-200', borderHover: 'hover:border-teal-200', borderFocus: 'focus:border-teal-400', ringActive: 'ring-teal-100', ringFocus: 'focus:ring-teal-100', shadowIcon: 'shadow-teal-200', shadowBtn: 'shadow-teal-500/30', gradient: 'from-teal-400 via-teal-500 to-emerald-600', sidebarGradient: 'from-teal-500 via-teal-600 to-emerald-800', waveColorClass: 'text-teal-100', patternClass: 'bg-slate-50/50' },
-        lavender: { id: 'lavender', name: 'Lavender Night', bgMain: 'bg-indigo-500', bgHover: 'hover:bg-indigo-600', bgLight: 'bg-indigo-50', textMain: 'text-indigo-600', textLight: 'text-indigo-100', borderMain: 'border-indigo-200', borderHover: 'hover:border-indigo-200', borderFocus: 'focus:border-indigo-400', ringActive: 'ring-indigo-100', ringFocus: 'focus:ring-indigo-100', shadowIcon: 'shadow-indigo-200', shadowBtn: 'shadow-indigo-500/30', gradient: 'from-indigo-400 via-purple-500 to-indigo-700', sidebarGradient: 'from-indigo-500 via-indigo-600 to-purple-900', waveColorClass: 'text-indigo-100', patternClass: 'bg-slate-50/50' },
-        navy: { id: 'navy', name: 'Deep Sea Grid', bgMain: 'bg-slate-700', bgHover: 'hover:bg-slate-800', bgLight: 'bg-slate-100', textMain: 'text-slate-700', textLight: 'text-slate-200', borderMain: 'border-slate-300', borderHover: 'hover:border-slate-400', borderFocus: 'focus:border-slate-500', ringActive: 'ring-slate-200', ringFocus: 'focus:ring-slate-200', shadowIcon: 'shadow-slate-300', shadowBtn: 'shadow-slate-700/30', gradient: 'from-slate-600 via-slate-700 to-slate-900', sidebarGradient: 'from-slate-700 via-slate-800 to-slate-950', waveColorClass: 'text-slate-200', patternClass: 'bg-slate-50/50 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:24px_24px]' }
+        mint: { id: 'mint', name: 'Fresh Mint', bgMain: 'bg-teal-500', bgHover: 'hover:bg-teal-600', bgLight: 'bg-teal-50', textMain: 'text-teal-600', textLight: 'text-teal-100', borderMain: 'border-teal-200', borderHover: 'hover:border-teal-200', borderFocus: 'focus:border-teal-400', ringActive: 'ring-teal-100', ringFocus: 'focus:ring-teal-100', shadowIcon: 'shadow-teal-200', shadowBtn: 'shadow-teal-500/30', gradient: 'from-teal-400 via-teal-500 to-emerald-600', sidebarGradient: 'from-teal-500 via-teal-600 to-emerald-800', waveColorClass: 'text-teal-100', patternClass: 'pattern-mint' },
+        lavender: { id: 'lavender', name: 'Lavender Night', bgMain: 'bg-indigo-500', bgHover: 'hover:bg-indigo-600', bgLight: 'bg-indigo-50', textMain: 'text-indigo-600', textLight: 'text-indigo-100', borderMain: 'border-indigo-200', borderHover: 'hover:border-indigo-200', borderFocus: 'focus:border-indigo-400', ringActive: 'ring-indigo-100', ringFocus: 'focus:ring-indigo-100', shadowIcon: 'shadow-indigo-200', shadowBtn: 'shadow-indigo-500/30', gradient: 'from-indigo-400 via-purple-500 to-indigo-700', sidebarGradient: 'from-indigo-500 via-indigo-600 to-purple-900', waveColorClass: 'text-indigo-100', patternClass: 'pattern-lavender' },
+        navy: { id: 'navy', name: 'Deep Sea Grid', bgMain: 'bg-slate-700', bgHover: 'hover:bg-slate-800', bgLight: 'bg-slate-100', textMain: 'text-slate-700', textLight: 'text-slate-200', borderMain: 'border-slate-300', borderHover: 'hover:border-slate-400', borderFocus: 'focus:border-slate-500', ringActive: 'ring-slate-200', ringFocus: 'focus:ring-slate-200', shadowIcon: 'shadow-slate-300', shadowBtn: 'shadow-slate-700/30', gradient: 'from-slate-600 via-slate-700 to-slate-900', sidebarGradient: 'from-slate-700 via-slate-800 to-slate-950', waveColorClass: 'text-slate-200', patternClass: 'pattern-navy' }
     };
 
     const getTerms = (themed) => ({
@@ -126,7 +129,10 @@
         settings: themed ? "Docking" : "Settings", 
         manual: themed ? "Captain's Manual" : "User Manual", 
         launch: themed ? "Launch" : "Create", 
-        explore: themed ? "Explore" : "Menu"
+        explore: themed ? "Explore" : "Menu",
+        tier1: themed ? "Fleet Admiral" : "Project Manager",
+        tier2: themed ? "Captain's Log" : "Task List",
+        tier3: themed ? "Free Sailing" : "Quick Timer"
     });
 
     const formatTime = (totalSeconds) => {
@@ -145,6 +151,30 @@
         </div>
     );
 
+    // --- ERROR BOUNDARY ---
+    class ErrorBoundary extends React.Component {
+        constructor(props) { super(props); this.state = { hasError: false, error: null, info: null }; }
+        static getDerivedStateFromError(error) { return { hasError: true, error }; }
+        componentDidCatch(error, info) { console.error("Crash Prevented:", error, info); this.setState({ info }); }
+        render() {
+            if (this.state.hasError) {
+                return (
+                    <div className="min-h-screen bg-red-50 text-red-900 p-6 md:p-10 flex flex-col items-start justify-center">
+                        <div className="w-16 h-16 bg-red-100 text-red-500 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow-inner"><i className="fas fa-bug"></i></div>
+                        <h1 className="text-2xl md:text-3xl font-black mb-2 tracking-tight">System Crash Prevented</h1>
+                        <p className="mb-6 font-medium text-red-700 max-w-xl">Something caused the user interface to break.</p>
+                        <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-red-200 w-full max-w-3xl overflow-x-auto font-mono text-[10px] md:text-xs">
+                            <strong className="text-red-600 block mb-3 text-sm">{this.state.error?.toString()}</strong>
+                            {this.state.info?.componentStack?.split('\n').map((line, i) => <div key={i} className="mb-1.5 text-slate-600">{line}</div>)}
+                        </div>
+                        <button onClick={() => window.location.reload()} className="mt-8 bg-red-600 hover:bg-red-700 text-white font-black py-4 px-8 rounded-2xl shadow-lg shadow-red-200 active:scale-95 transition-all uppercase tracking-widest text-xs">Reload Application</button>
+                    </div>
+                );
+            }
+            return this.props.children;
+        }
+    }
+
     // --- COMPONENTS ---
 
     function ProfileSetup({ theme, terms, setProfile, authUser, authError, setThemeId, setIsThemed }) {
@@ -159,14 +189,12 @@
             const val = nickname.trim();
             if (!val) return;
 
-            // SECRET DEV TEST BYPASS
             if (val === 'DEV_TEST') {
                 setProfile({
                     nickname: 'Dev Tester',
                     bio: 'Offline Sandbox Mode',
                     id: 'DEV_TEST_ID',
                     isCreated: true,
-                    // If they are logging in, skip tutorial. If new, show tutorial.
                     hasSeenTutorial: mode === 'login', 
                     isSailing: false,
                     currentCourse: '',
@@ -178,15 +206,8 @@
                 return;
             }
             
-            if (authError) {
-                setError(authError);
-                return;
-            }
-
-            if (!authUser || !db) {
-                setError('Still connecting to the cloud. Please wait a second.');
-                return;
-            }
+            if (authError) { setError(authError); return; }
+            if (!authUser || !db) { setError('Still connecting to the cloud. Please wait a second.'); return; }
 
             setLoading(true);
             setError('');
@@ -195,18 +216,15 @@
                 const profilesRef = window.FB.collection(db, 'artifacts', globalAppId, 'public', 'data', 'profiles');
                 const snap = await window.FB.getDocs(profilesRef);
                 const allProfiles = snap.docs.map(d => ({...d.data(), uid: d.id}));
-                
                 const nameLower = val.toLowerCase();
                 const existing = allProfiles.find(p => p.nickname.toLowerCase() === nameLower);
 
                 if (mode === 'login') {
                     if (existing) {
-                        // FIX: Returning users automatically skip the tutorial
                         setProfile({ ...existing, id: existing.uid, hasSeenTutorial: true }); 
                         if (existing.themeId) setThemeId(existing.themeId);
                         if (existing.isThemed !== undefined) setIsThemed(existing.isThemed);
                         
-                        // Force update DB so it's permanently marked complete and set online
                         if (authUser && db) {
                             const docRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', existing.uid);
                             window.FB.updateDoc(docRef, { hasSeenTutorial: true, status: 'online' }).catch(()=>{});
@@ -238,11 +256,8 @@
                 }
             } catch (err) {
                 console.error(err);
-                if (err.code === 'permission-denied') {
-                    setError('Permission Denied. Check your Firestore Security Rules.');
-                } else {
-                    setError('Network error connecting to the cloud.');
-                }
+                if (err.code === 'permission-denied') { setError('Permission Denied. Check your Firestore Security Rules.'); } 
+                else { setError('Network error connecting to the cloud.'); }
             }
             setLoading(false);
         };
@@ -251,16 +266,11 @@
             <div className={`flex flex-col absolute inset-0 overflow-y-auto ${theme.bgLight} items-center justify-center p-6`}>
                 <div className="bg-white w-full max-w-sm rounded-3xl p-8 shadow-xl animate-[fadeIn_0.4s_ease-out] my-auto shrink-0 relative overflow-hidden text-center">
                     <WaveSVG colorClass={theme.textLight} className="top-0 rotate-180 opacity-40 h-12" />
-                    
-                    <div className={`w-20 h-20 ${theme.bgLight} ${theme.textMain} rounded-full flex items-center justify-center text-4xl mx-auto mb-4 shadow-inner relative z-10`}>
-                        <i className="fas fa-water"></i>
-                    </div>
-                    
+                    <div className={`w-20 h-20 ${theme.bgLight} ${theme.textMain} rounded-full flex items-center justify-center text-4xl mx-auto mb-4 shadow-inner relative z-10`}><i className="fas fa-water"></i></div>
                     <div className="flex bg-slate-100 p-1 rounded-xl mb-6 relative z-10 w-3/4 mx-auto">
                         <button type="button" onClick={() => { setMode('login'); setError(''); }} className={`flex-1 py-2 text-xs font-black uppercase tracking-widest rounded-lg transition-all ${mode === 'login' ? 'bg-white shadow-sm text-slate-800' : 'text-slate-400'}`}>Login</button>
                         <button type="button" onClick={() => { setMode('signup'); setError(''); }} className={`flex-1 py-2 text-xs font-black uppercase tracking-widest rounded-lg transition-all ${mode === 'signup' ? 'bg-white shadow-sm text-slate-800' : 'text-slate-400'}`}>New</button>
                     </div>
-
                     <h2 className="text-2xl font-bold text-slate-800 mb-2 relative z-10">{mode === 'login' ? 'Welcome Back' : 'Create Profile'}</h2>
                     <p className="text-sm text-slate-500 mb-6 relative z-10">{mode === 'login' ? `Enter your ${terms.captain.toLowerCase()} name to connect.` : 'Beta Test: Pick a unique name to identify yourself.'}</p>
                     
@@ -269,7 +279,6 @@
                             <i className="fas fa-exclamation-triangle mr-1"></i> {authError}
                         </div>
                     )}
-
                     <form onSubmit={handleSubmit} className="space-y-4 relative z-10 text-left">
                         <div>
                             <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Exact Name</label>
@@ -281,9 +290,7 @@
                                 <textarea value={bio} onChange={e => setBio(e.target.value)} className={`w-full border-2 border-slate-100 p-3.5 rounded-xl outline-none ${theme.borderFocus} focus:bg-slate-50 resize-none h-20 text-slate-600`} placeholder="What keeps you moving?"></textarea>
                             </div>
                         )}
-                        
                         {error && !authError && <div className="text-red-500 text-xs font-bold bg-red-50 p-3 rounded-lg text-center">{error}</div>}
-
                         <div className="pt-2">
                             <button type="submit" disabled={loading || !!authError} className={`w-full ${theme.bgMain} text-white font-bold py-3.5 rounded-xl shadow-lg ${theme.shadowBtn} ${theme.bgHover} transition-all disabled:opacity-50 disabled:cursor-not-allowed`}>
                                 {loading ? <i className="fas fa-spinner fa-spin"></i> : mode === 'login' ? 'Connect to Cloud' : 'Create & Connect'}
@@ -617,7 +624,6 @@
             }
         ];
 
-        const [currentSlide, setCurrentSlide] = useState(0);
         const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
         const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
         const slide = slides[currentSlide];
@@ -816,7 +822,7 @@
                                         <label key={g.id} className={`flex items-start justify-between gap-3 text-sm cursor-pointer p-3 rounded-2xl border-2 transition-all ${g.isCompleted ? 'bg-slate-50 border-transparent' : 'bg-white border-slate-50 hover:border-slate-200 shadow-sm'}`}>
                                             <div className="flex items-start gap-4 flex-1">
                                                 <div className="pt-0.5">
-                                                    <input type="checkbox" checked={g.isCompleted} disabled={isLocked} onChange={() => toggleGoal(course, g.id)} className="w-5 h-5 text-emerald-500 rounded-lg border-slate-300 focus:ring-emerald-500 cursor-pointer shadow-inner disabled:opacity-50 disabled:cursor-not-allowed" />
+                                                    <input type="checkbox" checked={g.isCompleted} disabled={isLocked} onChange={() => toggleGoal(course, g.id)} className="w-5 h-5 text-emerald-500 rounded-lg border-slate-300 focus:ring-emerald-50 cursor-pointer shadow-inner disabled:opacity-50 disabled:cursor-not-allowed" />
                                                 </div>
                                                 <span className={`flex-1 pt-0.5 ${g.isCompleted ? 'line-through text-slate-400' : 'text-slate-700 font-bold'}`}>{g.text}</span>
                                             </div>
@@ -862,7 +868,267 @@
         );
     }
 
-    function CoursesView({ theme, terms, voyages, courses, openAddVoyage, openEditVoyage, deleteVoyage, toggleTimer, completeCourse, toggleGoal, deleteCourse, openEditCourse, toggleVoyagePin, toggleVoyageCollapse, toggleCoursePin, moveCourse, currentTime, voyageView, unlockCourseEarly, unlockVoyageEarly }) {
+    function FlowSaveModal({ theme, terms, flowSession, isCompleting, onClose, onSave, triggerCompletionFlash }) {
+        const [title, setTitle] = useState('');
+        const [desc, setDesc] = useState('');
+        const [priority, setPriority] = useState('low');
+
+        const handleSubmit = (e) => {
+            e.preventDefault();
+            if (!title.trim()) return;
+
+            onSave({
+                id: Date.now().toString(),
+                title: title.trim(),
+                description: desc,
+                duration: flowSession.duration,
+                timeSpent: flowSession.timeSpent,
+                isRunning: false,
+                isCompleted: isCompleting,
+                goals: [],
+                priority,
+                deadline: '',
+                includeTime: false,
+                isFuture: false,
+                startDate: '',
+                order: Date.now(),
+                isPinned: false,
+                isEdit: false
+            });
+            if (isCompleting) triggerCompletionFlash(title.trim());
+        };
+
+        return (
+            <div className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+                <div className="bg-white w-full max-w-lg rounded-[2.5rem] p-8 shadow-2xl animate-[slideUp_0.3s_ease-out] text-left relative overflow-hidden">
+                    <WaveSVG colorClass={theme.textLight} className="top-0 rotate-180 opacity-40 h-12" />
+                    
+                    <div className="flex justify-between items-center mb-6 relative z-10">
+                        <h2 className="text-2xl font-black text-slate-800 tracking-tight">Define Your Session</h2>
+                        <button type="button" onClick={onClose} className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i className="fas fa-times"></i></button>
+                    </div>
+
+                    <div className="mb-6 relative z-10 flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <div className={`w-12 h-12 rounded-xl ${theme.bgLight} ${theme.textMain} flex items-center justify-center text-2xl shadow-inner`}><i className="fas fa-stopwatch"></i></div>
+                        <div>
+                            <div className="text-[10px] font-black uppercase tracking-widest text-slate-400">Session Length</div>
+                            <div className="font-mono font-black text-slate-800 text-lg">{formatTime(flowSession.timeSpent)}</div>
+                        </div>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+                        <div>
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">What did you accomplish?</label>
+                            <input autoFocus required type="text" value={title} onChange={e => setTitle(e.target.value)} className={`w-full border-b-4 border-slate-100 p-4 rounded-2xl outline-none ${theme.borderFocus} focus:bg-slate-50 transition-all font-bold text-slate-700 bg-slate-50/50`} placeholder={`e.g., Read 3 chapters`} />
+                        </div>
+                        
+                        <div>
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">{terms.tide} Priority</label>
+                            <select value={priority} onChange={e => setPriority(e.target.value)} className={`w-full border-b-4 border-slate-100 p-4 rounded-2xl outline-none ${theme.borderFocus} bg-slate-50/50 font-bold text-slate-700 transition-all`}>
+                                <option value="low">💧 {terms.lowTide}</option>
+                                <option value="high">🌊 {terms.highTide}</option>
+                                <option value="tsunami">🌋 {terms.tsunami}</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Notes (Optional)</label>
+                            <textarea value={desc} onChange={e => setDesc(e.target.value)} className={`w-full border-b-4 border-slate-100 p-4 rounded-2xl outline-none ${theme.borderFocus} focus:bg-slate-50 resize-none h-24 bg-slate-50/50 transition-all`} placeholder="Add any details..."></textarea>
+                        </div>
+
+                        <div className="pt-2">
+                            <button type="submit" className={`w-full ${isCompleting ? 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-200' : theme.bgMain + ' ' + theme.bgHover} text-white font-black py-5 rounded-3xl shadow-xl active:scale-95 transition-all tracking-widest uppercase text-sm`}>
+                                {isCompleting ? `Complete & Save` : `Save Task`}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        );
+    }
+
+    function FlowModeView({ theme, terms, flowSession, setFlowSession, onSaveFlowCourse, triggerCompletionFlash, setConfirmAction }) {
+        const [hrs, setHrs] = useState('');
+        const [mins, setMins] = useState('30');
+        const [showModal, setShowModal] = useState(false);
+        const [isCompleting, setIsCompleting] = useState(false);
+
+        const handleLaunch = () => {
+            const h = parseInt(hrs) || 0;
+            const m = parseInt(mins) || 0;
+            let durationSecs = (h * 3600) + (m * 60);
+            if (durationSecs === 0) durationSecs = 1800; // default 30 mins
+
+            setFlowSession({
+                id: 'flow_' + Date.now(),
+                duration: durationSecs,
+                timeSpent: 0,
+                isRunning: true,
+                isPaused: false
+            });
+        };
+
+        const togglePause = () => setFlowSession(prev => ({ ...prev, isPaused: !prev.isPaused }));
+
+        const openDefineModal = (completing) => {
+            setFlowSession(prev => ({ ...prev, isPaused: true }));
+            setIsCompleting(completing);
+            setShowModal(true);
+        };
+
+        const handleDiscard = () => {
+            setConfirmAction({
+                title: "Discard Flow Session?",
+                message: "Are you sure you want to discard this timer? All tracked time will be lost forever.",
+                onConfirm: () => setFlowSession(null)
+            });
+        };
+
+        if (!flowSession) {
+            return (
+                <div className="flex flex-col items-center justify-center h-full text-center animate-[fadeIn_0.5s_ease-out] w-full max-w-md mx-auto">
+                    <div className={`w-32 h-32 ${theme.bgLight} ${theme.textMain} rounded-[3rem] flex items-center justify-center text-6xl shadow-inner mb-8 mx-auto`}>
+                        <i className="fas fa-stopwatch"></i>
+                    </div>
+                    <h2 className="text-4xl font-black text-slate-800 mb-4 tracking-tighter">{terms.tier3}</h2>
+                    <p className="text-slate-500 mb-10 text-sm font-medium leading-relaxed">Start the timer now. Define what you accomplished later.</p>
+                    
+                    <div className="flex gap-4 w-full mb-8">
+                        <div className="flex-1 relative">
+                            <input type="number" min="0" placeholder="0" value={hrs} onChange={e => setHrs(e.target.value)} className={`w-full border-b-4 border-slate-100 p-6 pr-12 rounded-3xl outline-none ${theme.borderFocus} font-mono text-center text-4xl font-black bg-white shadow-sm transition-all`} />
+                            <span className="absolute right-6 top-8 text-sm font-black text-slate-300">HRS</span>
+                        </div>
+                        <div className="flex-1 relative">
+                            <input type="number" min="0" max="59" placeholder="30" value={mins} onChange={e => setMins(e.target.value)} className={`w-full border-b-4 border-slate-100 p-6 pr-12 rounded-3xl outline-none ${theme.borderFocus} font-mono text-center text-4xl font-black bg-white shadow-sm transition-all`} />
+                            <span className="absolute right-6 top-8 text-sm font-black text-slate-300">MIN</span>
+                        </div>
+                    </div>
+                    
+                    <button onClick={handleLaunch} className={`w-full ${theme.bgMain} text-white py-6 rounded-[2.5rem] font-black text-xl shadow-xl hover:shadow-2xl hover:-translate-y-1 active:scale-95 transition-all flex items-center justify-center gap-3 tracking-widest uppercase`}>
+                        <i className="fas fa-play"></i> {terms.launch} Timer
+                    </button>
+                </div>
+            );
+        }
+
+        const timeLeft = flowSession.duration - flowSession.timeSpent;
+        const isOvertime = timeLeft < 0;
+        const progress = flowSession.duration === 0 ? 0 : Math.min(1, flowSession.timeSpent / flowSession.duration);
+
+        return (
+            <div className="flex flex-col items-center justify-center h-full text-center animate-[fadeIn_0.5s_ease-out] w-full max-w-lg mx-auto relative">
+                {showModal && <FlowSaveModal theme={theme} terms={terms} flowSession={flowSession} isCompleting={isCompleting} onClose={() => setShowModal(false)} onSave={onSaveFlowCourse} triggerCompletionFlash={triggerCompletionFlash} />}
+                
+                {flowSession.isRunning && !flowSession.isPaused && (
+                    <WaveSVG colorClass={isOvertime ? 'text-red-100' : theme.waveColorClass} className="bottom-0 rotate-180 h-40 opacity-40 rounded-[3rem]" speed="animate-wave" />
+                )}
+
+                <div className="relative w-72 h-72 sm:w-96 sm:h-96 flex items-center justify-center mb-12 z-10">
+                    <svg viewBox="0 0 32 32" className={`w-full h-full -rotate-90 ${isOvertime ? 'text-red-500' : theme.textMain}`}>
+                        <circle r="15" cx="16" cy="16" className="fill-transparent stroke-slate-200 stroke-[1.5]" />
+                        <circle r="15" cx="16" cy="16"
+                            fill="transparent"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeDasharray={`${progress * 94.24} 94.24`}
+                            className="transition-all duration-1000 ease-linear drop-shadow-md" />
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                        <span className={`text-[10px] font-black uppercase tracking-[0.3em] mb-2 ${isOvertime ? 'text-red-400' : 'text-slate-400'}`}>
+                            {isOvertime ? 'OVERTIME' : flowSession.isPaused ? 'PAUSED' : 'IN FLOW'}
+                        </span>
+                        <div className={`text-6xl sm:text-7xl font-mono font-black tracking-tighter ${isOvertime ? 'text-red-600' : 'text-slate-800'}`}>
+                            {isOvertime ? '+' : ''}{formatTime(timeLeft)}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex flex-col w-full gap-4 relative z-10 px-4">
+                    {!flowSession.isPaused ? (
+                        <div className="flex gap-4">
+                            <button onClick={togglePause} className="flex-1 bg-white text-slate-700 font-black py-5 rounded-3xl border-2 border-slate-200 hover:bg-slate-50 transition-all text-sm uppercase tracking-widest shadow-sm">
+                                <i className="fas fa-pause mr-2"></i> Pause
+                            </button>
+                            <button onClick={() => openDefineModal(true)} className="flex-1 bg-emerald-500 text-white font-black py-5 rounded-3xl shadow-lg hover:shadow-xl hover:bg-emerald-600 transition-all text-sm uppercase tracking-widest active:scale-95 shadow-emerald-200">
+                                <i className="fas fa-check mr-2"></i> {terms.anchor}
+                            </button>
+                        </div>
+                    ) : (
+                        <>
+                            <button onClick={togglePause} className={`w-full ${theme.bgMain} text-white font-black py-5 rounded-3xl shadow-lg hover:shadow-xl active:scale-95 transition-all text-sm uppercase tracking-widest mb-2`}>
+                                <i className="fas fa-play mr-2"></i> Resume Flow
+                            </button>
+                            <div className="flex gap-4">
+                                <button onClick={handleDiscard} className="flex-1 bg-red-50 text-red-600 font-black py-4 rounded-2xl hover:bg-red-100 transition-all text-xs uppercase tracking-widest border border-red-100">
+                                    Discard
+                                </button>
+                                <button onClick={() => openDefineModal(false)} className="flex-[2] bg-white text-slate-700 font-black py-4 rounded-2xl border border-slate-200 hover:bg-slate-50 transition-all text-xs uppercase tracking-widest shadow-sm">
+                                    <i className="fas fa-save mr-2"></i> Save & Define
+                                </button>
+                            </div>
+                        </>
+                    )}
+                </div>
+            </div>
+        );
+    }
+
+    function CoursesView({ theme, terms, voyages, courses, orgMode, openAddCourse, openAddVoyage, openEditVoyage, deleteVoyage, toggleTimer, completeCourse, toggleGoal, deleteCourse, openEditCourse, toggleVoyagePin, toggleVoyageCollapse, toggleCoursePin, moveCourse, currentTime, voyageView, unlockCourseEarly, unlockVoyageEarly, flowSession, setFlowSession, handleSaveCourse, triggerCompletionFlash, setConfirmAction }) {
+        if (orgMode === 'tier3') {
+            return <FlowModeView theme={theme} terms={terms} flowSession={flowSession} setFlowSession={setFlowSession} onSaveFlowCourse={(courseData) => { handleSaveCourse(courseData); setFlowSession(null); }} triggerCompletionFlash={triggerCompletionFlash} setConfirmAction={setConfirmAction} />;
+        }
+
+        if (orgMode === 'tier2') {
+            const displayedCourses = courses
+                .filter(c => voyageView === 'active' ? !c.isFuture : c.isFuture)
+                .map(c => ({...c, priority: c.priority || 'low', order: c.order || c.id}))
+                .sort((a,b) => {
+                    if (a.isPinned !== b.isPinned) return a.isPinned ? -1 : 1;
+                    const pScore = { tsunami: 3, high: 2, low: 1 };
+                    if (pScore[a.priority] !== pScore[b.priority]) return pScore[b.priority] - pScore[a.priority];
+                    return a.order - b.order;
+                });
+
+            if (displayedCourses.length === 0) {
+                return (
+                    <div className="flex flex-col items-center justify-center h-full text-center animate-[fadeIn_0.5s_ease-out]">
+                        <div className={`w-32 h-32 ${theme.bgLight} ${theme.textMain} rounded-[2rem] flex items-center justify-center text-6xl shadow-inner mb-6 mx-auto`}>
+                            <i className="fas fa-list-check"></i>
+                        </div>
+                        <h2 className="text-3xl font-black text-slate-800 mb-4">No {terms.courses} Found</h2>
+                        <p className="text-slate-500 max-w-md mb-8 mx-auto">Your list is clear. {terms.chartFirst} {terms.course.toLowerCase()} to begin.</p>
+                        <button onClick={openAddCourse} className={`${theme.bgMain} text-white px-8 py-4 rounded-2xl font-black shadow-xl ${theme.shadowBtn} ${theme.bgHover} hover:-translate-y-1 active:scale-95 transition-all flex items-center gap-3 mx-auto`}>
+                            <i className="fas fa-plus"></i> {terms.chartFirst} {terms.course}
+                        </button>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="space-y-10 pb-10">
+                    <div className="space-y-6">
+                        <h3 className="text-xl font-black text-slate-800 tracking-tight flex items-center gap-2 px-2">
+                            <i className={`fas ${voyageView === 'active' ? 'fa-list-check' : 'fa-water'} ${theme.textMain}`}></i> 
+                            {voyageView === 'active' ? `Active ${terms.courses}` : terms.waves}
+                        </h3>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 animate-[fadeIn_0.3s_ease-out]">
+                            {displayedCourses.map((course, index, sortedArr) => {
+                                const prev = sortedArr[index - 1];
+                                const next = sortedArr[index + 1];
+                                const isFirstInGroup = !prev || prev.isPinned !== course.isPinned || prev.priority !== course.priority;
+                                const isLastInGroup = !next || next.isPinned !== course.isPinned || next.priority !== course.priority;
+                                
+                                return (
+                                    <CourseCard key={course.id} theme={theme} terms={terms} course={course} toggleTimer={toggleTimer} completeCourse={completeCourse} toggleGoal={toggleGoal} deleteCourse={deleteCourse} openEditCourse={openEditCourse} toggleCoursePin={toggleCoursePin} moveCourse={moveCourse} isFirstInGroup={isFirstInGroup} isLastInGroup={isLastInGroup} currentTime={currentTime} unlockCourseEarly={unlockCourseEarly} />
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // TIER 1 Render
         if (voyages.length === 0) {
             return (
                 <div className="flex flex-col items-center justify-center h-full text-center animate-[fadeIn_0.5s_ease-out]">
@@ -1387,7 +1653,1033 @@
         );
     }
 
-    function CourseModal({ theme, terms, voyages, initialCourse, onClose, onSave }) {
+    function App() {
+        // --- FIREBASE AUTHENTICATION ---
+        const [authUser, setAuthUser] = useState(null);
+        const [authError, setAuthError] = useState(null);
+
+        useEffect(() => {
+            if (!auth) return;
+            const initAuth = async () => {
+                try {
+                    if (isSandboxEnvironment && typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await window.FB.signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await window.FB.signInAnonymously(auth);
+                    }
+                } catch (e) { 
+                    console.error("Firebase Auth Init Failed", e);
+                    if (e.code === 'auth/configuration-not-found' || e.code === 'auth/admin-restricted-operation') {
+                        setAuthError("Please enable 'Anonymous' Sign-in provider in your Firebase Console (Authentication -> Sign-in method).");
+                    } else {
+                        setAuthError(`Cloud Connection Error: ${e.message}`);
+                    }
+                }
+            };
+            initAuth();
+            const unsub = window.FB.onAuthStateChanged(auth, (user) => {
+                setAuthUser(user); 
+                if (user) setAuthError(null); 
+            });
+            return () => unsub();
+        }, []);
+
+        // --- STATE & TERMINOLOGY ---
+        const [activeTab, setActiveTab] = useState('courses');
+        const [voyageView, setVoyageView] = useState('active'); 
+        const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+        const [currentTime, setCurrentTime] = useState(new Date());
+
+        const [isThemed, setIsThemed] = useState(() => {
+            const saved = localStorage.getItem('drift-terminology');
+            return saved !== null ? JSON.parse(saved) : true;
+        });
+        const [themeId, setThemeId] = useState(() => localStorage.getItem('drift-theme') || 'navy');
+        
+        const [orgMode, setOrgMode] = useState(() => localStorage.getItem('drift-orgMode') || 'tier1');
+        const [isFabOpen, setIsFabOpen] = useState(false);
+
+        const theme = THEMES[themeId] || THEMES['navy'];
+        const terms = getTerms(isThemed);
+
+        const [profile, setProfile] = useState(() => {
+            const saved = localStorage.getItem('drift-profile');
+            return saved ? JSON.parse(saved) : { nickname: '', bio: '', id: '', isCreated: false, hasSeenTutorial: false };
+        });
+        
+        const isDev = profile.id === 'DEV_TEST_ID';
+
+        const [voyages, setVoyages] = useState(() => {
+            if (isDev) return JSON.parse(localStorage.getItem('drift-voyages-dev') || '[]');
+            return [];
+        });
+        const [courses, setCourses] = useState(() => {
+            if (isDev) return JSON.parse(localStorage.getItem('drift-courses-dev') || '[]');
+            return [];
+        });
+        
+        // --- PHASE 3: FLOW TIMER STATE ---
+        const [flowSession, setFlowSession] = useState(() => {
+            const saved = localStorage.getItem('drift-flow-session');
+            return saved ? JSON.parse(saved) : null;
+        });
+        const flowSessionRef = useRef(flowSession);
+        useEffect(() => { flowSessionRef.current = flowSession; }, [flowSession]);
+        useEffect(() => { localStorage.setItem('drift-flow-session', JSON.stringify(flowSession)); }, [flowSession]);
+
+        const [allProfiles, setAllProfiles] = useState([]);
+        const [radarData, setRadarData] = useState({ friends: [], incomingRequests: [], outgoingRequests: [] });
+
+        const [isAddCourseModalOpen, setIsAddCourseModalOpen] = useState(false);
+        const [isAddVoyageModalOpen, setIsAddVoyageModalOpen] = useState(false);
+        const [editingCourse, setEditingCourse] = useState(null);
+        const [editingVoyage, setEditingVoyage] = useState(null);
+        
+        // Custom error handling state to replace alerts
+        const [appError, setAppError] = useState(null);
+        const showError = (title, message) => setAppError({ title, message });
+
+        const [confirmAction, setConfirmAction] = useState(null);
+        
+        const prevStatusRef = useRef({ status: '', currentCourse: '', isOvertime: false });
+        const completionTimeoutRef = useRef(null);
+
+        const getCourseRef = (courseId) => window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'courses', `${profile.id}_${courseId}`);
+        const getVoyageRef = (voyageId) => window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'voyages', `${profile.id}_${voyageId}`);
+        const getRadarRef = () => window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'radars', profile.id);
+
+        const [isIdle, setIsIdle] = useState(false);
+        const isIdleRef = useRef(false);
+
+        // Settings Sync Wrappers
+        const handleSetThemeId = (newThemeId) => {
+            setThemeId(newThemeId);
+            if (!isDev && db && profile.id) {
+                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+                window.FB.updateDoc(profileRef, { themeId: newThemeId }).catch(()=>{});
+            }
+        };
+
+        const handleSetIsThemed = (newVal) => {
+            setIsThemed(newVal);
+            if (!isDev && db && profile.id) {
+                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+                window.FB.updateDoc(profileRef, { isThemed: newVal }).catch(()=>{});
+            }
+        };
+
+        // Effect synchronizers
+        useEffect(() => { localStorage.setItem('drift-terminology', JSON.stringify(isThemed)); }, [isThemed]);
+        useEffect(() => { localStorage.setItem('drift-theme', themeId); }, [themeId]);
+        useEffect(() => { localStorage.setItem('drift-profile', JSON.stringify(profile)); }, [profile]);
+        useEffect(() => { localStorage.setItem('drift-orgMode', orgMode); }, [orgMode]);
+        
+        useEffect(() => {
+            if (isDev) {
+                localStorage.setItem('drift-courses-dev', JSON.stringify(courses));
+                localStorage.setItem('drift-voyages-dev', JSON.stringify(voyages));
+            }
+        }, [courses, voyages, isDev]);
+
+        // --- ACTIVITY TRACKER (ONLINE / IDLE) ---
+        useEffect(() => {
+            if (!profile.isCreated || !profile.id || !db || !authUser || isDev) return;
+            let timeoutId;
+            const handleActivity = () => {
+                setIsIdle(false);
+                isIdleRef.current = false;
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => {
+                    setIsIdle(true);
+                    isIdleRef.current = true;
+                }, 5 * 60 * 1000); // 5 minutes
+            };
+            
+            window.addEventListener('mousemove', handleActivity);
+            window.addEventListener('keydown', handleActivity);
+            window.addEventListener('click', handleActivity);
+            window.addEventListener('scroll', handleActivity);
+            
+            handleActivity(); // Init
+            
+            return () => {
+                window.removeEventListener('mousemove', handleActivity);
+                window.removeEventListener('keydown', handleActivity);
+                window.removeEventListener('click', handleActivity);
+                window.removeEventListener('scroll', handleActivity);
+                clearTimeout(timeoutId);
+            };
+        }, [profile.isCreated, profile.id, authUser, isDev]);
+
+        // --- INIT RACE-CONDITION FIX (HEARTBEAT ON MOUNT) ---
+        useEffect(() => {
+            if (!profile.isCreated || !profile.id || !db || !authUser || isDev) return;
+            
+            const forceOnline = setTimeout(() => {
+                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+                window.FB.updateDoc(profileRef, { status: 'online' }).catch(()=>{});
+                prevStatusRef.current.status = 'online';
+            }, 2000);
+            
+            return () => clearTimeout(forceOnline);
+        }, [profile.isCreated, profile.id, db, authUser, isDev]);
+
+
+        // --- EXIT TRAP (OFFLINE) ---
+        useEffect(() => {
+            if (!profile.isCreated || !profile.id || !db || !authUser || isDev) return;
+            
+            const handleUnload = () => {
+                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+                window.FB.updateDoc(profileRef, { status: 'offline', isSailing: false }).catch(()=>{});
+            };
+            
+            window.addEventListener('beforeunload', handleUnload);
+            return () => window.removeEventListener('beforeunload', handleUnload);
+        }, [profile.isCreated, profile.id, authUser, isDev]);
+
+        // --- FIREBASE LIVE SYNCS ---
+        useEffect(() => {
+            if (!profile.isCreated || !profile.id || !db || !authUser || isDev) return;
+            
+            const voyagesRef = window.FB.collection(db, 'artifacts', globalAppId, 'public', 'data', 'voyages');
+            const unsubVoyages = window.FB.onSnapshot(voyagesRef, (snap) => {
+                const all = snap.docs.map(d => ({ ...d.data(), id: d.data().id || d.id.split('_')[1] }));
+                setVoyages(all.filter(v => v.ownerId === profile.id));
+            });
+
+            const coursesRef = window.FB.collection(db, 'artifacts', globalAppId, 'public', 'data', 'courses');
+            const unsubCourses = window.FB.onSnapshot(coursesRef, (snap) => {
+                const all = snap.docs.map(d => ({ ...d.data(), id: d.data().id || d.id.split('_')[1] }));
+                const mine = all.filter(c => c.ownerId === profile.id);
+                setCourses(prev => {
+                    return mine.map(newC => {
+                        const oldC = prev.find(p => p.id === newC.id);
+                        if (oldC && oldC.isRunning) return { ...newC, timeSpent: oldC.timeSpent }; 
+                        return newC;
+                    });
+                });
+            });
+
+            const unsubRadar = window.FB.onSnapshot(getRadarRef(), (snap) => {
+                if (snap.exists()) {
+                    const data = snap.data();
+                    setRadarData({
+                        friends: data.friends || [],
+                        incomingRequests: data.incomingRequests || [],
+                        outgoingRequests: data.outgoingRequests || []
+                    });
+                }
+            });
+
+            const profilesRef = window.FB.collection(db, 'artifacts', globalAppId, 'public', 'data', 'profiles');
+            const unsubProfiles = window.FB.onSnapshot(profilesRef, (snap) => {
+                setAllProfiles(snap.docs.map(d => ({ ...d.data(), uid: d.id })));
+            });
+
+            return () => { unsubVoyages(); unsubCourses(); unsubRadar(); unsubProfiles(); };
+        }, [profile.isCreated, profile.id, authUser, isDev]);
+
+
+        // --- TIMER INTERVAL & AUTOMATIC UNLOCKS ---
+        useEffect(() => {
+            const interval = setInterval(() => {
+                const now = new Date();
+                setCurrentTime(now);
+                
+                // Advance Phase 3 Flow Timer
+                const currentFlow = flowSessionRef.current;
+                if (currentFlow && currentFlow.isRunning && !currentFlow.isPaused) {
+                    setFlowSession(prev => prev ? { ...prev, timeSpent: prev.timeSpent + 1 } : null);
+                }
+
+                setCourses(prevCourses => prevCourses.map(course => {
+                    let updatedCourse = { ...course };
+                    if (updatedCourse.isFuture && updatedCourse.startDate) {
+                        let unlockTime;
+                        if (!updatedCourse.includeTime) {
+                            const [y, m, d] = updatedCourse.startDate.split('-');
+                            unlockTime = new Date(y, m - 1, d, 6, 0, 0); 
+                        } else { unlockTime = new Date(updatedCourse.startDate); }
+                        
+                        if (now >= unlockTime) updatedCourse.isFuture = false;
+                    }
+                    if (updatedCourse.isRunning && !updatedCourse.isCompleted) {
+                        updatedCourse.timeSpent = updatedCourse.timeSpent + 1;
+                    }
+                    return updatedCourse;
+                }));
+
+                setVoyages(prevVoyages => prevVoyages.map(voyage => {
+                    let updatedVoyage = { ...voyage };
+                    if (updatedVoyage.isFuture && updatedVoyage.startDate) {
+                        let unlockTime;
+                        if (!updatedVoyage.includeTime) {
+                            const [y, m, d] = updatedVoyage.startDate.split('-');
+                            unlockTime = new Date(y, m - 1, d, 6, 0, 0); 
+                        } else { unlockTime = new Date(updatedVoyage.startDate); }
+                        if (now >= unlockTime) updatedVoyage.isFuture = false;
+                    }
+                    return updatedVoyage;
+                }));
+            }, 1000);
+
+            const dbSyncInterval = setInterval(() => {
+                setCourses(prevCourses => {
+                    if (profile.id && db && authUser && !isDev) {
+                        const runningCourse = prevCourses.find(c => c.isRunning);
+                        const currentFlow = flowSessionRef.current;
+                        
+                        prevCourses.filter(c => c.isRunning).forEach(c => {
+                            const courseRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'courses', `${profile.id}_${c.id}`);
+                            window.FB.updateDoc(courseRef, { timeSpent: c.timeSpent }).catch(()=>{});
+                        });
+
+                        // Calculate and sync percentage progress and overtime to public profile
+                        let isActive = false;
+                        let activeTaskTitle = '';
+                        let activeTaskDuration = 0;
+                        let activeTaskTimeSpent = 0;
+
+                        if (runningCourse) {
+                            isActive = true;
+                            activeTaskTitle = runningCourse.title;
+                            activeTaskDuration = runningCourse.duration;
+                            activeTaskTimeSpent = runningCourse.timeSpent;
+                        } else if (currentFlow && currentFlow.isRunning && !currentFlow.isPaused) {
+                            isActive = true;
+                            activeTaskTitle = `${terms.sailing} (${terms.tier3})`;
+                            activeTaskDuration = currentFlow.duration;
+                            activeTaskTimeSpent = currentFlow.timeSpent;
+                        }
+
+                        if (isActive && prevStatusRef.current.status !== 'completed') {
+                            const prog = activeTaskDuration > 0 ? (activeTaskTimeSpent / activeTaskDuration) * 100 : 0;
+                            const isOvertime = activeTaskTimeSpent > activeTaskDuration;
+                            
+                            const currentStatus = 'focused';
+
+                            // Only update if something changed
+                            if (prevStatusRef.current.status !== currentStatus || prevStatusRef.current.currentCourse !== activeTaskTitle || prevStatusRef.current.isOvertime !== isOvertime) {
+                                prevStatusRef.current = { status: currentStatus, currentCourse: activeTaskTitle, isOvertime: isOvertime };
+                                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+                                window.FB.updateDoc(profileRef, { 
+                                    status: currentStatus,
+                                    currentCourse: activeTaskTitle,
+                                    isSailing: true,
+                                    progress: Math.min(100, Math.max(0, prog)),
+                                    isOvertime: isOvertime
+                                }).catch(()=>{});
+                            }
+                        } else if (prevStatusRef.current.status !== 'completed') {
+                            // HEARTBEAT: Force sync status every 10 seconds to self-heal any network drops or stuck offline states from page refreshes
+                            const correctStatus = isIdleRef.current ? 'idle' : 'online';
+                            if (prevStatusRef.current.status !== correctStatus) {
+                                prevStatusRef.current = { status: correctStatus, currentCourse: '', isOvertime: false };
+                                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+                                window.FB.updateDoc(profileRef, { 
+                                    status: correctStatus,
+                                    currentCourse: '',
+                                    isSailing: false,
+                                    progress: 0,
+                                    isOvertime: false
+                                }).catch(()=>{});
+                            }
+                        }
+                    }
+                    return prevCourses;
+                });
+            }, 10000);
+
+            return () => { clearInterval(interval); clearInterval(dbSyncInterval); };
+        }, [profile.id, authUser, isDev, db]);
+
+        // --- ACTIONS ---
+
+        const triggerCompletionFlash = (courseTitle) => {
+            if (isDev || !db || !authUser) return;
+            
+            // 1. Instantly lock the public profile to "Completed"
+            prevStatusRef.current = { status: 'completed', currentCourse: courseTitle, isOvertime: false };
+            const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+            window.FB.updateDoc(profileRef, { 
+                status: 'completed', 
+                currentCourse: courseTitle, 
+                isSailing: false, 
+                progress: 100, 
+                isOvertime: false 
+            }).catch(()=>{});
+
+            // 2. Set the 5-second countdown to revert back to Idle/Online
+            if (completionTimeoutRef.current) clearTimeout(completionTimeoutRef.current);
+            completionTimeoutRef.current = setTimeout(() => {
+                const newStatus = isIdleRef.current ? 'idle' : 'online';
+                prevStatusRef.current = { status: newStatus, currentCourse: '', isOvertime: false };
+                window.FB.updateDoc(profileRef, { 
+                    status: newStatus, 
+                    currentCourse: '', 
+                    isSailing: false, 
+                    progress: 0, 
+                    isOvertime: false 
+                }).catch(()=>{});
+                completionTimeoutRef.current = null;
+            }, 5000);
+        };
+
+        const toggleTimer = (course) => {
+            const nextState = !course.isRunning;
+            
+            // Instantly clear the 5-second completion flash if starting a new course
+            if (completionTimeoutRef.current) {
+                clearTimeout(completionTimeoutRef.current);
+                completionTimeoutRef.current = null;
+            }
+            if (prevStatusRef.current.status === 'completed' && nextState) {
+                prevStatusRef.current.status = ''; 
+            }
+
+            if (isDev) {
+                setCourses(prev => prev.map(c => c.id === course.id ? { ...c, isRunning: nextState } : c));
+                return;
+            }
+            if (!db || !authUser) return;
+            window.FB.updateDoc(getCourseRef(course.id), { isRunning: nextState, timeSpent: course.timeSpent }).catch(e => showError("Sync Error", e.message));
+            
+            // Push immediate status switch on start
+            if (nextState) {
+                const isOvertime = course.timeSpent > course.duration;
+                const prog = course.duration > 0 ? (course.timeSpent / course.duration) * 100 : 0;
+                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+                window.FB.updateDoc(profileRef, { 
+                    status: 'focused', 
+                    currentCourse: course.title, 
+                    isSailing: true, 
+                    progress: Math.min(100, Math.max(0, prog)), 
+                    isOvertime: isOvertime 
+                }).catch(()=>{});
+                prevStatusRef.current = { status: 'focused', currentCourse: course.title, isOvertime: isOvertime };
+            } else {
+                // If paused, revert immediately to idle/online
+                const correctStatus = isIdleRef.current ? 'idle' : 'online';
+                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+                window.FB.updateDoc(profileRef, { 
+                    status: correctStatus, 
+                    currentCourse: '', 
+                    isSailing: false, 
+                    progress: 0, 
+                    isOvertime: false 
+                }).catch(()=>{});
+                prevStatusRef.current = { status: correctStatus, currentCourse: '', isOvertime: false };
+            }
+        };
+
+        const completeCourse = (course) => {
+            if (isDev) {
+                setCourses(prev => prev.map(c => c.id === course.id ? { ...c, isCompleted: true, isRunning: false } : c));
+                return;
+            }
+            if (!db || !authUser) return;
+            window.FB.updateDoc(getCourseRef(course.id), { isCompleted: true, isRunning: false, timeSpent: course.timeSpent }).catch(e => showError("Sync Error", e.message));
+            
+            triggerCompletionFlash(course.title);
+        };
+
+        const toggleGoal = (course, goalId) => {
+            if (isDev) {
+                setCourses(prev => prev.map(c => {
+                    if (c.id === course.id) return { ...c, goals: c.goals.map(g => g.id === goalId ? { ...g, isCompleted: !g.isCompleted } : g) };
+                    return c;
+                }));
+                return;
+            }
+            if (!db || !authUser) return;
+            const newGoals = course.goals.map(g => g.id === goalId ? { ...g, isCompleted: !g.isCompleted } : g);
+            window.FB.updateDoc(getCourseRef(course.id), { goals: newGoals }).catch(e => showError("Sync Error", e.message));
+        };
+
+        const toggleCoursePin = (course) => {
+            if (isDev) {
+                setCourses(prev => prev.map(c => c.id === course.id ? { ...c, isPinned: !c.isPinned } : c));
+                return;
+            }
+            if (!db || !authUser) return;
+            window.FB.updateDoc(getCourseRef(course.id), { isPinned: !course.isPinned }).catch(e => showError("Sync Error", e.message));
+        };
+
+        const moveCourse = (courseId, direction) => {
+            const target = courses.find(c => c.id === courseId);
+            if (!target) return;
+            
+            const vCourses = courses
+                .filter(c => orgMode === 'tier2' ? true : c.voyageId === target.voyageId)
+                .map(c => ({...c, priority: c.priority || 'low', order: c.order || c.id}))
+                .sort((a,b) => {
+                    if (a.isPinned !== b.isPinned) return a.isPinned ? -1 : 1;
+                    const pScore = { tsunami: 3, high: 2, low: 1 };
+                    if (pScore[a.priority] !== pScore[b.priority]) return pScore[b.priority] - pScore[a.priority];
+                    return a.order - b.order;
+                });
+            
+            const idx = vCourses.findIndex(c => c.id === courseId);
+            let swapTarget = null;
+            if (direction === 'up' && idx > 0) swapTarget = vCourses[idx - 1];
+            if (direction === 'down' && idx < vCourses.length - 1) swapTarget = vCourses[idx + 1];
+
+            if (swapTarget && swapTarget.isPinned === (target.isPinned || false) && swapTarget.priority === (target.priority || 'low')) {
+                if (isDev) {
+                    setCourses(prev => prev.map(c => {
+                        if (c.id === courseId) return { ...c, order: swapTarget.order || swapTarget.id };
+                        if (c.id === swapTarget.id) return { ...c, order: target.order || target.id };
+                        return c;
+                    }));
+                    return;
+                }
+                if (!db || !authUser) return;
+                window.FB.updateDoc(getCourseRef(courseId), { order: swapTarget.order || swapTarget.id }).catch(e => showError("Sync Error", e.message));
+                window.FB.updateDoc(getCourseRef(swapTarget.id), { order: target.order || target.id }).catch(e => showError("Sync Error", e.message));
+            }
+        };
+
+        const deleteCourse = (course) => {
+            setConfirmAction({
+                title: `Delete ${terms.course}?`,
+                message: `Are you sure you want to delete this ${terms.course.toLowerCase()}? This cannot be undone.`,
+                onConfirm: () => {
+                    if (isDev) { setCourses(prev => prev.filter(c => c.id !== course.id)); return; }
+                    if (!authUser) return;
+                    window.FB.deleteDoc(getCourseRef(course.id)).catch(e => showError("Sync Error", e.message));
+                }
+            });
+        };
+
+        const deleteVoyage = (voyage) => {
+            setConfirmAction({
+                title: `Delete ${terms.voyage}?`,
+                message: `All ${terms.courses.toLowerCase()} inside this ${terms.voyage.toLowerCase()} will be lost forever!`,
+                onConfirm: () => {
+                    if (isDev) {
+                        setVoyages(prev => prev.filter(v => v.id !== voyage.id));
+                        setCourses(prev => prev.filter(c => c.voyageId !== voyage.id));
+                        return;
+                    }
+                    if (!authUser) return;
+                    window.FB.deleteDoc(getVoyageRef(voyage.id)).catch(e => showError("Sync Error", e.message));
+                    // Wipe related courses
+                    courses.filter(c => c.voyageId === voyage.id).forEach(c => window.FB.deleteDoc(getCourseRef(c.id)));
+                }
+            });
+        };
+
+        const unlockCourseEarly = (course) => {
+            setConfirmAction({
+                title: "Unlock Early?",
+                message: "Start this ahead of schedule? It will immediately become active.",
+                onConfirm: () => {
+                    if (isDev) { setCourses(prev => prev.map(c => c.id === course.id ? { ...c, isFuture: false, startedEarly: true } : c)); return; }
+                    if (!authUser) return;
+                    window.FB.updateDoc(getCourseRef(course.id), { isFuture: false, startedEarly: true });
+                }
+            });
+        };
+
+        const unlockVoyageEarly = (voyage) => {
+            setConfirmAction({
+                title: "Unlock Early?",
+                message: "Start this ahead of schedule? It will immediately become active.",
+                onConfirm: () => {
+                    if (isDev) { setVoyages(prev => prev.map(v => v.id === voyage.id ? { ...v, isFuture: false, startedEarly: true } : v)); return; }
+                    if (!authUser) return;
+                    window.FB.updateDoc(getVoyageRef(voyage.id), { isFuture: false, startedEarly: true });
+                }
+            });
+        };
+
+        const toggleVoyagePin = (voyage) => {
+            if (isDev) { setVoyages(prev => prev.map(v => v.id === voyage.id ? { ...v, isPinned: !v.isPinned } : v)); return; }
+            if (!db || !authUser) return;
+            window.FB.updateDoc(getVoyageRef(voyage.id), { isPinned: !voyage.isPinned });
+        };
+
+        const toggleVoyageCollapse = (voyage) => {
+            if (isDev) { setVoyages(prev => prev.map(v => v.id === voyage.id ? { ...v, isCollapsed: !v.isCollapsed } : v)); return; }
+            if (!db || !authUser) return;
+            window.FB.updateDoc(getVoyageRef(voyage.id), { isCollapsed: !voyage.isCollapsed });
+        };
+
+        const handleSaveVoyage = (voyageData) => {
+            if (isDev) {
+                if (voyageData.isEdit) {
+                    setVoyages(voyages.map(v => v.id === voyageData.id ? voyageData : v));
+                } else {
+                    setVoyages(prev => [...prev, { ...voyageData, startedEarly: false, ownerId: profile.id }]);
+                }
+                setIsAddVoyageModalOpen(false);
+                setEditingVoyage(null);
+                return;
+            }
+            if (!db || !authUser) return;
+            const ref = getVoyageRef(voyageData.id);
+            if (voyageData.isEdit) {
+                delete voyageData.isEdit;
+                window.FB.updateDoc(ref, voyageData).catch(e => showError("Database Blocked", e.message));
+            } else {
+                delete voyageData.isEdit; 
+                window.FB.setDoc(ref, { ...voyageData, startedEarly: false, ownerId: profile.id }).catch(e => showError("Database Blocked", e.message));
+            }
+            setIsAddVoyageModalOpen(false);
+            setEditingVoyage(null);
+        };
+
+        const handleSaveCourse = async (courseData) => {
+            let finalCourseData = { ...courseData };
+
+            // Phase 2: Route Tier 2/3 tasks to a default Voyage if not in Architect Mode
+            if (!courseData.isEdit && orgMode !== 'tier1') {
+                const defaultName = isThemed ? "Uncharted Waters" : "Uncategorized Tasks";
+                let defaultVoyage = voyages.find(v => v.isDefault || v.name === "Uncharted Waters" || v.name === "Uncategorized Tasks");
+
+                if (!defaultVoyage) {
+                    const newVoyageId = Date.now().toString() + "_def";
+                    const newVoyage = {
+                        id: newVoyageId,
+                        name: defaultName,
+                        isPinned: false,
+                        isCollapsed: false,
+                        isFuture: false,
+                        startDate: '',
+                        includeTime: false,
+                        isDefault: true,
+                        ownerId: profile.id,
+                        startedEarly: false
+                    };
+                    
+                    if (isDev) {
+                        setVoyages(prev => [...prev, newVoyage]);
+                    } else if (db && authUser) {
+                        await window.FB.setDoc(getVoyageRef(newVoyageId), newVoyage).catch(e => console.error("Default Voyage Error:", e));
+                    }
+                    finalCourseData.voyageId = newVoyageId;
+                } else {
+                    finalCourseData.voyageId = defaultVoyage.id;
+                }
+            }
+
+            if (isDev) {
+                if (finalCourseData.isEdit) {
+                    setCourses(prev => prev.map(c => c.id === finalCourseData.id ? finalCourseData : c));
+                } else {
+                    setCourses(prev => [...prev, { ...finalCourseData, startedEarly: false, ownerId: profile.id }]);
+                }
+                setIsAddCourseModalOpen(false);
+                setEditingCourse(null);
+                return;
+            }
+            if (!db || !authUser) return;
+            const ref = getCourseRef(finalCourseData.id);
+            if (finalCourseData.isEdit) {
+                delete finalCourseData.isEdit; 
+                window.FB.updateDoc(ref, finalCourseData).catch(e => showError("Database Blocked", e.message));
+            } else {
+                delete finalCourseData.isEdit; 
+                window.FB.setDoc(ref, { ...finalCourseData, startedEarly: false, ownerId: profile.id }).catch(e => showError("Database Blocked", e.message));
+            }
+            setIsAddCourseModalOpen(false);
+            setEditingCourse(null);
+        };
+
+        // --- NETWORK / RADAR FUNCTIONS ---
+
+        const handleAddFriendToRadar = async (friendName) => {
+            if (isDev) { showError("Offline Mode", "Network features are disabled."); return; }
+            if (!authUser) return;
+            
+            const friendNameLower = friendName.trim().toLowerCase();
+            const friend = allProfiles.find(p => p.nickname.toLowerCase() === friendNameLower);
+            if (!friend) { showError("Radar Error", `Could not locate ${terms.captain.toLowerCase()} "${friendName}" on the global network.`); return; }
+            if (friend.uid === profile.id) return;
+            
+            const { friends, incomingRequests, outgoingRequests } = radarData;
+            
+            if (friends.includes(friend.uid) || outgoingRequests.includes(friend.uid) || incomingRequests.includes(friend.uid)) {
+                showError("Connection Exists", `You are already connected or have a pending request with ${friend.nickname}.`);
+                return;
+            }
+
+            try {
+                // Update my outgoing queue
+                const myNewOutgoing = [...outgoingRequests, friend.uid];
+                await window.FB.setDoc(getRadarRef(), { outgoingRequests: myNewOutgoing }, { merge: true });
+
+                // Update their incoming queue
+                const friendRadarRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'radars', friend.uid);
+                const friendSnap = await window.FB.getDoc(friendRadarRef);
+                let theirIncoming = [];
+                if (friendSnap.exists()) {
+                    theirIncoming = friendSnap.data().incomingRequests || [];
+                }
+                if (!theirIncoming.includes(profile.id)) {
+                    await window.FB.setDoc(friendRadarRef, { incomingRequests: [...theirIncoming, profile.id] }, { merge: true });
+                }
+            } catch (e) {
+                showError("Radar Error", "Failed to send request: " + e.message);
+            }
+        };
+
+        const handleAcceptRequest = async (requesterUid) => {
+            if (isDev || !authUser) return;
+            try {
+                // Remove from my incoming, add to my friends
+                const newIncoming = radarData.incomingRequests.filter(id => id !== requesterUid);
+                const newFriends = [...radarData.friends, requesterUid];
+                await window.FB.setDoc(getRadarRef(), { incomingRequests: newIncoming, friends: newFriends }, { merge: true });
+
+                // Remove from their outgoing, add to their friends
+                const requesterRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'radars', requesterUid);
+                const reqSnap = await window.FB.getDoc(requesterRef);
+                if (reqSnap.exists()) {
+                    const reqData = reqSnap.data();
+                    const theirOut = (reqData.outgoingRequests || []).filter(id => id !== profile.id);
+                    const theirFriends = [...(reqData.friends || []).filter(id => id !== profile.id), profile.id];
+                    await window.FB.setDoc(requesterRef, { outgoingRequests: theirOut, friends: theirFriends }, { merge: true });
+                }
+            } catch (e) {
+                showError("Radar Error", "Failed to accept request: " + e.message);
+            }
+        };
+
+        const handleDeclineRequest = async (requesterUid) => {
+            if (isDev || !authUser) return;
+            try {
+                // Remove from my incoming
+                const newIncoming = radarData.incomingRequests.filter(id => id !== requesterUid);
+                await window.FB.setDoc(getRadarRef(), { incomingRequests: newIncoming }, { merge: true });
+
+                // Remove from their outgoing
+                const requesterRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'radars', requesterUid);
+                const reqSnap = await window.FB.getDoc(requesterRef);
+                if (reqSnap.exists()) {
+                    const reqData = reqSnap.data();
+                    const theirOut = (reqData.outgoingRequests || []).filter(id => id !== profile.id);
+                    await window.FB.setDoc(requesterRef, { outgoingRequests: theirOut }, { merge: true });
+                }
+            } catch (e) {
+                showError("Radar Error", "Failed to decline request: " + e.message);
+            }
+        };
+
+        const handleCancelRequest = async (targetUid) => {
+            if (isDev || !authUser) return;
+            try {
+                // Remove from my outgoing
+                const newOutgoing = radarData.outgoingRequests.filter(id => id !== targetUid);
+                await window.FB.setDoc(getRadarRef(), { outgoingRequests: newOutgoing }, { merge: true });
+
+                // Remove from their incoming
+                const targetRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'radars', targetUid);
+                const targetSnap = await window.FB.getDoc(targetRef);
+                if (targetSnap.exists()) {
+                    const targetData = targetSnap.data();
+                    const theirIncoming = (targetData.incomingRequests || []).filter(id => id !== profile.id);
+                    await window.FB.setDoc(targetRef, { incomingRequests: theirIncoming }, { merge: true });
+                }
+            } catch (e) {
+                showError("Radar Error", "Failed to cancel request: " + e.message);
+            }
+        };
+
+        const handleRemoveFriendFromRadar = async (removeUid) => {
+            if (isDev || !authUser) return;
+            try {
+                // Remove from my friends
+                const newFriends = radarData.friends.filter(id => id !== removeUid);
+                await window.FB.setDoc(getRadarRef(), { friends: newFriends }, { merge: true });
+
+                // Remove from their friends
+                const friendRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'radars', removeUid);
+                const friendSnap = await window.FB.getDoc(friendRef);
+                if (friendSnap.exists()) {
+                    const theirFriends = (friendSnap.data().friends || []).filter(id => id !== profile.id);
+                    await window.FB.setDoc(friendRef, { friends: theirFriends }, { merge: true });
+                }
+            } catch (e) {
+                showError("Radar Error", "Failed to remove: " + e.message);
+            }
+        };
+
+        const openAddCourse = () => { setEditingCourse(null); setIsAddCourseModalOpen(true); };
+        const openEditCourse = (course) => { setEditingCourse(course); setIsAddCourseModalOpen(true); };
+        const openAddVoyage = () => { setEditingVoyage(null); setIsAddVoyageModalOpen(true); };
+        const openEditVoyage = (voyage) => { setEditingVoyage(voyage); setIsAddVoyageModalOpen(true); };
+
+        const logOut = () => {
+            setConfirmAction({
+                title: terms.logOut,
+                message: "Are you sure you want to log out? You can return anytime by typing your exact name.",
+                onConfirm: () => {
+                    setProfile({ nickname: '', bio: '', id: '', isCreated: false, hasSeenTutorial: false });
+                    setCourses([]); setVoyages([]); setRadarData({ friends: [], incomingRequests: [], outgoingRequests: [] });
+                    localStorage.removeItem('drift-profile');
+                    window.location.reload();
+                }
+            });
+        };
+
+        const clearData = () => {
+            setConfirmAction({
+                title: terms.abandon,
+                message: "WARNING: This will permanently delete your account, including all cloud data, Voyages, Courses, and Network connections! This cannot be undone.",
+                onConfirm: async () => {
+                    // 1. Wipe Cloud Data if connected
+                    if (!isDev && db && authUser && profile.id) {
+                        try {
+                            // Delete all user courses
+                            for (const c of courses) {
+                                await window.FB.deleteDoc(getCourseRef(c.id)).catch(()=>{});
+                            }
+                            // Delete all user voyages
+                            for (const v of voyages) {
+                                await window.FB.deleteDoc(getVoyageRef(v.id)).catch(()=>{});
+                            }
+                            // Delete radar connections
+                            await window.FB.deleteDoc(getRadarRef()).catch(()=>{});
+                            // Delete public profile
+                            const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+                            await window.FB.deleteDoc(profileRef).catch(()=>{});
+                        } catch (e) {
+                            console.error("Cloud wipe error:", e);
+                        }
+                    }
+
+                    // 2. Wipe Local Data & Reset
+                    setProfile({ nickname: '', bio: '', id: '', isCreated: false, hasSeenTutorial: false });
+                    setCourses([]); setVoyages([]); setRadarData({ friends: [], incomingRequests: [], outgoingRequests: [] });
+                    localStorage.clear();
+                    window.location.reload();
+                }
+            });
+        }
+
+        const handleNavClick = (tab) => {
+            setActiveTab(tab);
+            setIsSidebarOpen(false);
+        };
+
+        // UI RENDER SAFEGUARDS
+
+        if (authError && profile.isCreated && !isDev) {
+            return (
+                <div className="flex flex-col h-full w-full items-center justify-center bg-slate-50 p-6 text-center">
+                    <div className="w-16 h-16 bg-red-100 text-red-500 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow-inner"><i className="fas fa-exclamation-triangle"></i></div>
+                    <h2 className="text-xl font-bold text-slate-800 mb-2">Cloud Connection Failed</h2>
+                    <p className="text-slate-500 text-sm max-w-sm mb-8 leading-relaxed">{authError}</p>
+                    <button onClick={clearData} className="bg-red-500 text-white font-bold py-3.5 px-8 rounded-xl hover:bg-red-600 shadow-lg active:scale-95 transition-all">Clear Local Cache & Reset</button>
+                </div>
+            );
+        }
+
+        if (profile.isCreated && !authUser && !isDev) {
+             return (
+                <div className="flex flex-col h-full w-full items-center justify-center bg-slate-50 p-6">
+                    <div className="w-16 h-16 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin mb-4"></div>
+                    <h2 className="text-slate-500 font-bold text-sm uppercase tracking-widest animate-pulse">Connecting to Fleet Command...</h2>
+                </div>
+            );
+        }
+
+        if (!profile.isCreated) {
+            return <ProfileSetup theme={theme} terms={terms} setProfile={setProfile} authUser={authUser} authError={authError} setThemeId={setThemeId} setIsThemed={setIsThemed} />;
+        }
+
+        if (!profile.hasSeenTutorial) {
+            return <Onboarding theme={theme} terms={terms} isThemed={isThemed} setIsThemed={handleSetIsThemed} onComplete={() => {
+                setProfile({...profile, hasSeenTutorial: true});
+                if (!isDev && db && authUser) {
+                    const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
+                    window.FB.updateDoc(profileRef, { hasSeenTutorial: true }).catch(()=>{});
+                }
+            }} />;
+        }
+
+        return (
+            <div className="flex h-full w-full bg-slate-50 transition-colors duration-500 relative">
+                
+                {isSidebarOpen && (
+                    <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 lg:hidden animate-[fadeIn_0.3s_ease-out]" onClick={() => setIsSidebarOpen(false)}></div>
+                )}
+
+                <aside className={`fixed inset-y-0 left-0 z-50 w-72 shrink-0 bg-gradient-to-b ${theme.sidebarGradient} text-white flex flex-col shadow-2xl transition-transform duration-500 ease-in-out lg:relative lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} overflow-hidden`}>
+                    <WaveSVG colorClass="text-white/20" className="bottom-0 h-40 opacity-40" />
+                    <WaveSVG colorClass="text-white/10" className="bottom-4 h-32 opacity-20" speed="animate-wave-slow" />
+
+                    <div className="p-6 pb-4 flex items-center gap-3 border-b border-white/10 relative z-10">
+                        <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-xl backdrop-blur-sm shadow-inner shrink-0">
+                            <i className="fas fa-water"></i>
+                        </div>
+                        <h1 className="text-2xl font-bold tracking-tight">Drift</h1>
+                        <span className={`text-[9px] px-2 py-0.5 rounded uppercase tracking-widest ml-1 font-bold ${isDev ? 'bg-orange-500 text-white' : 'bg-white/20'}`}>{isDev ? 'OFFLINE' : 'BETA'}</span>
+                        <button onClick={() => setIsSidebarOpen(false)} className="lg:hidden ml-auto w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 transition-all text-white/80 hover:text-white">
+                            <i className="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <div className="p-6 pb-2 relative z-10 flex-1 overflow-y-auto">
+                        <div className="text-xs font-bold text-white/50 uppercase tracking-widest mb-4 ml-1">{terms.explore}</div>
+                        <nav className="flex flex-col gap-2">
+                            <button onClick={() => handleNavClick('courses')} className={`flex items-center gap-3 w-full p-3.5 rounded-xl transition-all ${activeTab === 'courses' ? `bg-white ${theme.textMain} shadow-lg font-bold scale-105` : 'text-white/80 hover:bg-white/10 hover:text-white font-medium'}`}>
+                                <i className="fas fa-wind text-lg w-5 text-center"></i>
+                                <span>Current {terms.voyages}</span>
+                            </button>
+                            <button onClick={() => handleNavClick('crew')} className={`flex items-center gap-3 w-full p-3.5 rounded-xl transition-all ${activeTab === 'crew' ? `bg-white ${theme.textMain} shadow-lg font-bold scale-105` : 'text-white/80 hover:bg-white/10 hover:text-white font-medium'}`}>
+                                <i className="fas fa-users text-lg w-5 text-center"></i>
+                                <span>{terms.fleet}</span>
+                            </button>
+                            <button onClick={() => handleNavClick('analytics')} className={`flex items-center gap-3 w-full p-3.5 rounded-xl transition-all ${activeTab === 'analytics' ? `bg-white ${theme.textMain} shadow-lg font-bold scale-105` : 'text-white/80 hover:bg-white/10 hover:text-white font-medium'}`}>
+                                <i className="fas fa-chart-line text-lg w-5 text-center"></i>
+                                <span>{terms.analytics}</span>
+                            </button>
+                            <button onClick={() => handleNavClick('settings')} className={`flex items-center gap-3 w-full p-3.5 rounded-xl transition-all ${activeTab === 'settings' ? `bg-white ${theme.textMain} shadow-lg font-bold scale-105` : 'text-white/80 hover:bg-white/10 hover:text-white font-medium'}`}>
+                                <i className="fas fa-sliders text-lg w-5 text-center"></i>
+                                <span>{terms.settings}</span>
+                            </button>
+                            <div className="h-px w-full bg-white/10 my-1"></div>
+                            <button onClick={() => handleNavClick('manual')} className={`flex items-center gap-3 w-full p-3.5 rounded-xl transition-all ${activeTab === 'manual' ? `bg-white ${theme.textMain} shadow-lg font-bold scale-105` : 'text-white/80 hover:bg-white/10 hover:text-white font-medium'}`}>
+                                <i className="fas fa-life-ring text-lg w-5 text-center"></i>
+                                <span>{terms.manual}</span>
+                            </button>
+                        </nav>
+                    </div>
+
+                    <div className="mt-auto p-6 border-t border-white/10 relative z-10 shrink-0">
+                        <div className="flex items-center gap-3 p-3 bg-white/10 rounded-xl cursor-not-allowed transition-all backdrop-blur-md">
+                            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-lg shadow-inner shrink-0"><i className="fas fa-user-astronaut"></i></div>
+                            <div className="flex flex-col overflow-hidden">
+                                <span className="font-bold truncate">{profile.nickname}</span>
+                                <span className={`text-[10px] uppercase tracking-tighter ${isDev ? 'text-orange-400' : (isIdle ? 'text-amber-400' : 'text-emerald-400')}`}><i className="fas fa-circle text-[8px]"></i> {isDev ? 'Local Mode' : (isIdle ? terms.adrift : terms.atPort)}</span>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <div className="flex-1 flex flex-col h-full overflow-hidden relative">
+                    <header className="bg-white/70 backdrop-blur-xl border-b border-slate-200 p-4 sm:p-6 lg:px-10 flex flex-wrap gap-4 justify-between items-center shrink-0 z-10">
+                        <div className="flex items-center gap-4">
+                            <button onClick={() => setIsSidebarOpen(true)} className={`lg:hidden w-11 h-11 rounded-2xl ${theme.bgLight} ${theme.textMain} flex items-center justify-center shadow-sm active:scale-95 transition-all`}>
+                                <i className="fas fa-bars text-xl"></i>
+                            </button>
+                            
+                            {activeTab === 'courses' && orgMode !== 'tier3' ? (
+                                <div className="flex items-center gap-4 sm:gap-6 shrink-0">
+                                    <div className="relative cursor-pointer group" onClick={() => setVoyageView('active')}>
+                                        <h2 className={`text-lg sm:text-2xl font-bold transition-colors ${voyageView === 'active' ? 'text-slate-800' : 'text-slate-400 group-hover:text-slate-600'}`}>Active {terms.voyages}</h2>
+                                        <div className={`absolute -bottom-1 left-0 h-1 w-8 sm:w-12 ${theme.bgMain} rounded-full mt-1 transition-all duration-500 hidden sm:block ${voyageView === 'active' ? 'opacity-100' : 'opacity-0'}`}></div>
+                                    </div>
+                                    <div className="relative cursor-pointer group" onClick={() => setVoyageView('upcoming')}>
+                                        <h2 className={`text-lg sm:text-2xl font-bold transition-colors ${voyageView === 'upcoming' ? 'text-slate-800' : 'text-slate-400 group-hover:text-slate-600'}`}>Upcoming {terms.voyages}</h2>
+                                        <div className={`absolute -bottom-1 left-0 h-1 w-8 sm:w-12 ${theme.bgMain} rounded-full mt-1 transition-all duration-500 hidden sm:block ${voyageView === 'upcoming' ? 'opacity-100' : 'opacity-0'}`}></div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="relative">
+                                    <h2 className="text-xl sm:text-2xl font-bold text-slate-800">
+                                        {activeTab === 'crew' && terms.radar}
+                                        {activeTab === 'analytics' && terms.analytics}
+                                        {activeTab === 'settings' && terms.settings}
+                                        {activeTab === 'manual' && terms.manual}
+                                        {activeTab === 'courses' && orgMode === 'tier3' && terms.tier3}
+                                    </h2>
+                                    <div className={`absolute -bottom-1 left-0 h-1 w-12 ${theme.bgMain} rounded-full mt-1 transition-all duration-500 hidden sm:block`}></div>
+                                </div>
+                            )}
+                        </div>
+                        {activeTab === 'courses' && (isDev || voyages.length > 0 || orgMode === 'tier2') && orgMode !== 'tier3' && (
+                            <button onClick={openAddCourse} className={`${theme.bgMain} text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl font-bold shadow-lg hover:shadow-2xl hover:-translate-y-1 active:scale-95 transition-all flex items-center gap-2 group text-sm sm:text-base ml-auto`}>
+                                <i className="fas fa-plus group-hover:rotate-90 transition-transform"></i> <span className="hidden sm:inline">New {terms.course}</span><span className="sm:hidden">{terms.course}</span>
+                            </button>
+                        )}
+                    </header>
+
+                    <main className={`flex-1 overflow-y-auto p-4 sm:p-6 lg:p-10 relative ${theme.patternClass}`}>
+                        <div className="max-w-7xl mx-auto h-full relative z-10">
+                            {activeTab === 'courses' && <CoursesView theme={theme} terms={terms} voyages={voyages} courses={courses} orgMode={orgMode} openAddCourse={openAddCourse} openAddVoyage={openAddVoyage} openEditVoyage={openEditVoyage} deleteVoyage={deleteVoyage} toggleTimer={toggleTimer} completeCourse={completeCourse} toggleGoal={toggleGoal} deleteCourse={deleteCourse} openEditCourse={openEditCourse} toggleVoyagePin={toggleVoyagePin} toggleVoyageCollapse={toggleVoyageCollapse} toggleCoursePin={toggleCoursePin} moveCourse={moveCourse} currentTime={currentTime} voyageView={voyageView} unlockCourseEarly={unlockCourseEarly} unlockVoyageEarly={unlockVoyageEarly} flowSession={flowSession} setFlowSession={setFlowSession} handleSaveCourse={handleSaveCourse} triggerCompletionFlash={triggerCompletionFlash} setConfirmAction={setConfirmAction} />}
+                            {activeTab === 'crew' && <CrewView theme={theme} terms={terms} profile={profile} radarData={radarData} allProfiles={allProfiles} onAddFriend={handleAddFriendToRadar} onRemoveFriend={handleRemoveFriendFromRadar} onAccept={handleAcceptRequest} onDecline={handleDeclineRequest} onCancel={handleCancelRequest} />}
+                            {activeTab === 'analytics' && <AnalyticsView theme={theme} terms={terms} courses={courses} />}
+                            {activeTab === 'settings' && <SettingsView theme={theme} terms={terms} themeId={themeId} setThemeId={handleSetThemeId} profile={profile} clearData={clearData} logOut={logOut} isThemed={isThemed} setIsThemed={handleSetIsThemed} />}
+                            {activeTab === 'manual' && <ManualView theme={theme} terms={terms} />}
+                        </div>
+                        <div className="fixed bottom-0 right-0 w-1/3 h-full opacity-[0.03] pointer-events-none flex items-end justify-end">
+                            <i className={`fas fa-${isThemed ? 'water' : 'folder'} text-[20rem] -rotate-12 mb-[-5rem] mr-[-5rem]`}></i>
+                        </div>
+                    </main>
+                    
+                    {/* FAB MODE SWITCHER */}
+                    {activeTab === 'courses' && (
+                        <>
+                            {isFabOpen && <div className="fixed inset-0 z-[65] bg-slate-900/10 backdrop-blur-sm animate-[fadeIn_0.2s_ease-out]" onClick={() => setIsFabOpen(false)}></div>}
+                            <div className="fixed bottom-6 right-6 sm:bottom-10 sm:right-10 z-[70] flex flex-col items-end group">
+                                <div className={`flex flex-col gap-3 items-end mb-4 transition-all duration-300 origin-bottom ${isFabOpen ? 'scale-100 opacity-100 pointer-events-auto' : 'scale-75 opacity-0 pointer-events-none'}`}>
+                                    <button onClick={() => {setOrgMode('tier3'); setIsFabOpen(false);}} className={`flex items-center gap-3 px-5 py-3 rounded-full shadow-xl font-bold text-xs sm:text-sm uppercase tracking-widest transition-all ${orgMode === 'tier3' ? theme.bgMain + ' text-white' : 'bg-white text-slate-700 hover:bg-slate-50'}`}>
+                                        <span>{terms.tier3}</span>
+                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${orgMode === 'tier3' ? 'bg-white/20' : theme.bgLight + ' ' + theme.textMain}`}><i className="fas fa-stopwatch"></i></div>
+                                    </button>
+                                    <button onClick={() => {setOrgMode('tier2'); setIsFabOpen(false);}} className={`flex items-center gap-3 px-5 py-3 rounded-full shadow-xl font-bold text-xs sm:text-sm uppercase tracking-widest transition-all ${orgMode === 'tier2' ? theme.bgMain + ' text-white' : 'bg-white text-slate-700 hover:bg-slate-50'}`}>
+                                        <span>{terms.tier2}</span>
+                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${orgMode === 'tier2' ? 'bg-white/20' : theme.bgLight + ' ' + theme.textMain}`}><i className="fas fa-list-check"></i></div>
+                                    </button>
+                                    <button onClick={() => {setOrgMode('tier1'); setIsFabOpen(false);}} className={`flex items-center gap-3 px-5 py-3 rounded-full shadow-xl font-bold text-xs sm:text-sm uppercase tracking-widest transition-all ${orgMode === 'tier1' ? theme.bgMain + ' text-white' : 'bg-white text-slate-700 hover:bg-slate-50'}`}>
+                                        <span>{terms.tier1}</span>
+                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${orgMode === 'tier1' ? 'bg-white/20' : theme.bgLight + ' ' + theme.textMain}`}><i className="fas fa-layer-group"></i></div>
+                                    </button>
+                                </div>
+                                <button onClick={() => setIsFabOpen(!isFabOpen)} className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center text-xl sm:text-2xl text-white shadow-2xl transition-all duration-300 ${isFabOpen ? 'rotate-90 ' + theme.bgHover : theme.bgMain + ' hover:scale-110'}`}>
+                                    <i className={`fas ${isFabOpen ? 'fa-times' : 'fa-compass'}`}></i>
+                                </button>
+                            </div>
+                        </>
+                    )}
+                </div>
+
+                {/* MODALS */}
+                {isAddCourseModalOpen && <CourseModal theme={theme} terms={terms} voyages={voyages} initialCourse={editingCourse} orgMode={orgMode} onClose={() => {setIsAddCourseModalOpen(false); setEditingCourse(null);}} onSave={handleSaveCourse} />}
+                {isAddVoyageModalOpen && <VoyageModal theme={theme} terms={terms} initialVoyage={editingVoyage} onClose={() => {setIsAddVoyageModalOpen(false); setEditingVoyage(null);}} onSave={handleSaveVoyage} />}
+                
+                {appError && (
+                    <div className="fixed inset-0 z-[90] bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4">
+                        <div className="bg-white w-full max-w-sm rounded-3xl p-6 sm:p-8 shadow-2xl animate-[slideUp_0.3s_ease-out] text-center flex flex-col max-h-[90vh]">
+                            <div className="w-20 h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 shadow-inner shrink-0">
+                                <i className="fas fa-times-circle"></i>
+                            </div>
+                            <h2 className="text-xl sm:text-2xl font-black text-slate-800 mb-2 shrink-0">{appError.title}</h2>
+                            <div className="overflow-y-auto mb-8 pr-2 flex-1">
+                                <p className="text-sm text-slate-500 font-medium">{appError.message}</p>
+                            </div>
+                            <button onClick={() => setAppError(null)} className="w-full bg-slate-100 text-slate-600 font-bold py-3.5 rounded-xl hover:bg-slate-200 transition-all">Dismiss</button>
+                        </div>
+                    </div>
+                )}
+
+                {confirmAction && (
+                    <div className="absolute inset-0 z-[80] bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4">
+                        <div className="bg-white w-full max-w-sm rounded-3xl p-6 sm:p-8 shadow-2xl animate-[slideUp_0.3s_ease-out] text-center flex flex-col max-h-[90vh]">
+                            <div className="w-20 h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 shadow-inner shrink-0">
+                                <i className="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <h2 className="text-xl sm:text-2xl font-black text-slate-800 mb-2 shrink-0">{confirmAction.title}</h2>
+                            <div className="overflow-y-auto mb-8 pr-2 flex-1">
+                                <p className="text-sm text-slate-500 font-medium">{confirmAction.message}</p>
+                            </div>
+                            <div className="flex gap-3 shrink-0">
+                                <button onClick={() => setConfirmAction(null)} className="flex-1 bg-slate-100 text-slate-600 font-bold py-3.5 rounded-xl hover:bg-slate-200 transition-all">Cancel</button>
+                                <button onClick={() => { confirmAction.onConfirm(); setConfirmAction(null); }} className="flex-1 bg-red-500 text-white font-bold py-3.5 rounded-xl hover:bg-red-600 shadow-lg shadow-red-200 active:scale-95 transition-all">Confirm</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
+    }
+
+    // Include the missing components here!
+    function CourseModal({ theme, terms, voyages, initialCourse, orgMode, onClose, onSave }) {
         const isEdit = !!initialCourse;
         const [title, setTitle] = useState(initialCourse?.title || '');
         const [desc, setDesc] = useState(initialCourse?.description || '');
@@ -1478,15 +2770,18 @@
                                     <input required type="text" value={title} onChange={e => setTitle(e.target.value)} className={`w-full border-b-4 border-slate-100 p-4 rounded-2xl outline-none ${theme.borderFocus} focus:bg-slate-50 transition-all text-xl font-bold bg-slate-50/50`} placeholder="What's the objective?" />
                                 </div>
                                 
-                                <div className="text-left">
-                                    <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 ml-1">{terms.voyage} Assignment</label>
-                                    <div className="relative">
-                                        <select value={voyageId} onChange={e => setVoyageId(e.target.value)} className={`w-full border-b-4 border-slate-100 p-5 rounded-2xl outline-none ${theme.borderFocus} focus:bg-slate-50 bg-slate-50/50 appearance-none font-bold text-slate-700 transition-all`}>
-                                            {voyages.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
-                                        </select>
-                                        <i className="fas fa-chevron-down absolute right-6 top-6 text-slate-400 pointer-events-none"></i>
+                                {orgMode === 'tier1' && (
+                                    <div className="text-left animate-[fadeIn_0.3s_ease-out]">
+                                        <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 ml-1">{terms.voyage} Assignment</label>
+                                        <div className="relative">
+                                            <select value={voyageId} onChange={e => setVoyageId(e.target.value)} className={`w-full border-b-4 border-slate-100 p-5 rounded-2xl outline-none ${theme.borderFocus} focus:bg-slate-50 bg-slate-50/50 appearance-none font-bold text-slate-700 transition-all`}>
+                                                {voyages.length === 0 && <option value="">Select a {terms.voyage}</option>}
+                                                {voyages.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
+                                            </select>
+                                            <i className="fas fa-chevron-down absolute right-6 top-6 text-slate-400 pointer-events-none"></i>
+                                        </div>
                                     </div>
-                                </div>
+                                )}
                             </div>
 
                             <div className="space-y-8 text-left">
@@ -1697,944 +2992,6 @@
                         </button>
                     </form>
                 </div>
-            </div>
-        );
-    }
-
-    // --- ERROR BOUNDARY ---
-    class ErrorBoundary extends React.Component {
-        constructor(props) { super(props); this.state = { hasError: false, error: null, info: null }; }
-        static getDerivedStateFromError(error) { return { hasError: true, error }; }
-        componentDidCatch(error, info) { console.error("Crash Prevented:", error, info); this.setState({ info }); }
-        render() {
-            if (this.state.hasError) {
-                return (
-                    <div className="min-h-screen bg-red-50 text-red-900 p-6 md:p-10 flex flex-col items-start justify-center">
-                        <div className="w-16 h-16 bg-red-100 text-red-500 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow-inner"><i className="fas fa-bug"></i></div>
-                        <h1 className="text-2xl md:text-3xl font-black mb-2 tracking-tight">System Crash Prevented</h1>
-                        <p className="mb-6 font-medium text-red-700 max-w-xl">Something caused the user interface to break.</p>
-                        <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-red-200 w-full max-w-3xl overflow-x-auto font-mono text-[10px] md:text-xs">
-                            <strong className="text-red-600 block mb-3 text-sm">{this.state.error?.toString()}</strong>
-                            {this.state.info?.componentStack?.split('\n').map((line, i) => <div key={i} className="mb-1.5 text-slate-600">{line}</div>)}
-                        </div>
-                        <button onClick={() => window.location.reload()} className="mt-8 bg-red-600 hover:bg-red-700 text-white font-black py-4 px-8 rounded-2xl shadow-lg shadow-red-200 active:scale-95 transition-all uppercase tracking-widest text-xs">Reload Application</button>
-                    </div>
-                );
-            }
-            return this.props.children;
-        }
-    }
-
-    function App() {
-        // --- FIREBASE AUTHENTICATION ---
-        const [authUser, setAuthUser] = useState(null);
-        const [authError, setAuthError] = useState(null);
-
-        useEffect(() => {
-            if (!auth) return;
-            const initAuth = async () => {
-                try {
-                    if (isSandboxEnvironment && typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        await window.FB.signInWithCustomToken(auth, __initial_auth_token);
-                    } else {
-                        await window.FB.signInAnonymously(auth);
-                    }
-                } catch (e) { 
-                    console.error("Firebase Auth Init Failed", e);
-                    if (e.code === 'auth/configuration-not-found' || e.code === 'auth/admin-restricted-operation') {
-                        setAuthError("Please enable 'Anonymous' Sign-in provider in your Firebase Console (Authentication -> Sign-in method).");
-                    } else {
-                        setAuthError(`Cloud Connection Error: ${e.message}`);
-                    }
-                }
-            };
-            initAuth();
-            const unsub = window.FB.onAuthStateChanged(auth, (user) => {
-                setAuthUser(user); 
-                if (user) setAuthError(null); 
-            });
-            return () => unsub();
-        }, []);
-
-        // --- STATE & TERMINOLOGY ---
-        const [activeTab, setActiveTab] = useState('courses');
-        const [voyageView, setVoyageView] = useState('active'); 
-        const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-        const [currentTime, setCurrentTime] = useState(new Date());
-
-        const [isThemed, setIsThemed] = useState(() => {
-            const saved = localStorage.getItem('drift-terminology');
-            return saved !== null ? JSON.parse(saved) : true;
-        });
-        const [themeId, setThemeId] = useState(() => localStorage.getItem('drift-theme') || 'navy');
-        
-        const theme = THEMES[themeId] || THEMES['navy'];
-        const terms = getTerms(isThemed);
-
-        const [profile, setProfile] = useState(() => {
-            const saved = localStorage.getItem('drift-profile');
-            return saved ? JSON.parse(saved) : { nickname: '', bio: '', id: '', isCreated: false, hasSeenTutorial: false };
-        });
-        
-        const isDev = profile.id === 'DEV_TEST_ID';
-
-        const [voyages, setVoyages] = useState(() => {
-            if (isDev) return JSON.parse(localStorage.getItem('drift-voyages-dev') || '[]');
-            return [];
-        });
-        const [courses, setCourses] = useState(() => {
-            if (isDev) return JSON.parse(localStorage.getItem('drift-courses-dev') || '[]');
-            return [];
-        });
-        
-        const [allProfiles, setAllProfiles] = useState([]);
-        const [radarData, setRadarData] = useState({ friends: [], incomingRequests: [], outgoingRequests: [] });
-
-        const [isAddCourseModalOpen, setIsAddCourseModalOpen] = useState(false);
-        const [isAddVoyageModalOpen, setIsAddVoyageModalOpen] = useState(false);
-        const [editingCourse, setEditingCourse] = useState(null);
-        const [editingVoyage, setEditingVoyage] = useState(null);
-        const [confirmAction, setConfirmAction] = useState(null);
-        
-        const prevStatusRef = useRef({ status: '', currentCourse: '' });
-        const completionTimeoutRef = useRef(null);
-
-        const getCourseRef = (courseId) => window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'courses', `${profile.id}_${courseId}`);
-        const getVoyageRef = (voyageId) => window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'voyages', `${profile.id}_${voyageId}`);
-        const getRadarRef = () => window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'radars', profile.id);
-
-        const [isIdle, setIsIdle] = useState(false);
-        const isIdleRef = useRef(false);
-
-        // Settings Sync Wrappers
-        const handleSetThemeId = (newThemeId) => {
-            setThemeId(newThemeId);
-            if (!isDev && db && profile.id) {
-                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
-                window.FB.updateDoc(profileRef, { themeId: newThemeId }).catch(()=>{});
-            }
-        };
-
-        const handleSetIsThemed = (newVal) => {
-            setIsThemed(newVal);
-            if (!isDev && db && profile.id) {
-                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
-                window.FB.updateDoc(profileRef, { isThemed: newVal }).catch(()=>{});
-            }
-        };
-
-        // Effect synchronizers
-        useEffect(() => { localStorage.setItem('drift-terminology', JSON.stringify(isThemed)); }, [isThemed]);
-        useEffect(() => { localStorage.setItem('drift-theme', themeId); }, [themeId]);
-        useEffect(() => { localStorage.setItem('drift-profile', JSON.stringify(profile)); }, [profile]);
-        
-        useEffect(() => {
-            if (isDev) {
-                localStorage.setItem('drift-courses-dev', JSON.stringify(courses));
-                localStorage.setItem('drift-voyages-dev', JSON.stringify(voyages));
-            }
-        }, [courses, voyages, isDev]);
-
-        // --- ACTIVITY TRACKER (ONLINE / IDLE) ---
-        useEffect(() => {
-            if (!profile.isCreated || !profile.id || !db || !authUser || isDev) return;
-            let timeoutId;
-            const handleActivity = () => {
-                setIsIdle(false);
-                isIdleRef.current = false;
-                clearTimeout(timeoutId);
-                timeoutId = setTimeout(() => {
-                    setIsIdle(true);
-                    isIdleRef.current = true;
-                }, 5 * 60 * 1000); // 5 minutes
-            };
-            
-            window.addEventListener('mousemove', handleActivity);
-            window.addEventListener('keydown', handleActivity);
-            window.addEventListener('click', handleActivity);
-            window.addEventListener('scroll', handleActivity);
-            
-            handleActivity(); // Init
-            
-            return () => {
-                window.removeEventListener('mousemove', handleActivity);
-                window.removeEventListener('keydown', handleActivity);
-                window.removeEventListener('click', handleActivity);
-                window.removeEventListener('scroll', handleActivity);
-                clearTimeout(timeoutId);
-            };
-        }, [profile.isCreated, profile.id, authUser, isDev]);
-
-        // --- INIT RACE-CONDITION FIX (HEARTBEAT ON MOUNT) ---
-        useEffect(() => {
-            if (!profile.isCreated || !profile.id || !db || !authUser || isDev) return;
-            
-            // Wait 2 seconds to ensure any beforeunload 'offline' signals from a rapid page refresh have fully cleared out over the network.
-            const forceOnline = setTimeout(() => {
-                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
-                window.FB.updateDoc(profileRef, { status: 'online' }).catch(()=>{});
-                prevStatusRef.current.status = 'online';
-            }, 2000);
-            
-            return () => clearTimeout(forceOnline);
-        }, [profile.isCreated, profile.id, db, authUser, isDev]);
-
-
-        // --- EXIT TRAP (OFFLINE) ---
-        useEffect(() => {
-            if (!profile.isCreated || !profile.id || !db || !authUser || isDev) return;
-            
-            const handleUnload = () => {
-                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
-                window.FB.updateDoc(profileRef, { status: 'offline', isSailing: false }).catch(()=>{});
-            };
-            
-            window.addEventListener('beforeunload', handleUnload);
-            return () => window.removeEventListener('beforeunload', handleUnload);
-        }, [profile.isCreated, profile.id, authUser, isDev]);
-
-        // --- FIREBASE LIVE SYNCS ---
-        useEffect(() => {
-            if (!profile.isCreated || !profile.id || !db || !authUser || isDev) return;
-            
-            const voyagesRef = window.FB.collection(db, 'artifacts', globalAppId, 'public', 'data', 'voyages');
-            const unsubVoyages = window.FB.onSnapshot(voyagesRef, (snap) => {
-                const all = snap.docs.map(d => ({ ...d.data(), id: d.data().id || d.id.split('_')[1] }));
-                setVoyages(all.filter(v => v.ownerId === profile.id));
-            });
-
-            const coursesRef = window.FB.collection(db, 'artifacts', globalAppId, 'public', 'data', 'courses');
-            const unsubCourses = window.FB.onSnapshot(coursesRef, (snap) => {
-                const all = snap.docs.map(d => ({ ...d.data(), id: d.data().id || d.id.split('_')[1] }));
-                const mine = all.filter(c => c.ownerId === profile.id);
-                setCourses(prev => {
-                    return mine.map(newC => {
-                        const oldC = prev.find(p => p.id === newC.id);
-                        if (oldC && oldC.isRunning) return { ...newC, timeSpent: oldC.timeSpent }; 
-                        return newC;
-                    });
-                });
-            });
-
-            const unsubRadar = window.FB.onSnapshot(getRadarRef(), (snap) => {
-                if (snap.exists()) {
-                    const data = snap.data();
-                    setRadarData({
-                        friends: data.friends || [],
-                        incomingRequests: data.incomingRequests || [],
-                        outgoingRequests: data.outgoingRequests || []
-                    });
-                }
-            });
-
-            const profilesRef = window.FB.collection(db, 'artifacts', globalAppId, 'public', 'data', 'profiles');
-            const unsubProfiles = window.FB.onSnapshot(profilesRef, (snap) => {
-                setAllProfiles(snap.docs.map(d => ({ ...d.data(), uid: d.id })));
-            });
-
-            return () => { unsubVoyages(); unsubCourses(); unsubRadar(); unsubProfiles(); };
-        }, [profile.isCreated, profile.id, authUser, isDev]);
-
-
-        // --- TIMER INTERVAL & AUTOMATIC UNLOCKS ---
-        useEffect(() => {
-            const interval = setInterval(() => {
-                const now = new Date();
-                setCurrentTime(now);
-                
-                setCourses(prevCourses => prevCourses.map(course => {
-                    let updatedCourse = { ...course };
-                    if (updatedCourse.isFuture && updatedCourse.startDate) {
-                        let unlockTime;
-                        if (!updatedCourse.includeTime) {
-                            const [y, m, d] = updatedCourse.startDate.split('-');
-                            unlockTime = new Date(y, m - 1, d, 6, 0, 0); 
-                        } else { unlockTime = new Date(updatedCourse.startDate); }
-                        
-                        if (now >= unlockTime) updatedCourse.isFuture = false;
-                    }
-                    if (updatedCourse.isRunning && !updatedCourse.isCompleted) {
-                        updatedCourse.timeSpent = updatedCourse.timeSpent + 1;
-                    }
-                    return updatedCourse;
-                }));
-
-                setVoyages(prevVoyages => prevVoyages.map(voyage => {
-                    let updatedVoyage = { ...voyage };
-                    if (updatedVoyage.isFuture && updatedVoyage.startDate) {
-                        let unlockTime;
-                        if (!updatedVoyage.includeTime) {
-                            const [y, m, d] = updatedVoyage.startDate.split('-');
-                            unlockTime = new Date(y, m - 1, d, 6, 0, 0); 
-                        } else { unlockTime = new Date(updatedVoyage.startDate); }
-                        if (now >= unlockTime) updatedVoyage.isFuture = false;
-                    }
-                    return updatedVoyage;
-                }));
-            }, 1000);
-
-            const dbSyncInterval = setInterval(() => {
-                setCourses(prevCourses => {
-                    if (profile.id && db && authUser && !isDev) {
-                        const runningCourse = prevCourses.find(c => c.isRunning);
-                        
-                        prevCourses.filter(c => c.isRunning).forEach(c => {
-                            const courseRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'courses', `${profile.id}_${c.id}`);
-                            window.FB.updateDoc(courseRef, { timeSpent: c.timeSpent }).catch(()=>{});
-                        });
-
-                        // Calculate and sync percentage progress and overtime to public profile
-                        if (runningCourse && prevStatusRef.current.status !== 'completed') {
-                            const prog = runningCourse.duration > 0 ? (runningCourse.timeSpent / runningCourse.duration) * 100 : 0;
-                            const isOvertime = runningCourse.timeSpent > runningCourse.duration;
-                            
-                            const currentStatus = 'focused';
-                            const courseTitle = runningCourse.title;
-
-                            // Only update if something changed
-                            if (prevStatusRef.current.status !== currentStatus || prevStatusRef.current.currentCourse !== courseTitle || prevStatusRef.current.isOvertime !== isOvertime) {
-                                prevStatusRef.current = { status: currentStatus, currentCourse: courseTitle, isOvertime: isOvertime };
-                                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
-                                window.FB.updateDoc(profileRef, { 
-                                    status: currentStatus,
-                                    currentCourse: courseTitle,
-                                    isSailing: true,
-                                    progress: Math.min(100, Math.max(0, prog)),
-                                    isOvertime: isOvertime
-                                }).catch(()=>{});
-                            }
-                        } else if (prevStatusRef.current.status !== 'completed') {
-                            // HEARTBEAT: Force sync status every 10 seconds to self-heal any network drops or stuck offline states from page refreshes
-                            const correctStatus = isIdleRef.current ? 'idle' : 'online';
-                            if (prevStatusRef.current.status !== correctStatus) {
-                                prevStatusRef.current = { status: correctStatus, currentCourse: '', isOvertime: false };
-                                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
-                                window.FB.updateDoc(profileRef, { 
-                                    status: correctStatus,
-                                    currentCourse: '',
-                                    isSailing: false,
-                                    progress: 0,
-                                    isOvertime: false
-                                }).catch(()=>{});
-                            }
-                        }
-                    }
-                    return prevCourses;
-                });
-            }, 10000);
-
-            return () => { clearInterval(interval); clearInterval(dbSyncInterval); };
-        }, [profile.id, authUser, isDev, db]);
-
-        // --- ACTIONS ---
-        const updatePublicStatus = (isSailing, courseTitle = '') => {
-            if (isDev) return;
-            if (!profile.id || !db || !authUser) return;
-            
-            const currentStatus = isSailing ? 'focused' : (isIdle ? 'idle' : 'online');
-            const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
-            window.FB.updateDoc(profileRef, { isSailing, currentCourse: courseTitle, status: currentStatus }).catch(()=>{});
-            
-            prevStatusRef.current = { status: currentStatus, currentCourse: courseTitle, isOvertime: false };
-        };
-
-        const toggleTimer = (course) => {
-            const nextState = !course.isRunning;
-            
-            // Instantly clear the 5-second completion flash if starting a new course
-            if (completionTimeoutRef.current) {
-                clearTimeout(completionTimeoutRef.current);
-                completionTimeoutRef.current = null;
-            }
-            if (prevStatusRef.current.status === 'completed' && nextState) {
-                prevStatusRef.current.status = ''; 
-            }
-
-            if (isDev) {
-                setCourses(prev => prev.map(c => c.id === course.id ? { ...c, isRunning: nextState } : c));
-                return;
-            }
-            if (!db || !authUser) return;
-            window.FB.updateDoc(getCourseRef(course.id), { isRunning: nextState, timeSpent: course.timeSpent }).catch(e => alert("Sync Error: " + e.message));
-            
-            // Push immediate status switch on start
-            if (nextState) {
-                const isOvertime = course.timeSpent > course.duration;
-                const prog = course.duration > 0 ? (course.timeSpent / course.duration) * 100 : 0;
-                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
-                window.FB.updateDoc(profileRef, { 
-                    status: 'focused', 
-                    currentCourse: course.title, 
-                    isSailing: true, 
-                    progress: Math.min(100, Math.max(0, prog)), 
-                    isOvertime: isOvertime 
-                }).catch(()=>{});
-                prevStatusRef.current = { status: 'focused', currentCourse: course.title, isOvertime: isOvertime };
-            } else {
-                // If paused, revert immediately to idle/online
-                const correctStatus = isIdleRef.current ? 'idle' : 'online';
-                const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
-                window.FB.updateDoc(profileRef, { 
-                    status: correctStatus, 
-                    currentCourse: '', 
-                    isSailing: false, 
-                    progress: 0, 
-                    isOvertime: false 
-                }).catch(()=>{});
-                prevStatusRef.current = { status: correctStatus, currentCourse: '', isOvertime: false };
-            }
-        };
-
-        const completeCourse = (course) => {
-            if (isDev) {
-                setCourses(prev => prev.map(c => c.id === course.id ? { ...c, isCompleted: true, isRunning: false } : c));
-                return;
-            }
-            if (!db || !authUser) return;
-            window.FB.updateDoc(getCourseRef(course.id), { isCompleted: true, isRunning: false, timeSpent: course.timeSpent }).catch(e => alert("Sync Error: " + e.message));
-            
-            // 1. Instantly lock the public profile to "Completed"
-            prevStatusRef.current = { status: 'completed', currentCourse: course.title, isOvertime: false };
-            const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
-            window.FB.updateDoc(profileRef, { 
-                status: 'completed', 
-                currentCourse: course.title, 
-                isSailing: false, 
-                progress: 100, 
-                isOvertime: false 
-            }).catch(()=>{});
-
-            // 2. Set the 5-second countdown to revert back to Idle/Online
-            if (completionTimeoutRef.current) clearTimeout(completionTimeoutRef.current);
-            completionTimeoutRef.current = setTimeout(() => {
-                const newStatus = isIdleRef.current ? 'idle' : 'online';
-                prevStatusRef.current = { status: newStatus, currentCourse: '', isOvertime: false };
-                if (db && authUser) {
-                    window.FB.updateDoc(profileRef, { 
-                        status: newStatus, 
-                        currentCourse: '', 
-                        isSailing: false, 
-                        progress: 0, 
-                        isOvertime: false 
-                    }).catch(()=>{});
-                }
-                completionTimeoutRef.current = null;
-            }, 5000);
-        };
-
-        const toggleGoal = (course, goalId) => {
-            if (isDev) {
-                setCourses(prev => prev.map(c => {
-                    if (c.id === course.id) return { ...c, goals: c.goals.map(g => g.id === goalId ? { ...g, isCompleted: !g.isCompleted } : g) };
-                    return c;
-                }));
-                return;
-            }
-            if (!db || !authUser) return;
-            const newGoals = course.goals.map(g => g.id === goalId ? { ...g, isCompleted: !g.isCompleted } : g);
-            window.FB.updateDoc(getCourseRef(course.id), { goals: newGoals }).catch(e => alert("Sync Error: " + e.message));
-        };
-
-        const toggleCoursePin = (course) => {
-            if (isDev) {
-                setCourses(prev => prev.map(c => c.id === course.id ? { ...c, isPinned: !c.isPinned } : c));
-                return;
-            }
-            if (!db || !authUser) return;
-            window.FB.updateDoc(getCourseRef(course.id), { isPinned: !course.isPinned }).catch(e => alert("Sync Error: " + e.message));
-        };
-
-        const moveCourse = (courseId, direction) => {
-            const target = courses.find(c => c.id === courseId);
-            if (!target) return;
-            
-            const vCourses = courses.filter(c => c.voyageId === target.voyageId)
-                .map(c => ({...c, priority: c.priority || 'low', order: c.order || c.id}))
-                .sort((a,b) => {
-                    if (a.isPinned !== b.isPinned) return a.isPinned ? -1 : 1;
-                    const pScore = { tsunami: 3, high: 2, low: 1 };
-                    if (pScore[a.priority] !== pScore[b.priority]) return pScore[b.priority] - pScore[a.priority];
-                    return a.order - b.order;
-                });
-            
-            const idx = vCourses.findIndex(c => c.id === courseId);
-            let swapTarget = null;
-            if (direction === 'up' && idx > 0) swapTarget = vCourses[idx - 1];
-            if (direction === 'down' && idx < vCourses.length - 1) swapTarget = vCourses[idx + 1];
-
-            if (swapTarget && swapTarget.isPinned === (target.isPinned || false) && swapTarget.priority === (target.priority || 'low')) {
-                if (isDev) {
-                    setCourses(prev => prev.map(c => {
-                        if (c.id === courseId) return { ...c, order: swapTarget.order || swapTarget.id };
-                        if (c.id === swapTarget.id) return { ...c, order: target.order || target.id };
-                        return c;
-                    }));
-                    return;
-                }
-                if (!db || !authUser) return;
-                window.FB.updateDoc(getCourseRef(courseId), { order: swapTarget.order || swapTarget.id }).catch(e => alert("Sync Error: " + e.message));
-                window.FB.updateDoc(getCourseRef(swapTarget.id), { order: target.order || target.id }).catch(e => alert("Sync Error: " + e.message));
-            }
-        };
-
-        const deleteCourse = (course) => {
-            setConfirmAction({
-                title: `Delete ${terms.course}?`,
-                message: `Are you sure you want to delete this ${terms.course.toLowerCase()}? This cannot be undone.`,
-                onConfirm: () => {
-                    if (isDev) { setCourses(prev => prev.filter(c => c.id !== course.id)); return; }
-                    if (!authUser) return;
-                    window.FB.deleteDoc(getCourseRef(course.id)).catch(e => alert("Sync Error: " + e.message));
-                }
-            });
-        };
-
-        const deleteVoyage = (voyage) => {
-            setConfirmAction({
-                title: `Delete ${terms.voyage}?`,
-                message: `All ${terms.courses.toLowerCase()} inside this ${terms.voyage.toLowerCase()} will be lost forever!`,
-                onConfirm: () => {
-                    if (isDev) {
-                        setVoyages(prev => prev.filter(v => v.id !== voyage.id));
-                        setCourses(prev => prev.filter(c => c.voyageId !== voyage.id));
-                        return;
-                    }
-                    if (!authUser) return;
-                    window.FB.deleteDoc(getVoyageRef(voyage.id)).catch(e => alert("Sync Error: " + e.message));
-                    // Wipe related courses
-                    courses.filter(c => c.voyageId === voyage.id).forEach(c => window.FB.deleteDoc(getCourseRef(c.id)));
-                }
-            });
-        };
-
-        const unlockCourseEarly = (course) => {
-            setConfirmAction({
-                title: "Unlock Early?",
-                message: "Start this ahead of schedule? It will immediately become active.",
-                onConfirm: () => {
-                    if (isDev) { setCourses(prev => prev.map(c => c.id === course.id ? { ...c, isFuture: false, startedEarly: true } : c)); return; }
-                    if (!authUser) return;
-                    window.FB.updateDoc(getCourseRef(course.id), { isFuture: false, startedEarly: true });
-                }
-            });
-        };
-
-        const unlockVoyageEarly = (voyage) => {
-            setConfirmAction({
-                title: "Unlock Early?",
-                message: "Start this ahead of schedule? It will immediately become active.",
-                onConfirm: () => {
-                    if (isDev) { setVoyages(prev => prev.map(v => v.id === voyage.id ? { ...v, isFuture: false, startedEarly: true } : v)); return; }
-                    if (!authUser) return;
-                    window.FB.updateDoc(getVoyageRef(voyage.id), { isFuture: false, startedEarly: true });
-                }
-            });
-        };
-
-        const toggleVoyagePin = (voyage) => {
-            if (isDev) { setVoyages(prev => prev.map(v => v.id === voyage.id ? { ...v, isPinned: !v.isPinned } : v)); return; }
-            if (!db || !authUser) return;
-            window.FB.updateDoc(getVoyageRef(voyage.id), { isPinned: !voyage.isPinned });
-        };
-
-        const toggleVoyageCollapse = (voyage) => {
-            if (isDev) { setVoyages(prev => prev.map(v => v.id === voyage.id ? { ...v, isCollapsed: !v.isCollapsed } : v)); return; }
-            if (!db || !authUser) return;
-            window.FB.updateDoc(getVoyageRef(voyage.id), { isCollapsed: !voyage.isCollapsed });
-        };
-
-        const handleSaveVoyage = (voyageData) => {
-            if (isDev) {
-                if (voyageData.isEdit) {
-                    setVoyages(voyages.map(v => v.id === voyageData.id ? voyageData : v));
-                } else {
-                    setVoyages([...voyages, { ...voyageData, startedEarly: false, ownerId: profile.id }]);
-                }
-                setIsAddVoyageModalOpen(false);
-                setEditingVoyage(null);
-                return;
-            }
-            if (!db || !authUser) return;
-            const ref = getVoyageRef(voyageData.id);
-            if (voyageData.isEdit) {
-                delete voyageData.isEdit;
-                window.FB.updateDoc(ref, voyageData).catch(e => alert("Database Blocked: " + e.message));
-            } else {
-                delete voyageData.isEdit; 
-                window.FB.setDoc(ref, { ...voyageData, startedEarly: false, ownerId: profile.id }).catch(e => alert("Database Blocked: " + e.message));
-            }
-            setIsAddVoyageModalOpen(false);
-            setEditingVoyage(null);
-        };
-
-        const handleSaveCourse = (courseData) => {
-            if (isDev) {
-                if (courseData.isEdit) {
-                    setCourses(courses.map(c => c.id === courseData.id ? courseData : c));
-                } else {
-                    setCourses([...courses, { ...courseData, startedEarly: false, ownerId: profile.id }]);
-                }
-                setIsAddCourseModalOpen(false);
-                setEditingCourse(null);
-                return;
-            }
-            if (!db || !authUser) return;
-            const ref = getCourseRef(courseData.id);
-            if (courseData.isEdit) {
-                delete courseData.isEdit; 
-                window.FB.updateDoc(ref, courseData).catch(e => alert("Database Blocked: " + e.message));
-            } else {
-                delete courseData.isEdit; 
-                window.FB.setDoc(ref, { ...courseData, startedEarly: false, ownerId: profile.id }).catch(e => alert("Database Blocked: " + e.message));
-            }
-            setIsAddCourseModalOpen(false);
-            setEditingCourse(null);
-        };
-
-        // --- NETWORK / RADAR FUNCTIONS ---
-
-        const handleAddFriendToRadar = async (friendName) => {
-            if (isDev) { alert("Offline Mode: Network features are disabled."); return; }
-            if (!authUser) return;
-            
-            const friendNameLower = friendName.trim().toLowerCase();
-            const friend = allProfiles.find(p => p.nickname.toLowerCase() === friendNameLower);
-            if (!friend) { alert(`Could not locate ${terms.captain.toLowerCase()} "${friendName}" on the global network.`); return; }
-            if (friend.uid === profile.id) return;
-            
-            const { friends, incomingRequests, outgoingRequests } = radarData;
-            
-            if (friends.includes(friend.uid) || outgoingRequests.includes(friend.uid) || incomingRequests.includes(friend.uid)) {
-                alert(`You are already connected or have a pending request with ${friend.nickname}.`);
-                return;
-            }
-
-            try {
-                // Update my outgoing queue
-                const myNewOutgoing = [...outgoingRequests, friend.uid];
-                await window.FB.setDoc(getRadarRef(), { outgoingRequests: myNewOutgoing }, { merge: true });
-
-                // Update their incoming queue
-                const friendRadarRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'radars', friend.uid);
-                const friendSnap = await window.FB.getDoc(friendRadarRef);
-                let theirIncoming = [];
-                if (friendSnap.exists()) {
-                    theirIncoming = friendSnap.data().incomingRequests || [];
-                }
-                if (!theirIncoming.includes(profile.id)) {
-                    await window.FB.setDoc(friendRadarRef, { incomingRequests: [...theirIncoming, profile.id] }, { merge: true });
-                }
-            } catch (e) {
-                alert("Failed to send request: " + e.message);
-            }
-        };
-
-        const handleAcceptRequest = async (requesterUid) => {
-            if (isDev || !authUser) return;
-            try {
-                // Remove from my incoming, add to my friends
-                const newIncoming = radarData.incomingRequests.filter(id => id !== requesterUid);
-                const newFriends = [...radarData.friends, requesterUid];
-                await window.FB.setDoc(getRadarRef(), { incomingRequests: newIncoming, friends: newFriends }, { merge: true });
-
-                // Remove from their outgoing, add to their friends
-                const requesterRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'radars', requesterUid);
-                const reqSnap = await window.FB.getDoc(requesterRef);
-                if (reqSnap.exists()) {
-                    const reqData = reqSnap.data();
-                    const theirOut = (reqData.outgoingRequests || []).filter(id => id !== profile.id);
-                    const theirFriends = [...(reqData.friends || []).filter(id => id !== profile.id), profile.id];
-                    await window.FB.setDoc(requesterRef, { outgoingRequests: theirOut, friends: theirFriends }, { merge: true });
-                }
-            } catch (e) {
-                alert("Failed to accept request: " + e.message);
-            }
-        };
-
-        const handleDeclineRequest = async (requesterUid) => {
-            if (isDev || !authUser) return;
-            try {
-                // Remove from my incoming
-                const newIncoming = radarData.incomingRequests.filter(id => id !== requesterUid);
-                await window.FB.setDoc(getRadarRef(), { incomingRequests: newIncoming }, { merge: true });
-
-                // Remove from their outgoing
-                const requesterRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'radars', requesterUid);
-                const reqSnap = await window.FB.getDoc(requesterRef);
-                if (reqSnap.exists()) {
-                    const reqData = reqSnap.data();
-                    const theirOut = (reqData.outgoingRequests || []).filter(id => id !== profile.id);
-                    await window.FB.setDoc(requesterRef, { outgoingRequests: theirOut }, { merge: true });
-                }
-            } catch (e) {
-                alert("Failed to decline request: " + e.message);
-            }
-        };
-
-        const handleCancelRequest = async (targetUid) => {
-            if (isDev || !authUser) return;
-            try {
-                // Remove from my outgoing
-                const newOutgoing = radarData.outgoingRequests.filter(id => id !== targetUid);
-                await window.FB.setDoc(getRadarRef(), { outgoingRequests: newOutgoing }, { merge: true });
-
-                // Remove from their incoming
-                const targetRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'radars', targetUid);
-                const targetSnap = await window.FB.getDoc(targetRef);
-                if (targetSnap.exists()) {
-                    const targetData = targetSnap.data();
-                    const theirIncoming = (targetData.incomingRequests || []).filter(id => id !== profile.id);
-                    await window.FB.setDoc(targetRef, { incomingRequests: theirIncoming }, { merge: true });
-                }
-            } catch (e) {
-                alert("Failed to cancel request: " + e.message);
-            }
-        };
-
-        const handleRemoveFriendFromRadar = async (removeUid) => {
-            if (isDev || !authUser) return;
-            try {
-                // Remove from my friends
-                const newFriends = radarData.friends.filter(id => id !== removeUid);
-                await window.FB.setDoc(getRadarRef(), { friends: newFriends }, { merge: true });
-
-                // Remove from their friends
-                const friendRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'radars', removeUid);
-                const friendSnap = await window.FB.getDoc(friendRef);
-                if (friendSnap.exists()) {
-                    const theirFriends = (friendSnap.data().friends || []).filter(id => id !== profile.id);
-                    await window.FB.setDoc(friendRef, { friends: theirFriends }, { merge: true });
-                }
-            } catch (e) {
-                alert("Failed to remove: " + e.message);
-            }
-        };
-
-        const openAddCourse = () => { setEditingCourse(null); setIsAddCourseModalOpen(true); };
-        const openEditCourse = (course) => { setEditingCourse(course); setIsAddCourseModalOpen(true); };
-        const openAddVoyage = () => { setEditingVoyage(null); setIsAddVoyageModalOpen(true); };
-        const openEditVoyage = (voyage) => { setEditingVoyage(voyage); setIsAddVoyageModalOpen(true); };
-
-        const logOut = () => {
-            setConfirmAction({
-                title: terms.logOut,
-                message: "Are you sure you want to log out? You can return anytime by typing your exact name.",
-                onConfirm: () => {
-                    setProfile({ nickname: '', bio: '', id: '', isCreated: false, hasSeenTutorial: false });
-                    setCourses([]); setVoyages([]); setRadarData({ friends: [], incomingRequests: [], outgoingRequests: [] });
-                    localStorage.removeItem('drift-profile');
-                    window.location.reload();
-                }
-            });
-        };
-
-        const clearData = () => {
-            setConfirmAction({
-                title: terms.abandon,
-                message: "WARNING: This will permanently delete your account, including all cloud data, Voyages, Courses, and Network connections! This cannot be undone.",
-                onConfirm: async () => {
-                    // 1. Wipe Cloud Data if connected
-                    if (!isDev && db && authUser && profile.id) {
-                        try {
-                            // Delete all user courses
-                            for (const c of courses) {
-                                await window.FB.deleteDoc(getCourseRef(c.id)).catch(()=>{});
-                            }
-                            // Delete all user voyages
-                            for (const v of voyages) {
-                                await window.FB.deleteDoc(getVoyageRef(v.id)).catch(()=>{});
-                            }
-                            // Delete radar connections
-                            await window.FB.deleteDoc(getRadarRef()).catch(()=>{});
-                            // Delete public profile
-                            const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
-                            await window.FB.deleteDoc(profileRef).catch(()=>{});
-                        } catch (e) {
-                            console.error("Cloud wipe error:", e);
-                        }
-                    }
-
-                    // 2. Wipe Local Data & Reset
-                    setProfile({ nickname: '', bio: '', id: '', isCreated: false, hasSeenTutorial: false });
-                    setCourses([]); setVoyages([]); setRadarData({ friends: [], incomingRequests: [], outgoingRequests: [] });
-                    localStorage.clear();
-                    window.location.reload();
-                }
-            });
-        }
-
-        const handleNavClick = (tab) => {
-            setActiveTab(tab);
-            setIsSidebarOpen(false);
-        };
-
-        // UI RENDER SAFEGUARDS
-
-        if (authError && profile.isCreated && !isDev) {
-            return (
-                <div className="flex flex-col h-full w-full items-center justify-center bg-slate-50 p-6 text-center">
-                    <div className="w-16 h-16 bg-red-100 text-red-500 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow-inner"><i className="fas fa-exclamation-triangle"></i></div>
-                    <h2 className="text-xl font-bold text-slate-800 mb-2">Cloud Connection Failed</h2>
-                    <p className="text-slate-500 text-sm max-w-sm mb-8 leading-relaxed">{authError}</p>
-                    <button onClick={clearData} className="bg-red-500 text-white font-bold py-3.5 px-8 rounded-xl hover:bg-red-600 shadow-lg active:scale-95 transition-all">Clear Local Cache & Reset</button>
-                </div>
-            );
-        }
-
-        if (profile.isCreated && !authUser && !isDev) {
-             return (
-                <div className="flex flex-col h-full w-full items-center justify-center bg-slate-50 p-6">
-                    <div className="w-16 h-16 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin mb-4"></div>
-                    <h2 className="text-slate-500 font-bold text-sm uppercase tracking-widest animate-pulse">Connecting to Fleet Command...</h2>
-                </div>
-            );
-        }
-
-        if (!profile.isCreated) {
-            return <ProfileSetup theme={theme} terms={terms} setProfile={setProfile} authUser={authUser} authError={authError} setThemeId={setThemeId} setIsThemed={setIsThemed} />;
-        }
-
-        if (!profile.hasSeenTutorial) {
-            return <Onboarding theme={theme} terms={terms} isThemed={isThemed} setIsThemed={handleSetIsThemed} onComplete={() => {
-                setProfile({...profile, hasSeenTutorial: true});
-                if (!isDev && db && authUser) {
-                    const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
-                    window.FB.updateDoc(profileRef, { hasSeenTutorial: true }).catch(()=>{});
-                }
-            }} />;
-        }
-
-        return (
-            <div className="flex h-full w-full bg-slate-50 transition-colors duration-500 relative">
-                
-                {isSidebarOpen && (
-                    <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 lg:hidden animate-[fadeIn_0.3s_ease-out]" onClick={() => setIsSidebarOpen(false)}></div>
-                )}
-
-                <aside className={`fixed inset-y-0 left-0 z-50 w-72 shrink-0 bg-gradient-to-b ${theme.sidebarGradient} text-white flex flex-col shadow-2xl transition-transform duration-500 ease-in-out lg:relative lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} overflow-hidden`}>
-                    <WaveSVG colorClass="text-white/20" className="bottom-0 h-40 opacity-40" />
-                    <WaveSVG colorClass="text-white/10" className="bottom-4 h-32 opacity-20" speed="animate-wave-slow" />
-
-                    <div className="p-6 pb-4 flex items-center gap-3 border-b border-white/10 relative z-10">
-                        <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-xl backdrop-blur-sm shadow-inner shrink-0">
-                            <i className="fas fa-water"></i>
-                        </div>
-                        <h1 className="text-2xl font-bold tracking-tight">Drift</h1>
-                        <span className={`text-[9px] px-2 py-0.5 rounded uppercase tracking-widest ml-1 font-bold ${isDev ? 'bg-orange-500 text-white' : 'bg-white/20'}`}>{isDev ? 'OFFLINE' : 'BETA'}</span>
-                        <button onClick={() => setIsSidebarOpen(false)} className="lg:hidden ml-auto w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 transition-all text-white/80 hover:text-white">
-                            <i className="fas fa-times text-xl"></i>
-                        </button>
-                    </div>
-                    
-                    <div className="p-6 pb-2 relative z-10 flex-1 overflow-y-auto">
-                        <div className="text-xs font-bold text-white/50 uppercase tracking-widest mb-4 ml-1">{terms.explore}</div>
-                        <nav className="flex flex-col gap-2">
-                            <button onClick={() => handleNavClick('courses')} className={`flex items-center gap-3 w-full p-3.5 rounded-xl transition-all ${activeTab === 'courses' ? `bg-white ${theme.textMain} shadow-lg font-bold scale-105` : 'text-white/80 hover:bg-white/10 hover:text-white font-medium'}`}>
-                                <i className="fas fa-wind text-lg w-5 text-center"></i>
-                                <span>Current {terms.voyages}</span>
-                            </button>
-                            <button onClick={() => handleNavClick('crew')} className={`flex items-center gap-3 w-full p-3.5 rounded-xl transition-all ${activeTab === 'crew' ? `bg-white ${theme.textMain} shadow-lg font-bold scale-105` : 'text-white/80 hover:bg-white/10 hover:text-white font-medium'}`}>
-                                <i className="fas fa-users text-lg w-5 text-center"></i>
-                                <span>{terms.fleet}</span>
-                            </button>
-                            <button onClick={() => handleNavClick('analytics')} className={`flex items-center gap-3 w-full p-3.5 rounded-xl transition-all ${activeTab === 'analytics' ? `bg-white ${theme.textMain} shadow-lg font-bold scale-105` : 'text-white/80 hover:bg-white/10 hover:text-white font-medium'}`}>
-                                <i className="fas fa-chart-line text-lg w-5 text-center"></i>
-                                <span>{terms.analytics}</span>
-                            </button>
-                            <button onClick={() => handleNavClick('settings')} className={`flex items-center gap-3 w-full p-3.5 rounded-xl transition-all ${activeTab === 'settings' ? `bg-white ${theme.textMain} shadow-lg font-bold scale-105` : 'text-white/80 hover:bg-white/10 hover:text-white font-medium'}`}>
-                                <i className="fas fa-sliders text-lg w-5 text-center"></i>
-                                <span>{terms.settings}</span>
-                            </button>
-                            <div className="h-px w-full bg-white/10 my-1"></div>
-                            <button onClick={() => handleNavClick('manual')} className={`flex items-center gap-3 w-full p-3.5 rounded-xl transition-all ${activeTab === 'manual' ? `bg-white ${theme.textMain} shadow-lg font-bold scale-105` : 'text-white/80 hover:bg-white/10 hover:text-white font-medium'}`}>
-                                <i className="fas fa-life-ring text-lg w-5 text-center"></i>
-                                <span>{terms.manual}</span>
-                            </button>
-                        </nav>
-                    </div>
-
-                    <div className="mt-auto p-6 border-t border-white/10 relative z-10 shrink-0">
-                        <div className="flex items-center gap-3 p-3 bg-white/10 rounded-xl cursor-not-allowed transition-all backdrop-blur-md">
-                            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-lg shadow-inner shrink-0"><i className="fas fa-user-astronaut"></i></div>
-                            <div className="flex flex-col overflow-hidden">
-                                <span className="font-bold truncate">{profile.nickname}</span>
-                                <span className={`text-[10px] uppercase tracking-tighter ${isDev ? 'text-orange-400' : (isIdle ? 'text-amber-400' : 'text-emerald-400')}`}><i className="fas fa-circle text-[8px]"></i> {isDev ? 'Local Mode' : (isIdle ? terms.adrift : terms.atPort)}</span>
-                            </div>
-                        </div>
-                    </div>
-                </aside>
-
-                <div className="flex-1 flex flex-col h-full overflow-hidden relative">
-                    <header className="bg-white/70 backdrop-blur-xl border-b border-slate-200 p-4 sm:p-6 lg:px-10 flex flex-wrap gap-4 justify-between items-center shrink-0 z-10">
-                        <div className="flex items-center gap-4">
-                            <button onClick={() => setIsSidebarOpen(true)} className={`lg:hidden w-11 h-11 rounded-2xl ${theme.bgLight} ${theme.textMain} flex items-center justify-center shadow-sm active:scale-95 transition-all`}>
-                                <i className="fas fa-bars text-xl"></i>
-                            </button>
-                            
-                            {activeTab === 'courses' ? (
-                                <div className="flex items-center gap-4 sm:gap-6 shrink-0">
-                                    <div className="relative cursor-pointer group" onClick={() => setVoyageView('active')}>
-                                        <h2 className={`text-lg sm:text-2xl font-bold transition-colors ${voyageView === 'active' ? 'text-slate-800' : 'text-slate-400 group-hover:text-slate-600'}`}>Active {terms.voyages}</h2>
-                                        <div className={`absolute -bottom-1 left-0 h-1 w-8 sm:w-12 ${theme.bgMain} rounded-full mt-1 transition-all duration-500 hidden sm:block ${voyageView === 'active' ? 'opacity-100' : 'opacity-0'}`}></div>
-                                    </div>
-                                    <div className="relative cursor-pointer group" onClick={() => setVoyageView('upcoming')}>
-                                        <h2 className={`text-lg sm:text-2xl font-bold transition-colors ${voyageView === 'upcoming' ? 'text-slate-800' : 'text-slate-400 group-hover:text-slate-600'}`}>Upcoming {terms.voyages}</h2>
-                                        <div className={`absolute -bottom-1 left-0 h-1 w-8 sm:w-12 ${theme.bgMain} rounded-full mt-1 transition-all duration-500 hidden sm:block ${voyageView === 'upcoming' ? 'opacity-100' : 'opacity-0'}`}></div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="relative">
-                                    <h2 className="text-xl sm:text-2xl font-bold text-slate-800">
-                                        {activeTab === 'crew' && terms.radar}
-                                        {activeTab === 'analytics' && terms.analytics}
-                                        {activeTab === 'settings' && terms.settings}
-                                        {activeTab === 'manual' && terms.manual}
-                                    </h2>
-                                    <div className={`absolute -bottom-1 left-0 h-1 w-12 ${theme.bgMain} rounded-full mt-1 transition-all duration-500 hidden sm:block`}></div>
-                                </div>
-                            )}
-                        </div>
-                        {activeTab === 'courses' && (isDev || voyages.length > 0) && (
-                            <button onClick={() => setIsAddCourseModalOpen(true)} className={`${theme.bgMain} text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl font-bold shadow-lg hover:shadow-2xl hover:-translate-y-1 active:scale-95 transition-all flex items-center gap-2 group text-sm sm:text-base ml-auto`}>
-                                <i className="fas fa-plus group-hover:rotate-90 transition-transform"></i> <span className="hidden sm:inline">New {terms.course}</span><span className="sm:hidden">{terms.course}</span>
-                            </button>
-                        )}
-                    </header>
-
-                    <main className={`flex-1 overflow-y-auto p-4 sm:p-6 lg:p-10 relative ${theme.patternClass}`}>
-                        <div className="max-w-7xl mx-auto h-full relative z-10">
-                            {activeTab === 'courses' && <CoursesView theme={theme} terms={terms} voyages={voyages} courses={courses} openAddVoyage={openAddVoyage} openEditVoyage={openEditVoyage} deleteVoyage={deleteVoyage} toggleTimer={toggleTimer} completeCourse={completeCourse} toggleGoal={toggleGoal} deleteCourse={deleteCourse} openEditCourse={openEditCourse} toggleVoyagePin={toggleVoyagePin} toggleVoyageCollapse={toggleVoyageCollapse} toggleCoursePin={toggleCoursePin} moveCourse={moveCourse} currentTime={currentTime} voyageView={voyageView} unlockCourseEarly={unlockCourseEarly} unlockVoyageEarly={unlockVoyageEarly} />}
-                            {activeTab === 'crew' && <CrewView theme={theme} terms={terms} profile={profile} radarData={radarData} allProfiles={allProfiles} onAddFriend={handleAddFriendToRadar} onRemoveFriend={handleRemoveFriendFromRadar} onAccept={handleAcceptRequest} onDecline={handleDeclineRequest} onCancel={handleCancelRequest} />}
-                            {activeTab === 'analytics' && <AnalyticsView theme={theme} terms={terms} courses={courses} />}
-                            {activeTab === 'settings' && <SettingsView theme={theme} terms={terms} themeId={themeId} setThemeId={handleSetThemeId} profile={profile} clearData={clearData} logOut={logOut} isThemed={isThemed} setIsThemed={handleSetIsThemed} />}
-                            {activeTab === 'manual' && <ManualView theme={theme} terms={terms} />}
-                        </div>
-                        <div className="fixed bottom-0 right-0 w-1/3 h-1/3 opacity-[0.03] pointer-events-none">
-                            <i className={`fas fa-${isThemed ? 'water' : 'folder'} text-[20rem] -rotate-12`}></i>
-                        </div>
-                    </main>
-                </div>
-
-                {isAddCourseModalOpen && <CourseModal theme={theme} terms={terms} voyages={voyages} initialCourse={editingCourse} onClose={() => {setIsAddCourseModalOpen(false); setEditingCourse(null);}} onSave={handleSaveCourse} />}
-                {isAddVoyageModalOpen && <VoyageModal theme={theme} terms={terms} initialVoyage={editingVoyage} onClose={() => {setIsAddVoyageModalOpen(false); setEditingVoyage(null);}} onSave={handleSaveVoyage} />}
-                
-                {confirmAction && (
-                    <div className="absolute inset-0 z-[60] bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4">
-                        <div className="bg-white w-full max-w-sm rounded-3xl p-6 sm:p-8 shadow-2xl animate-[slideUp_0.3s_ease-out] text-center flex flex-col max-h-[90vh]">
-                            <div className="w-20 h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 shadow-inner shrink-0">
-                                <i className="fas fa-exclamation-triangle"></i>
-                            </div>
-                            <h2 className="text-xl sm:text-2xl font-black text-slate-800 mb-2 shrink-0">{confirmAction.title}</h2>
-                            <div className="overflow-y-auto mb-8 pr-2 flex-1">
-                                <p className="text-sm text-slate-500 font-medium">{confirmAction.message}</p>
-                            </div>
-                            <div className="flex gap-3 shrink-0">
-                                <button onClick={() => setConfirmAction(null)} className="flex-1 bg-slate-100 text-slate-600 font-bold py-3.5 rounded-xl hover:bg-slate-200 transition-all">Cancel</button>
-                                <button onClick={() => { confirmAction.onConfirm(); setConfirmAction(null); }} className="flex-1 bg-red-500 text-white font-bold py-3.5 rounded-xl hover:bg-red-600 shadow-lg shadow-red-200 active:scale-95 transition-all">Confirm</button>
-                            </div>
-                        </div>
-                    </div>
-                )}
             </div>
         );
     }
