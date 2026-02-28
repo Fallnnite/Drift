@@ -873,9 +873,6 @@
         const [desc, setDesc] = useState('');
         const [priority, setPriority] = useState('low');
 
-        const timeLeft = flowSession.duration - flowSession.timeSpent;
-        const isOvertime = timeLeft < 0;
-
         const handleSubmit = (e) => {
             e.preventDefault();
             if (!title.trim()) return;
@@ -911,26 +908,11 @@
                         <button type="button" onClick={onClose} className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"><i className="fas fa-times"></i></button>
                     </div>
 
-                    <div className="mb-6 relative z-10 flex flex-col sm:flex-row gap-4">
-                        <div className="flex-1 flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                            <div className={`w-12 h-12 shrink-0 rounded-xl ${theme.bgLight} ${theme.textMain} flex items-center justify-center text-2xl shadow-inner`}><i className="fas fa-stopwatch"></i></div>
-                            <div>
-                                <div className="text-[10px] font-black uppercase tracking-widest text-slate-400">Time Tracked</div>
-                                <div className="font-mono font-black text-slate-800 text-lg">{formatTime(flowSession.timeSpent)}</div>
-                            </div>
-                        </div>
-                        <div className={`flex-1 flex items-center gap-4 p-4 rounded-2xl border ${isOvertime ? 'bg-red-50 border-red-100' : 'bg-emerald-50 border-emerald-100'}`}>
-                            <div className={`w-12 h-12 shrink-0 rounded-xl flex items-center justify-center text-xl shadow-inner ${isOvertime ? 'bg-red-100 text-red-500' : 'bg-emerald-100 text-emerald-600'}`}>
-                                <i className={`fas ${isOvertime ? 'fa-fire' : 'fa-check-circle'}`}></i>
-                            </div>
-                            <div>
-                                <div className={`text-[10px] font-black uppercase tracking-widest ${isOvertime ? 'text-red-500' : 'text-emerald-600'}`}>
-                                    {isOvertime ? 'Overtime' : 'Time Remaining'}
-                                </div>
-                                <div className={`font-mono font-black text-lg ${isOvertime ? 'text-red-600' : 'text-emerald-700'}`}>
-                                    {isOvertime ? '+' : ''}{formatTime(Math.abs(timeLeft))}
-                                </div>
-                            </div>
+                    <div className="mb-6 relative z-10 flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <div className={`w-12 h-12 rounded-xl ${theme.bgLight} ${theme.textMain} flex items-center justify-center text-2xl shadow-inner`}><i className="fas fa-stopwatch"></i></div>
+                        <div>
+                            <div className="text-[10px] font-black uppercase tracking-widest text-slate-400">Session Length</div>
+                            <div className="font-mono font-black text-slate-800 text-lg">{formatTime(flowSession.timeSpent)}</div>
                         </div>
                     </div>
 
@@ -1714,7 +1696,7 @@
         });
         const [themeId, setThemeId] = useState(() => localStorage.getItem('drift-theme') || 'navy');
         
-        const [orgMode, setOrgMode] = useState(() => localStorage.getItem('drift-orgMode') || 'tier3');
+        const [orgMode, setOrgMode] = useState(() => localStorage.getItem('drift-orgMode') || 'tier1');
         const [isFabOpen, setIsFabOpen] = useState(false);
 
         const theme = THEMES[themeId] || THEMES['navy'];
