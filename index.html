@@ -1698,7 +1698,7 @@
         });
         const [themeId, setThemeId] = useState(() => localStorage.getItem('drift-theme') || 'navy');
         
-        const [orgMode, setOrgMode] = useState(() => localStorage.getItem('drift-orgMode') || 'tier1');
+        const [orgMode, setOrgMode] = useState(() => localStorage.getItem('drift-orgMode') || 'tier3');
         const [isFabOpen, setIsFabOpen] = useState(false);
 
         const theme = THEMES[themeId] || THEMES['navy'];
