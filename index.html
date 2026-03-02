@@ -486,6 +486,8 @@
     }
 
     function ManualView({ theme, terms }) {
+       const [currentSlide, setCurrentSlide] = useState(0);
+
         const slides = [
             {
                 id: 1,
