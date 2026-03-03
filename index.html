@@ -53,6 +53,7 @@
 <div id="root" class="w-full h-full flex relative overflow-hidden"></div>
 
 <script src="./themes.js"></script>
+<script src="./drift-core.js"></script> <script type="text/babel">
 
 <script type="text/babel">
     const { useState, useEffect, useRef } = React;
@@ -1455,134 +1456,101 @@
     }
 
     function AnalyticsView({ theme, terms, courses }) {
-        const totalTimeSpent = courses.reduce((acc, curr) => acc + curr.timeSpent, 0);
-        
-        const [chartPeriod, setChartPeriod] = useState('week'); 
+        // Fetch calculations from our isolated core logic file
+        const metrics = window.DriftCore.calculateWeeklyMetrics(courses);
 
-        const generateBins = (period) => {
-            const bins = [];
-            const now = new Date();
-            const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-            const oneDay = 24 * 60 * 60 * 1000;
+        if (!metrics.hasData) {
+            return (
+                <div className="flex flex-col items-center justify-center h-full text-center animate-[fadeIn_0.5s_ease-out]">
+                    <div className={`w-32 h-32 ${theme.bgLight} ${theme.textMain} rounded-[2rem] flex items-center justify-center text-6xl shadow-inner mb-6 mx-auto`}>
+                        <i className="fas fa-chart-pie"></i>
+                    </div>
+                    <h2 className="text-3xl font-black text-slate-800 mb-4">Quality Dashboard</h2>
+                    <p className="text-slate-500 max-w-md mx-auto">Complete a few {terms.courses.toLowerCase()} this week to generate your focus metrics.</p>
+                </div>
+            );
+        }
 
-            if (period === 'week') {
-                for (let i = 6; i >= 0; i--) {
-                    const start = startOfDay - i * oneDay;
-                    bins.push({ label: new Date(start).toLocaleDateString('en-US', { weekday: 'short' }), start: start, end: start + oneDay - 1, value: 0 });
-                }
-            } else if (period === 'month') {
-                for (let i = 3; i >= 0; i--) {
-                    const end = startOfDay + oneDay - 1 - (i * 7 * oneDay);
-                    const start = end - 7 * oneDay + 1;
-                    bins.push({ label: i === 0 ? 'This Wk' : i === 1 ? 'Last Wk' : `-${i} Wks`, start: start, end: end, value: 0 });
-                }
-            } else if (period === 'year') {
-                const currentYear = now.getFullYear();
-                for (let i = 0; i < 12; i++) {
-                    const start = new Date(currentYear, i, 1).getTime();
-                    const end = new Date(currentYear, i + 1, 0, 23, 59, 59, 999).getTime();
-                    bins.push({ label: new Date(currentYear, i, 1).toLocaleDateString('en-US', { month: 'short' }), start: start, end: end, value: 0 });
-                }
-            }
-            return bins;
-        };
+        const CircleProgress = ({ percentage, colorClass, icon, label, description }) => {
+            const radius = 36;
+            const circumference = 2 * Math.PI * radius;
+            const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
-        const bins = generateBins(chartPeriod);
-        let periodCompleted = 0;
-
-        courses.forEach(course => {
-            const courseTime = Number(course.id);
-            const bin = bins.find(b => courseTime >= b.start && courseTime <= b.end);
-            if (bin) {
-                bin.value += course.timeSpent;
-                if (course.isCompleted) periodCompleted++;
-            }
-        });
-
-        const periodTotalTime = bins.reduce((sum, b) => sum + b.value, 0);
-        const maxVal = Math.max(...bins.map(b => b.value));
-
-        return (
-            <div className="space-y-8 max-w-6xl mx-auto pb-20 animate-[fadeIn_0.5s_ease-out]">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 text-center sm:text-left">
-                    <div className={`col-span-1 md:col-span-3 lg:col-span-1 bg-gradient-to-br ${theme.gradient} rounded-[2.5rem] p-6 sm:p-8 lg:p-10 text-white relative overflow-hidden flex flex-col justify-center min-h-[200px] shadow-xl`}>
-                        <WaveSVG colorClass="text-white/10" className="bottom-0 h-32" />
-                        <h3 className="text-white/60 font-black mb-2 text-xs uppercase tracking-widest relative z-10 text-center sm:text-left md:text-center xl:text-left">Total {terms.sailing} Time</h3>
-                        <div className="text-4xl sm:text-5xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-black font-mono tracking-tighter relative z-10 text-center sm:text-left md:text-center xl:text-left drop-shadow-xl overflow-visible whitespace-nowrap">
-                            {formatTime(totalTimeSpent)}
+            return (
+                <div className="bg-white p-6 sm:p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col items-center text-center relative overflow-hidden group hover:border-slate-200 transition-colors">
+                    <div className="relative w-32 h-32 flex items-center justify-center mb-6">
+                        {/* Background Track */}
+                        <svg className="w-full h-full -rotate-90 absolute inset-0">
+                            <circle cx="50%" cy="50%" r={radius} className="fill-transparent stroke-slate-100" strokeWidth="8" />
+                        </svg>
+                        {/* Progress Track */}
+                        <svg className="w-full h-full -rotate-90 absolute inset-0 drop-shadow-md">
+                            <circle 
+                                cx="50%" cy="50%" r={radius} 
+                                className={`fill-transparent ${colorClass} transition-all duration-1500 ease-out`} 
+                                strokeWidth="8" 
+                                strokeLinecap="round"
+                                strokeDasharray={circumference}
+                                strokeDashoffset={strokeDashoffset}
+                                stroke="currentColor"
+                            />
+                        </svg>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+                            <i className={`${icon} ${colorClass} text-xl mb-1 opacity-50`}></i>
+                            <span className={`text-3xl font-black tracking-tighter ${colorClass}`}>{percentage}%</span>
                         </div>
                     </div>
-                    <div className="bg-white p-6 md:p-8 lg:p-10 rounded-[2.5rem] flex flex-col items-center justify-center shadow-sm border border-slate-100">
-                        <span className="text-5xl md:text-4xl lg:text-5xl font-black text-slate-800 tracking-tighter">{courses.length}</span>
-                        <span className="text-xs font-black text-slate-300 uppercase mt-3">{terms.courses}</span>
+                    <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest mb-2">{label}</h4>
+                    <p className="text-xs text-slate-400 font-medium leading-relaxed">{description}</p>
+                </div>
+            );
+        };
+
+        return (
+            <div className="space-y-8 max-w-5xl mx-auto pb-20 animate-[fadeIn_0.5s_ease-out]">
+                
+                <div className={`bg-gradient-to-br ${theme.gradient} rounded-[2.5rem] p-8 sm:p-12 text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between shadow-xl gap-6`}>
+                    <WaveSVG colorClass="text-white/10" className="bottom-0 h-40 opacity-40" />
+                    <div className="relative z-10 text-center md:text-left">
+                        <h2 className="text-3xl sm:text-4xl font-black tracking-tight mb-2">Weekly Quality Review</h2>
+                        <p className="text-white/80 text-sm font-medium">Focus on consistency and optimal pacing, not raw hours logged.</p>
                     </div>
-                    <div className="bg-white p-6 md:p-8 lg:p-10 rounded-[2.5rem] flex flex-col items-center justify-center shadow-sm border border-slate-100">
-                        <span className="text-5xl md:text-4xl lg:text-5xl font-black text-slate-800 tracking-tighter">{courses.filter(c=>c.isCompleted).length}</span>
-                        <span className="text-xs font-black text-slate-300 uppercase mt-3">{terms.anchored}</span>
+                    <div className="relative z-10 bg-white/10 p-4 sm:p-6 rounded-[2rem] border border-white/20 backdrop-blur-md flex items-center gap-4 text-left">
+                        <div className="w-12 h-12 bg-white text-slate-800 rounded-xl flex items-center justify-center text-xl shadow-lg shrink-0">
+                            <i className="fas fa-brain"></i>
+                        </div>
+                        <div>
+                            <div className="text-[10px] uppercase tracking-widest text-white/70 font-black">Focus Quality Score</div>
+                            <div className="text-2xl font-black tracking-tight">{metrics.focus}%</div>
+                        </div>
                     </div>
                 </div>
 
-                <div className="bg-white p-6 md:p-8 lg:p-10 rounded-[2.5rem] border border-slate-100 shadow-sm relative overflow-hidden flex flex-col">
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-10">
-                        <div>
-                            <h3 className="text-xl font-black text-slate-800 tracking-tight flex items-center gap-3">
-                                <i className={`fas fa-chart-column ${theme.textMain}`}></i> {terms.logs} Breakdown
-                            </h3>
-                            <p className="text-sm text-slate-400 font-bold mt-1 uppercase tracking-widest text-[10px]">
-                                {chartPeriod === 'week' ? 'Last 7 Days' : chartPeriod === 'month' ? 'Last 4 Weeks' : 'This Year'}
-                            </p>
-                        </div>
-                        
-                        <div className="flex bg-slate-100 p-1.5 rounded-2xl shadow-inner w-full sm:w-auto">
-                            <button onClick={() => setChartPeriod('week')} className={`flex-1 sm:flex-none px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${chartPeriod === 'week' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}>Week</button>
-                            <button onClick={() => setChartPeriod('month')} className={`flex-1 sm:flex-none px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${chartPeriod === 'month' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}>Month</button>
-                            <button onClick={() => setChartPeriod('year')} className={`flex-1 sm:flex-none px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${chartPeriod === 'year' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}>Year</button>
-                        </div>
-                    </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <CircleProgress 
+                        percentage={metrics.completion} 
+                        colorClass="text-emerald-500" 
+                        icon="fas fa-check-double" 
+                        label="Completion Rate" 
+                        description="Percentage of planned items you successfully finished this week." 
+                    />
+                    
+                    <CircleProgress 
+                        percentage={metrics.early} 
+                        colorClass="text-sky-500" 
+                        icon="fas fa-bolt" 
+                        label="Proactivity" 
+                        description="How often you started work before the scheduled target time." 
+                    />
 
-                    <div className="flex flex-col sm:flex-row gap-8 mb-10">
-                        <div className="bg-slate-50 border border-slate-100 rounded-2xl p-5 flex-1 relative overflow-hidden">
-                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Time {terms.sailed} This Period</span>
-                            <span className={`text-3xl lg:text-4xl font-black font-mono tracking-tighter ${theme.textMain}`}>{formatTime(periodTotalTime)}</span>
-                            <i className={`fas fa-water absolute -right-4 -bottom-4 text-6xl opacity-5 ${theme.textMain}`}></i>
-                        </div>
-                        <div className="bg-slate-50 border border-slate-100 rounded-2xl p-5 flex-1 relative overflow-hidden">
-                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">{terms.anchored} This Period</span>
-                            <span className="text-3xl lg:text-4xl font-black text-slate-700 tracking-tighter">{periodCompleted} <span className="text-sm text-slate-400 font-medium tracking-normal">{terms.courses}</span></span>
-                            <i className="fas fa-anchor absolute -right-4 -bottom-2 text-6xl opacity-5 text-slate-800"></i>
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col h-64 w-full mt-4">
-                        <div className="flex-1 flex items-end justify-between gap-1 sm:gap-2 relative">
-                            <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pb-0">
-                                <div className="border-b border-slate-100 border-dashed w-full h-0"></div>
-                                <div className="border-b border-slate-100 border-dashed w-full h-0"></div>
-                                <div className="border-b border-slate-100 border-dashed w-full h-0"></div>
-                                <div className="border-b border-slate-200 w-full h-0"></div>
-                            </div>
-                            
-                            {bins.map((b, i) => {
-                                const heightPct = maxVal > 0 && b.value > 0 ? Math.max((b.value / maxVal) * 100, 1.5) : 1.5; 
-                                return (
-                                    <div key={i} className="flex-1 flex flex-col items-center group relative h-full justify-end z-10 w-full">
-                                        <div className="absolute bottom-full mb-3 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-lg pointer-events-none whitespace-nowrap">
-                                            {formatTime(b.value)}
-                                            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800"></div>
-                                        </div>
-                                        <div className={`w-full max-w-[4rem] rounded-t-lg transition-all duration-700 ease-out hover:brightness-110 ${b.value > 0 ? theme.bgMain : 'bg-slate-200'}`} style={{ height: `${heightPct}%` }}></div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                        <div className="flex items-center justify-between gap-1 sm:gap-2 mt-3">
-                            {bins.map((b, i) => (
-                                <div key={i} className="flex-1 text-center">
-                                    <span className="text-[8px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-tighter sm:tracking-widest truncate block w-full">{b.label}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                    {/* Overrun is inverted: 0% is perfect, 100% is bad. We use amber/rose colors for it */}
+                    <CircleProgress 
+                        percentage={metrics.overrun} 
+                        colorClass={metrics.overrun > 50 ? "text-rose-500" : "text-amber-500"} 
+                        icon="fas fa-clock" 
+                        label="Overrun Rate" 
+                        description="How frequently your sessions ran past your estimated duration." 
+                    />
                 </div>
             </div>
         );
