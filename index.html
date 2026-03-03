@@ -948,6 +948,19 @@
         const [mins, setMins] = useState('30');
         const [showModal, setShowModal] = useState(false);
         const [isCompleting, setIsCompleting] = useState(false);
+        const [ghostPct, setGhostPct] = useState(0);
+
+        const ghost = flowSession?.ghostPartner;
+
+        // Ghost Tracker: Calculates abstract percentage based strictly on when YOU started
+        useEffect(() => {
+            if (ghost && flowSession?.isRunning && !flowSession?.isPaused && flowSession?.startTime) {
+                const interval = setInterval(() => {
+                    setGhostPct(window.DriftCore.calculateGhostProgress(ghost, flowSession.startTime));
+                }, 1000);
+                return () => clearInterval(interval);
+            }
+        }, [ghost, flowSession]);
 
         const handleLaunch = () => {
             const h = parseInt(hrs) || 0;
@@ -955,13 +968,14 @@
             let durationSecs = (h * 3600) + (m * 60);
             if (durationSecs === 0) durationSecs = 1800; // default 30 mins
 
-            setFlowSession({
-                id: 'flow_' + Date.now(),
+            setFlowSession(prev => ({
+                ...prev,
                 duration: durationSecs,
                 timeSpent: 0,
                 isRunning: true,
-                isPaused: false
-            });
+                isPaused: false,
+                startTime: Date.now() // Start timestamp required for Ghost math
+            }));
         };
 
         const togglePause = () => setFlowSession(prev => ({ ...prev, isPaused: !prev.isPaused }));
@@ -980,9 +994,18 @@
             });
         };
 
-        if (!flowSession) {
+        // SETUP SCREEN
+        if (!flowSession?.isRunning) {
             return (
                 <div className="flex flex-col items-center justify-center h-full text-center animate-[fadeIn_0.5s_ease-out] w-full max-w-md mx-auto">
+                    {/* Ghost Linked Banner */}
+                    {ghost && (
+                        <div className="bg-slate-800 text-white px-6 py-4 rounded-2xl text-[10px] sm:text-xs font-black uppercase tracking-widest mb-8 flex items-center justify-center gap-3 shadow-xl animate-[slideDown_0.3s_ease-out] w-full">
+                            <i className="fas fa-ghost animate-pulse text-blue-400 text-lg"></i>
+                            <span>Co-op Linked: {ghost.nickname}</span>
+                        </div>
+                    )}
+                    
                     <div className={`w-32 h-32 ${theme.bgLight} ${theme.textMain} rounded-[3rem] flex items-center justify-center text-6xl shadow-inner mb-8 mx-auto`}>
                         <i className="fas fa-stopwatch"></i>
                     </div>
@@ -1007,6 +1030,7 @@
             );
         }
 
+        // RUNNING TIMER SCREEN
         const timeLeft = flowSession.duration - flowSession.timeSpent;
         const isOvertime = timeLeft < 0;
         const progress = flowSession.duration === 0 ? 0 : Math.min(1, flowSession.timeSpent / flowSession.duration);
@@ -1020,6 +1044,7 @@
                 )}
 
                 <div className="relative w-72 h-72 sm:w-96 sm:h-96 flex items-center justify-center mb-12 z-10">
+                    {/* User's Main Ring */}
                     <svg viewBox="0 0 32 32" className={`w-full h-full -rotate-90 ${isOvertime ? 'text-red-500' : theme.textMain}`}>
                         <circle r="15" cx="16" cy="16" className="fill-transparent stroke-slate-200 stroke-[1.5]" />
                         <circle r="15" cx="16" cy="16"
@@ -1037,6 +1062,30 @@
                             {isOvertime ? '+' : ''}{formatTime(timeLeft)}
                         </div>
                     </div>
+
+                    {/* Ghost Ring (Strictly Percentage Based, No Raw Stats) */}
+                    {ghost && (
+                        <div className="absolute -bottom-6 -right-6 sm:-bottom-8 sm:-right-8 w-28 h-28 sm:w-36 sm:h-36 bg-white rounded-full p-2 shadow-2xl border border-slate-100 z-20 flex items-center justify-center group">
+                            <svg viewBox="0 0 32 32" className="w-full h-full -rotate-90 text-blue-500">
+                                <circle r="14" cx="16" cy="16" className="fill-slate-50 stroke-slate-200 stroke-[2]" />
+                                <circle r="14" cx="16" cy="16"
+                                    fill="transparent"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeDasharray={`${(ghostPct / 100) * 87.96} 87.96`}
+                                    className="transition-all duration-1000 ease-linear" />
+                            </svg>
+                            <div className="absolute inset-0 flex flex-col items-center justify-center pt-1">
+                                <i className={`fas fa-ghost text-lg mb-1 ${ghostPct >= 100 ? 'text-blue-500' : 'text-slate-300 animate-pulse'}`}></i>
+                                <span className="text-[9px] font-black uppercase tracking-widest text-slate-500 truncate w-20 text-center">{ghost.nickname}</span>
+                            </div>
+                            
+                            {/* Strict UI Anti-Comparison Tooltip */}
+                            <div className="absolute bottom-full mb-4 bg-slate-800 text-white text-[10px] p-3 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-xl font-bold tracking-widest uppercase">
+                                {ghostPct >= 100 ? 'Session Complete' : 'In Deep Focus'}
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 <div className="flex flex-col w-full gap-4 relative z-10 px-4">
@@ -1269,9 +1318,9 @@
         );
     }
 
-    function CrewView({ theme, terms, profile, radarData, allProfiles, onAddFriend, onRemoveFriend, onAccept, onDecline, onCancel }) {
+    function CrewView({ theme, terms, profile, radarData, allProfiles, onAddFriend, onRemoveFriend, onAccept, onDecline, onCancel, onStudyWithGhost }) {
         const [newFriendName, setNewFriendName] = useState('');
-        const [radarTab, setRadarTab] = useState('live'); // 'live', 'pending', 'sent'
+        const [radarTab, setRadarTab] = useState('live'); 
         
         const handleAdd = (e) => {
             e.preventDefault();
@@ -1329,6 +1378,7 @@
                                         const isIdle = mate.status === 'idle';
                                         const isOffline = mate.status === 'offline';
                                         const isOvertime = mate.isOvertime === true;
+                                        const hasGhost = isOffline && mate.lastGhostDuration && mate.lastGhostDuration > 0;
                                         
                                         let statusColor, statusText, statusDot, progressColor;
                                         if (isOffline) {
@@ -1366,7 +1416,7 @@
                                         const progressWidth = isCompleted ? 100 : (mate.progress || 0);
 
                                         return (
-                                            <div key={mate.uid} className="border-2 border-slate-100 rounded-[2rem] p-6 relative overflow-hidden group">
+                                            <div key={mate.uid} className="border-2 border-slate-100 rounded-[2rem] p-6 relative overflow-hidden group flex flex-col">
                                                 <div className="flex justify-between items-start mb-6">
                                                     <div className="flex items-center gap-4">
                                                         <div className="w-12 h-12 bg-slate-100 text-slate-500 rounded-2xl flex items-center justify-center text-xl shadow-inner"><i className="fas fa-user-astronaut"></i></div>
@@ -1386,6 +1436,13 @@
                                                     </div>
                                                 )}
                                                 {isFocused && <div className={`absolute top-0 right-0 w-full h-full opacity-10 bg-gradient-to-l ${theme.gradient} animate-[shimmer_3s_infinite] pointer-events-none`}></div>}
+                                                
+                                                {/* GHOST CO-OP BUTTON */}
+                                                {hasGhost && (
+                                                    <button onClick={() => onStudyWithGhost(mate)} className="mt-6 w-full bg-slate-50 hover:bg-blue-50 text-slate-500 hover:text-blue-600 font-black py-4 rounded-xl border border-slate-200 hover:border-blue-200 transition-all text-[10px] sm:text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-sm">
+                                                        <i className="fas fa-ghost"></i> Study with Ghost
+                                                    </button>
+                                                )}
                                             </div>
                                         );
                                     })}
