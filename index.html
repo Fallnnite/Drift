@@ -1455,39 +1455,55 @@
         );
     }
 
-    function AnalyticsView({ theme, terms, courses }) {
+   function AnalyticsView({ theme, terms, courses }) {
+        const [timeframe, setTimeframe] = useState('week'); // 'day', 'week', 'month'
+        const [viewMode, setViewMode] = useState('pct'); // 'pct', 'raw'
+
+        // Get current date info for calendar
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth();
+
         // Fetch calculations from our isolated core logic file
-        const metrics = window.DriftCore.calculateWeeklyMetrics(courses);
+        const metrics = window.DriftCore.calculateMetrics(courses, timeframe);
+        const calendarData = window.DriftCore.generateCalendarData(courses, currentYear, currentMonth);
 
-        if (!metrics.hasData) {
-            return (
-                <div className="flex flex-col items-center justify-center h-full text-center animate-[fadeIn_0.5s_ease-out]">
-                    <div className={`w-32 h-32 ${theme.bgLight} ${theme.textMain} rounded-[2rem] flex items-center justify-center text-6xl shadow-inner mb-6 mx-auto`}>
-                        <i className="fas fa-chart-pie"></i>
-                    </div>
-                    <h2 className="text-3xl font-black text-slate-800 mb-4">Quality Dashboard</h2>
-                    <p className="text-slate-500 max-w-md mx-auto">Complete a few {terms.courses.toLowerCase()} this week to generate your focus metrics.</p>
-                </div>
-            );
-        }
-
-        const CircleProgress = ({ percentage, colorClass, icon, label, description }) => {
-            const radius = 36;
+        const CircleProgress = ({ data, colorClass, icon, label, description, type }) => {
+            // Fix SVG scaling with a strict viewBox so text stays perfectly centered
+            const radius = 40;
             const circumference = 2 * Math.PI * radius;
-            const strokeDashoffset = circumference - (percentage / 100) * circumference;
+            const strokeDashoffset = circumference - (data.pct / 100) * circumference;
+
+            let displayValue = '';
+            let displaySub = '';
+
+            if (viewMode === 'pct') {
+                displayValue = `${data.pct}%`;
+                displaySub = type === 'focus' ? 'Quality Score' : 'of tasks';
+            } else {
+                if (type === 'focus') {
+                    const hrs = Math.floor(data.rawTime / 3600);
+                    const mins = Math.floor((data.rawTime % 3600) / 60);
+                    displayValue = hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m`;
+                    displaySub = 'Total Time';
+                } else {
+                    displayValue = `${data.raw}/${data.total}`;
+                    displaySub = 'Tasks';
+                }
+            }
 
             return (
-                <div className="bg-white p-6 sm:p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col items-center text-center relative overflow-hidden group hover:border-slate-200 transition-colors">
-                    <div className="relative w-32 h-32 flex items-center justify-center mb-6">
+                <div className="bg-white p-6 sm:p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col items-center text-center relative overflow-hidden group hover:border-slate-200 transition-all">
+                    <div className="relative w-32 h-32 flex items-center justify-center mb-6 shrink-0">
                         {/* Background Track */}
-                        <svg className="w-full h-full -rotate-90 absolute inset-0">
-                            <circle cx="50%" cy="50%" r={radius} className="fill-transparent stroke-slate-100" strokeWidth="8" />
+                        <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90 absolute inset-0">
+                            <circle cx="50" cy="50" r={radius} className="fill-transparent stroke-slate-100" strokeWidth="8" />
                         </svg>
                         {/* Progress Track */}
-                        <svg className="w-full h-full -rotate-90 absolute inset-0 drop-shadow-md">
+                        <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90 absolute inset-0 drop-shadow-md">
                             <circle 
-                                cx="50%" cy="50%" r={radius} 
-                                className={`fill-transparent ${colorClass} transition-all duration-1500 ease-out`} 
+                                cx="50" cy="50" r={radius} 
+                                className={`fill-transparent ${colorClass} transition-all duration-1000 ease-out`} 
                                 strokeWidth="8" 
                                 strokeLinecap="round"
                                 strokeDasharray={circumference}
@@ -1495,9 +1511,10 @@
                                 stroke="currentColor"
                             />
                         </svg>
-                        <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-                            <i className={`${icon} ${colorClass} text-xl mb-1 opacity-50`}></i>
-                            <span className={`text-3xl font-black tracking-tighter ${colorClass}`}>{percentage}%</span>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 pt-1">
+                            <i className={`${icon} ${colorClass} text-lg mb-1 opacity-50`}></i>
+                            <span className={`text-2xl font-black tracking-tighter ${colorClass} leading-none`}>{displayValue}</span>
+                            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">{displaySub}</span>
                         </div>
                     </div>
                     <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest mb-2">{label}</h4>
@@ -1506,51 +1523,151 @@
             );
         };
 
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
         return (
             <div className="space-y-8 max-w-5xl mx-auto pb-20 animate-[fadeIn_0.5s_ease-out]">
                 
-                <div className={`bg-gradient-to-br ${theme.gradient} rounded-[2.5rem] p-8 sm:p-12 text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between shadow-xl gap-6`}>
-                    <WaveSVG colorClass="text-white/10" className="bottom-0 h-40 opacity-40" />
-                    <div className="relative z-10 text-center md:text-left">
-                        <h2 className="text-3xl sm:text-4xl font-black tracking-tight mb-2">Weekly Quality Review</h2>
-                        <p className="text-white/80 text-sm font-medium">Focus on consistency and optimal pacing, not raw hours logged.</p>
+                {/* --- THE CONTROL DECK --- */}
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-2 rounded-2xl shadow-sm border border-slate-100">
+                    <div className="flex bg-slate-50 p-1 rounded-xl w-full sm:w-auto">
+                        <button onClick={() => setTimeframe('day')} className={`flex-1 sm:px-6 py-2 text-xs font-black uppercase tracking-widest rounded-lg transition-all ${timeframe === 'day' ? 'bg-white shadow-sm text-slate-800' : 'text-slate-400 hover:text-slate-600'}`}>Day</button>
+                        <button onClick={() => setTimeframe('week')} className={`flex-1 sm:px-6 py-2 text-xs font-black uppercase tracking-widest rounded-lg transition-all ${timeframe === 'week' ? 'bg-white shadow-sm text-slate-800' : 'text-slate-400 hover:text-slate-600'}`}>Week</button>
+                        <button onClick={() => setTimeframe('month')} className={`flex-1 sm:px-6 py-2 text-xs font-black uppercase tracking-widest rounded-lg transition-all ${timeframe === 'month' ? 'bg-white shadow-sm text-slate-800' : 'text-slate-400 hover:text-slate-600'}`}>Month</button>
                     </div>
-                    <div className="relative z-10 bg-white/10 p-4 sm:p-6 rounded-[2rem] border border-white/20 backdrop-blur-md flex items-center gap-4 text-left">
-                        <div className="w-12 h-12 bg-white text-slate-800 rounded-xl flex items-center justify-center text-xl shadow-lg shrink-0">
-                            <i className="fas fa-brain"></i>
-                        </div>
-                        <div>
-                            <div className="text-[10px] uppercase tracking-widest text-white/70 font-black">Focus Quality Score</div>
-                            <div className="text-2xl font-black tracking-tight">{metrics.focus}%</div>
-                        </div>
+
+                    <div className="flex bg-slate-50 p-1 rounded-xl w-full sm:w-auto">
+                        <button onClick={() => setViewMode('pct')} className={`flex-1 sm:px-6 py-2 text-xs font-black uppercase tracking-widest rounded-lg transition-all flex items-center justify-center gap-2 ${viewMode === 'pct' ? 'bg-white shadow-sm text-slate-800' : 'text-slate-400 hover:text-slate-600'}`}>
+                            <i className="fas fa-percent"></i> Percent
+                        </button>
+                        <button onClick={() => setViewMode('raw')} className={`flex-1 sm:px-6 py-2 text-xs font-black uppercase tracking-widest rounded-lg transition-all flex items-center justify-center gap-2 ${viewMode === 'raw' ? 'bg-white shadow-sm text-slate-800' : 'text-slate-400 hover:text-slate-600'}`}>
+                            <i className="fas fa-hashtag"></i> Raw Data
+                        </button>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <CircleProgress 
-                        percentage={metrics.completion} 
-                        colorClass="text-emerald-500" 
-                        icon="fas fa-check-double" 
-                        label="Completion Rate" 
-                        description="Percentage of planned items you successfully finished this week." 
-                    />
-                    
-                    <CircleProgress 
-                        percentage={metrics.early} 
-                        colorClass="text-sky-500" 
-                        icon="fas fa-bolt" 
-                        label="Proactivity" 
-                        description="How often you started work before the scheduled target time." 
-                    />
+                {!metrics.hasData ? (
+                    <div className="flex flex-col items-center justify-center py-20 text-center bg-white rounded-[3rem] border border-slate-100 shadow-sm">
+                        <div className={`w-24 h-24 ${theme.bgLight} ${theme.textMain} rounded-[2rem] flex items-center justify-center text-4xl shadow-inner mb-6 mx-auto`}>
+                            <i className="fas fa-chart-pie"></i>
+                        </div>
+                        <h2 className="text-2xl font-black text-slate-800 mb-2">No data for this {timeframe}</h2>
+                        <p className="text-slate-500 max-w-sm mx-auto text-sm">Complete tasks within this timeframe to generate your quality metrics.</p>
+                    </div>
+                ) : (
+                    <>
+                        {/* Top Hero Banner */}
+                        <div className={`bg-gradient-to-br ${theme.gradient} rounded-[2.5rem] p-8 sm:p-10 text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between shadow-xl gap-6`}>
+                            <WaveSVG colorClass="text-white/10" className="bottom-0 h-40 opacity-40" />
+                            <div className="relative z-10 text-center md:text-left">
+                                <h2 className="text-3xl font-black tracking-tight mb-2 capitalize">{timeframe}ly Review</h2>
+                                <p className="text-white/80 text-sm font-medium">Switch between percentages and raw numbers using the controls above.</p>
+                            </div>
+                            <div className="relative z-10 bg-white/10 p-4 sm:p-5 rounded-[2rem] border border-white/20 backdrop-blur-md flex items-center gap-4 text-left">
+                                <div className="w-12 h-12 bg-white text-slate-800 rounded-xl flex items-center justify-center text-xl shadow-lg shrink-0">
+                                    <i className="fas fa-brain"></i>
+                                </div>
+                                <div>
+                                    <div className="text-[10px] uppercase tracking-widest text-white/70 font-black">Focus Score</div>
+                                    <div className="text-2xl font-black tracking-tight">{metrics.focus.pct}%</div>
+                                </div>
+                            </div>
+                        </div>
 
-                    {/* Overrun is inverted: 0% is perfect, 100% is bad. We use amber/rose colors for it */}
-                    <CircleProgress 
-                        percentage={metrics.overrun} 
-                        colorClass={metrics.overrun > 50 ? "text-rose-500" : "text-amber-500"} 
-                        icon="fas fa-clock" 
-                        label="Overrun Rate" 
-                        description="How frequently your sessions ran past your estimated duration." 
-                    />
+                        {/* Metric Rings */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <CircleProgress 
+                                data={metrics.completion} 
+                                colorClass="text-emerald-500" 
+                                icon="fas fa-check-double" 
+                                label="Completion" 
+                                description="Planned items you successfully finished." 
+                                type="completion"
+                            />
+                            
+                            <CircleProgress 
+                                data={metrics.early} 
+                                colorClass="text-sky-500" 
+                                icon="fas fa-bolt" 
+                                label="Proactivity" 
+                                description="Items started before scheduled target time." 
+                                type="early"
+                            />
+
+                            <CircleProgress 
+                                data={metrics.overrun} 
+                                colorClass={metrics.overrun.pct > 50 ? "text-rose-500" : "text-amber-500"} 
+                                icon="fas fa-clock" 
+                                label="Overrun Rate" 
+                                description="Sessions that ran past estimated duration." 
+                                type="overrun"
+                            />
+                        </div>
+                    </>
+                )}
+
+                {/* --- THE CALENDAR HEATMAP --- */}
+                <div className="bg-white p-6 sm:p-10 rounded-[3rem] shadow-sm border border-slate-100 relative overflow-hidden">
+                    <div className="flex justify-between items-center mb-8">
+                        <div>
+                            <h3 className="text-xl font-black text-slate-800 tracking-tight flex items-center gap-3">
+                                <i className={`fas fa-calendar-alt ${theme.textMain}`}></i> Productivity Heatmap
+                            </h3>
+                            <p className="text-xs text-slate-500 mt-1 font-medium">{monthNames[currentMonth]} {currentYear}</p>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-7 gap-2 sm:gap-4">
+                        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                            <div key={day} className="text-center text-[10px] font-black uppercase tracking-widest text-slate-400 pb-2">{day}</div>
+                        ))}
+                        
+                        {/* Empty slots for start of month alignment */}
+                        {Array.from({ length: new Date(currentYear, currentMonth, 1).getDay() }).map((_, i) => (
+                            <div key={`empty-${i}`} className="aspect-square rounded-xl bg-transparent"></div>
+                        ))}
+
+                        {/* Actual days */}
+                        {calendarData.map(data => {
+                            // Map intensity to Tailwind opacity classes of the theme's main color
+                            const intensityClasses = {
+                                0: 'bg-slate-50 border border-slate-100 text-slate-400',
+                                1: `${theme.bgMain} opacity-30 text-slate-800 font-bold`,
+                                2: `${theme.bgMain} opacity-60 text-white font-bold`,
+                                3: `${theme.bgMain} opacity-80 text-white font-bold`,
+                                4: `${theme.bgMain} opacity-100 text-white font-black shadow-md`
+                            };
+                            
+                            const isToday = data.date === now.toISOString().split('T')[0];
+
+                            return (
+                                <div key={data.date} className="relative group aspect-square flex items-center justify-center">
+                                    <div className={`w-full h-full rounded-xl sm:rounded-2xl flex items-center justify-center text-xs sm:text-sm transition-all duration-300 ${intensityClasses[data.intensity]} ${isToday ? 'ring-2 ring-offset-2 ring-slate-800' : ''}`}>
+                                        {data.day}
+                                    </div>
+                                    
+                                    {/* Tooltip on hover */}
+                                    {data.intensity > 0 && (
+                                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-32 bg-slate-800 text-white text-[10px] p-2 rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-20 text-center shadow-xl">
+                                            <strong className="block mb-1">{data.coursesCompleted} tasks done</strong>
+                                            <span className="text-slate-300">{Math.round((data.timeSpent / 3600) * 10) / 10} hours logged</span>
+                                            <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800"></div>
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+                    
+                    <div className="flex items-center justify-end gap-2 mt-8 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                        <span>Less</span>
+                        <div className="w-3 h-3 rounded bg-slate-50 border border-slate-100"></div>
+                        <div className={`w-3 h-3 rounded ${theme.bgMain} opacity-30`}></div>
+                        <div className={`w-3 h-3 rounded ${theme.bgMain} opacity-60`}></div>
+                        <div className={`w-3 h-3 rounded ${theme.bgMain} opacity-80`}></div>
+                        <div className={`w-3 h-3 rounded ${theme.bgMain} opacity-100`}></div>
+                        <span>More</span>
+                    </div>
                 </div>
             </div>
         );
