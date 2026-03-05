@@ -73,7 +73,7 @@ window.DriftCore = {
         };
     },
 
-    generateCalendarData: function(courses, year, month) {
+   generateCalendarData: function(courses, year, month) {
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const calendar = [];
 
@@ -95,13 +95,14 @@ window.DriftCore = {
             }
         });
 
+        // Heatmap Intensity based on exact minutes for a better gradient
         calendar.forEach(day => {
-            const hours = day.timeSpent / 3600;
-            if (hours === 0) day.intensity = 0;
-            else if (hours <= 0.5) day.intensity = 1;
-            else if (hours <= 2.0) day.intensity = 2;
-            else if (hours <= 4.0) day.intensity = 3;
-            else day.intensity = 4; 
+            const minutes = day.timeSpent / 60;
+            if (minutes === 0) day.intensity = 0;
+            else if (minutes <= 15) day.intensity = 1; // Light (0 - 15m)
+            else if (minutes <= 60) day.intensity = 2; // Medium (15m - 1h)
+            else if (minutes <= 120) day.intensity = 3; // Heavy (1h - 2h)
+            else day.intensity = 4; // Max (2h+)
         });
 
         return calendar;
