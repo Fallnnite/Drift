@@ -1813,6 +1813,7 @@
         const [confirmAction, setConfirmAction] = useState(null);
         
         const prevStatusRef = useRef({ status: '', currentCourse: '', isOvertime: false });
+        const myDbStatusRef = useRef('offline'); // NEW: Tracks what the database actually thinks
         const completionTimeoutRef = useRef(null);
 
         const getCourseRef = (courseId) => window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'courses', `${profile.id}_${courseId}`);
@@ -1945,7 +1946,12 @@
 
             const profilesRef = window.FB.collection(db, 'artifacts', globalAppId, 'public', 'data', 'profiles');
             const unsubProfiles = window.FB.onSnapshot(profilesRef, (snap) => {
-                setAllProfiles(snap.docs.map(d => ({ ...d.data(), uid: d.id })));
+                const profiles = snap.docs.map(d => ({ ...d.data(), uid: d.id }));
+                setAllProfiles(profiles);
+                
+                // NEW: Update our checker with what the database actually sees
+                const me = profiles.find(p => p.uid === profile.id);
+                if (me) myDbStatusRef.current = me.status;
             });
 
             return () => { unsubVoyages(); unsubCourses(); unsubRadar(); unsubProfiles(); };
@@ -2043,9 +2049,11 @@
                                 }).catch(()=>{});
                             }
                         } else if (prevStatusRef.current.status !== 'completed') {
-                            // HEARTBEAT: Force sync status every 10 seconds to self-heal any network drops or stuck offline states from page refreshes
+                            // HEARTBEAT: Force sync status every 10 seconds to self-heal any network drops
                             const correctStatus = isIdleRef.current ? 'idle' : 'online';
-                            if (prevStatusRef.current.status !== correctStatus) {
+                            
+                            // NEW: If local state is wrong OR if the database wrongly thinks we are offline, force an update!
+                            if (prevStatusRef.current.status !== correctStatus || myDbStatusRef.current === 'offline') {
                                 prevStatusRef.current = { status: correctStatus, currentCourse: '', isOvertime: false };
                                 const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
                                 window.FB.updateDoc(profileRef, { 
