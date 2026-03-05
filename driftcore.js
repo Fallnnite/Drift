@@ -2,7 +2,7 @@
 
 window.DriftCore = {
     // ==========================================
-    // PHASE 1: ANALYTICS & FOCUS MATH
+    // PHASE 1 & 1.3: ANALYTICS & FOCUS MATH
     // ==========================================
     calculateMetrics: function(courses, timeframe = 'week') {
         const now = new Date();
@@ -73,7 +73,7 @@ window.DriftCore = {
         };
     },
 
-   generateCalendarData: function(courses, year, month) {
+    generateCalendarData: function(courses, year, month) {
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const calendar = [];
 
@@ -95,27 +95,35 @@ window.DriftCore = {
             }
         });
 
-        // Heatmap Intensity based on exact minutes for a better gradient
         calendar.forEach(day => {
             const minutes = day.timeSpent / 60;
             if (minutes === 0) day.intensity = 0;
-            else if (minutes <= 15) day.intensity = 1; // Light (0 - 15m)
-            else if (minutes <= 60) day.intensity = 2; // Medium (15m - 1h)
-            else if (minutes <= 120) day.intensity = 3; // Heavy (1h - 2h)
-            else day.intensity = 4; // Max (2h+)
+            else if (minutes <= 15) day.intensity = 1; 
+            else if (minutes <= 60) day.intensity = 2; 
+            else if (minutes <= 120) day.intensity = 3; 
+            else day.intensity = 4; 
         });
 
         return calendar;
     },
 
     // ==========================================
-    // PHASE 1.2: CO-OP & GHOST MULTIPLIERS
+    // PHASE 1.4: CREW BONDS & EXP ECONOMY
     // ==========================================
 
-    /**
-     * Calculates the EXP multiplier based on consecutive days studied together.
-     * Rewards consistency but caps at 1.5x to prevent economy inflation.
-     */
+    FRIENDSHIP_RANKS: [
+        { min: 0, max: 99, name: "Stowaway", icon: "fas fa-box" },
+        { min: 100, max: 499, name: "Deckhand", icon: "fas fa-anchor" },
+        { min: 500, max: 1499, name: "Trusted Mate", icon: "fas fa-handshake" },
+        { min: 1500, max: 3999, name: "Co-Captain", icon: "fas fa-dharmachakra" },
+        { min: 4000, max: Infinity, name: "Soulbound", icon: "fas fa-infinity" }
+    ],
+
+    getFriendshipRank: function(exp) {
+        const safeExp = exp || 0;
+        return this.FRIENDSHIP_RANKS.find(r => safeExp >= r.min && safeExp <= r.max) || this.FRIENDSHIP_RANKS[0];
+    },
+
     getCoopMultiplier: function(streakDays) {
         if (!streakDays || streakDays < 1) return 1.0;
         if (streakDays >= 7) return 1.5;
@@ -123,25 +131,21 @@ window.DriftCore = {
         return 1.1;
     },
 
-    /**
-     * Calculates base EXP earned for a session, factoring in co-op presence.
-     * E.g., 10 EXP per focused minute.
-     */
-    calculateSessionExp: function(timeSpentSeconds, isCoop, streakDays) {
+    calculateSessionExp: function(timeSpentSeconds, isLiveCoop, isGhostCoop, streakDays) {
         const minutes = Math.floor(timeSpentSeconds / 60);
-        if (minutes < 1) return 0; // Prevent farming sub-minute sessions
+        if (minutes < 1) return 0; // Prevent farming
         
         const baseExp = minutes * 10;
-        const multiplier = isCoop ? this.getCoopMultiplier(streakDays) : 1.0;
+        const multiplier = this.getCoopMultiplier(streakDays);
         
-        return Math.floor(baseExp * multiplier);
+        if (isLiveCoop) {
+            return Math.floor(baseExp * multiplier); // Full EXP for Live Co-op
+        } else if (isGhostCoop) {
+            return Math.floor((baseExp * multiplier) * 0.5); // 50% EXP for Ghost Co-op
+        }
+        return 0; 
     },
 
-    /**
-     * STRICT UI RULE COMPLIANCE: 
-     * Calculates Ghost Progress without exposing the Ghost's raw duration.
-     * Returns a clean 0 to 100 percentage based on when the local user started tracking it.
-     */
     calculateGhostProgress: function(ghostSessionData, localStartTime) {
         if (!ghostSessionData || !ghostSessionData.durationSeconds) return 0;
         
