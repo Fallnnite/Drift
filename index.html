@@ -891,7 +891,7 @@
                 isPinned: false,
                 isEdit: false
             });
-            if (isCompleting) triggerCompletionFlash(title.trim());
+            if (isCompleting) triggerCompletionFlash(title.trim(), flowSession.timeSpent || flowSession.duration);
         };
 
         return (
@@ -2134,19 +2134,27 @@
 
         // --- ACTIONS ---
 
-        const triggerCompletionFlash = (courseTitle) => {
+        const triggerCompletionFlash = (courseTitle, durationSecs = 0) => {
             if (isDev || !db || !authUser) return;
             
-            // 1. Instantly lock the public profile to "Completed"
+            // 1. Instantly lock the public profile to "Completed" and save the Ghost duration
             prevStatusRef.current = { status: 'completed', currentCourse: courseTitle, isOvertime: false };
             const profileRef = window.FB.doc(db, 'artifacts', globalAppId, 'public', 'data', 'profiles', profile.id);
-            window.FB.updateDoc(profileRef, { 
+            
+            const updatePayload = { 
                 status: 'completed', 
                 currentCourse: courseTitle, 
                 isSailing: false, 
                 progress: 100, 
                 isOvertime: false 
-            }).catch(()=>{});
+            };
+            
+            // Only save as a valid ghost if the session was longer than 1 minute (60 secs)
+            if (durationSecs >= 60) {
+                updatePayload.lastGhostDuration = durationSecs;
+            }
+
+            window.FB.updateDoc(profileRef, updatePayload).catch(()=>{});
 
             // 2. Set the 5-second countdown to revert back to Idle/Online
             if (completionTimeoutRef.current) clearTimeout(completionTimeoutRef.current);
@@ -2219,7 +2227,7 @@
             if (!db || !authUser) return;
             window.FB.updateDoc(getCourseRef(course.id), { isCompleted: true, isRunning: false, timeSpent: course.timeSpent }).catch(e => showError("Sync Error", e.message));
             
-            triggerCompletionFlash(course.title);
+            triggerCompletionFlash(course.title, course.timeSpent || course.duration);
         };
 
         const toggleGoal = (course, goalId) => {
@@ -2544,6 +2552,26 @@
             }
         };
 
+        const handleStudyWithGhost = (friendProfile) => {
+            if (!friendProfile.lastGhostDuration) return;
+            setOrgMode('tier3'); // Switch to Quick Timer mode
+            setActiveTab('courses'); // Navigate to the timer tab
+            
+            // Load the Ghost into the timer
+            setFlowSession({
+                duration: friendProfile.lastGhostDuration,
+                timeSpent: 0,
+                isRunning: false,
+                isPaused: false,
+                startTime: null,
+                ghostPartner: {
+                    uid: friendProfile.uid,
+                    nickname: friendProfile.nickname,
+                    durationSeconds: friendProfile.lastGhostDuration
+                }
+            });
+        };
+
         const openAddCourse = () => { setEditingCourse(null); setIsAddCourseModalOpen(true); };
         const openEditCourse = (course) => { setEditingCourse(course); setIsAddCourseModalOpen(true); };
         const openAddVoyage = () => { setEditingVoyage(null); setIsAddVoyageModalOpen(true); };
@@ -2739,7 +2767,7 @@
                     <main className={`flex-1 overflow-y-auto p-4 sm:p-6 lg:p-10 relative ${theme.patternClass}`}>
                         <div className="max-w-7xl mx-auto h-full relative z-10">
                             {activeTab === 'courses' && <CoursesView theme={theme} terms={terms} voyages={voyages} courses={courses} orgMode={orgMode} openAddCourse={openAddCourse} openAddVoyage={openAddVoyage} openEditVoyage={openEditVoyage} deleteVoyage={deleteVoyage} toggleTimer={toggleTimer} completeCourse={completeCourse} toggleGoal={toggleGoal} deleteCourse={deleteCourse} openEditCourse={openEditCourse} toggleVoyagePin={toggleVoyagePin} toggleVoyageCollapse={toggleVoyageCollapse} toggleCoursePin={toggleCoursePin} moveCourse={moveCourse} currentTime={currentTime} voyageView={voyageView} unlockCourseEarly={unlockCourseEarly} unlockVoyageEarly={unlockVoyageEarly} flowSession={flowSession} setFlowSession={setFlowSession} handleSaveCourse={handleSaveCourse} triggerCompletionFlash={triggerCompletionFlash} setConfirmAction={setConfirmAction} />}
-                            {activeTab === 'crew' && <CrewView theme={theme} terms={terms} profile={profile} radarData={radarData} allProfiles={allProfiles} onAddFriend={handleAddFriendToRadar} onRemoveFriend={handleRemoveFriendFromRadar} onAccept={handleAcceptRequest} onDecline={handleDeclineRequest} onCancel={handleCancelRequest} />}
+                            {activeTab === 'crew' && <CrewView theme={theme} terms={terms} profile={profile} radarData={radarData} allProfiles={allProfiles} onAddFriend={handleAddFriendToRadar} onRemoveFriend={handleRemoveFriendFromRadar} onAccept={handleAcceptRequest} onDecline={handleDeclineRequest} onCancel={handleCancelRequest} onStudyWithGhost={handleStudyWithGhost} />}
                             {activeTab === 'analytics' && <AnalyticsView theme={theme} terms={terms} courses={courses} />}
                             {activeTab === 'settings' && <SettingsView theme={theme} terms={terms} themeId={themeId} setThemeId={handleSetThemeId} profile={profile} clearData={clearData} logOut={logOut} isThemed={isThemed} setIsThemed={handleSetIsThemed} />}
                             {activeTab === 'manual' && <ManualView theme={theme} terms={terms} />}
